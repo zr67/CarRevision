@@ -1,9 +1,10 @@
-package com.example.carrevision.database.entity;
+package database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ public class RevisionEntity {
     private String status;
 
     // Constructors
+    @Ignore
     public RevisionEntity() {}
     public RevisionEntity(int technicianId, int carId, @NonNull Date start, Date end, String status) {
         this.technicianId = technicianId;

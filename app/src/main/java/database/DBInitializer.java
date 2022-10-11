@@ -1,14 +1,14 @@
-package com.example.carrevision.database;
+package database;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.carrevision.database.entity.BrandEntity;
-import com.example.carrevision.database.entity.CantonEntity;
-import com.example.carrevision.database.entity.CarEntity;
-import com.example.carrevision.database.entity.ModelEntity;
-import com.example.carrevision.database.entity.RevisionEntity;
-import com.example.carrevision.database.entity.TechnicianEntity;
+import database.entity.BrandEntity;
+import database.entity.CantonEntity;
+import database.entity.CarEntity;
+import database.entity.ModelEntity;
+import database.entity.RevisionEntity;
+import database.entity.TechnicianEntity;
 
 import java.util.Calendar;
 import java.util.Date;
