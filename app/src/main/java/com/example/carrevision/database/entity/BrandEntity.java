@@ -31,6 +31,9 @@ public class BrandEntity {
     }
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setBrand(@NonNull String brand) {
         this.brand = brand;
     }

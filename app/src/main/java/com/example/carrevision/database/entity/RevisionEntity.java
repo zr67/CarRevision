@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "revisions")
+@Entity(tableName = "revision")
 public class RevisionEntity {
     // Fields
     @PrimaryKey(autoGenerate = true)
@@ -57,6 +57,9 @@ public class RevisionEntity {
     }
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setTechnicianId(int technicianId) {
         this.technicianId = technicianId;
     }

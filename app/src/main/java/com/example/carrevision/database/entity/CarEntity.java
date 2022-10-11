@@ -51,6 +51,9 @@ public class CarEntity {
     }
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setModelId(int modelId) {
         this.modelId = modelId;
     }

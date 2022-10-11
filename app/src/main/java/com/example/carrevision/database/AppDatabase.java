@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.Executors;
 
@@ -20,10 +21,11 @@ import com.example.carrevision.database.entity.BrandEntity;
 import com.example.carrevision.database.entity.CantonEntity;
 import com.example.carrevision.database.entity.CarEntity;
 import com.example.carrevision.database.entity.ModelEntity;
+import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
 
-@Database(entities = {BrandEntity.class, CantonEntity.class, CarEntity.class, ModelEntity.class, Readable.class, TechnicianEntity.class}, version = 1)
-
+@Database(entities = {BrandEntity.class, CantonEntity.class, CarEntity.class, ModelEntity.class, RevisionEntity.class, TechnicianEntity.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String TAG = "AppDatabase";
     private static final String DBNAME = "db-carrevisions";

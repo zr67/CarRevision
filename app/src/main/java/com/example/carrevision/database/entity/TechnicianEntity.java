@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "technicians")
@@ -21,6 +22,7 @@ public class TechnicianEntity {
     private String email;
 
     // Constructors
+    @Ignore
     public TechnicianEntity() {}
     public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email) {
         this.title = title;
@@ -47,6 +49,9 @@ public class TechnicianEntity {
     }
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setTitle(String title) {
         this.title = title;
     }

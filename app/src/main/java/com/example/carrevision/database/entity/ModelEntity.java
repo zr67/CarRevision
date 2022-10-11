@@ -37,6 +37,9 @@ public class ModelEntity {
     }
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setBrandId(int brandId) {
         this.brandId = brandId;
     }

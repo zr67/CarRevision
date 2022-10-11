@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "cantons")
@@ -17,6 +18,7 @@ public class CantonEntity {
     private String abbreviation;
 
     // Constructors
+    @Ignore
     public CantonEntity() {}
     public CantonEntity(@NonNull String canton, @NonNull String abbreviation) {
         this.canton = canton;
@@ -35,6 +37,9 @@ public class CantonEntity {
     }
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setCanton(@NonNull String canton) {
         this.canton = canton;
     }
