@@ -1,4 +1,4 @@
-package database;
+package com.example.carrevision.database;
 import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -10,17 +10,17 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.Executors;
 
-import database.dao.BrandDao;
-import database.dao.CantonDao;
-import database.dao.CarDao;
-import database.dao.ModelDao;
-import database.dao.RevisionDao;
-import database.dao.TechnicianDao;
-import database.entity.BrandEntity;
-import database.entity.CantonEntity;
-import database.entity.CarEntity;
-import database.entity.ModelEntity;
-import database.entity.TechnicianEntity;
+import com.example.carrevision.database.dao.BrandDao;
+import com.example.carrevision.database.dao.CantonDao;
+import com.example.carrevision.database.dao.CarDao;
+import com.example.carrevision.database.dao.ModelDao;
+import com.example.carrevision.database.dao.RevisionDao;
+import com.example.carrevision.database.dao.TechnicianDao;
+import com.example.carrevision.database.entity.BrandEntity;
+import com.example.carrevision.database.entity.CantonEntity;
+import com.example.carrevision.database.entity.CarEntity;
+import com.example.carrevision.database.entity.ModelEntity;
+import com.example.carrevision.database.entity.TechnicianEntity;
 
 @Database(entities = {BrandEntity.class, CantonEntity.class, CarEntity.class, ModelEntity.class, Readable.class, TechnicianEntity.class}, version = 1)
 

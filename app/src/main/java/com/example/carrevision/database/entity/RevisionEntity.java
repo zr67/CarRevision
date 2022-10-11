@@ -1,4 +1,4 @@
-package database.entity;
+package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

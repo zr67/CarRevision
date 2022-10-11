@@ -1,4 +1,4 @@
-package database.dao;
+package com.example.carrevision.database.dao;
 
 import android.database.sqlite.SQLiteConstraintException;
 
@@ -6,7 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import database.entity.RevisionEntity;
+import com.example.carrevision.database.entity.RevisionEntity;
 @Dao
 public interface RevisionDao {
     @Insert
