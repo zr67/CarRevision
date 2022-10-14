@@ -4,18 +4,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "cars")
+@Entity(tableName = "cars",
+        foreignKeys =
+        @ForeignKey(
+                entity = ModelEntity.class,
+                parentColumns = "id",
+                childColumns = "model_id"
+        ),
+        indices = {
+        @Index(
+                value = {"model_id"}
+        )}
+)
 public class CarEntity {
     // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "model_id")
     private int modelId;
+    @NonNull
     @ColumnInfo(name = "plate")
     private String plate;
     @ColumnInfo(name = "year")
@@ -25,7 +39,9 @@ public class CarEntity {
 
     // Constructors
     @Ignore
-    public CarEntity() {}
+    public CarEntity() {
+        this.plate = "";
+    }
     public CarEntity(int modelId, @NonNull String plate, @NonNull Date year, int kilometers) {
         this.modelId = modelId;
         this.plate = plate;
@@ -40,6 +56,7 @@ public class CarEntity {
     public int getModelId() {
         return modelId;
     }
+    @NonNull
     public String getPlate() {
         return plate;
     }

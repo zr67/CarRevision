@@ -18,12 +18,15 @@ public class TechnicianEntity {
     private String firstname;
     @ColumnInfo(name = "surname")
     private String lastname;
+    @NonNull
     @ColumnInfo(name = "email")
     private String email;
 
     // Constructors
     @Ignore
-    public TechnicianEntity() {}
+    public TechnicianEntity() {
+        this.email = "";
+    }
     public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email) {
         this.title = title;
         this.firstname = firstname;
@@ -44,6 +47,7 @@ public class TechnicianEntity {
     public String getLastname() {
         return lastname;
     }
+    @NonNull
     public String getEmail() {
         return email;
     }

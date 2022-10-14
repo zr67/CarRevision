@@ -14,12 +14,15 @@ public class CantonEntity {
     private int id;
     @ColumnInfo(name = "canton")
     private String canton;
+    @NonNull
     @ColumnInfo(name = "abbr")
     private String abbreviation;
 
     // Constructors
     @Ignore
-    public CantonEntity() {}
+    public CantonEntity() {
+        this.abbreviation = "";
+    }
     public CantonEntity(@NonNull String canton, @NonNull String abbreviation) {
         this.canton = canton;
         this.abbreviation = abbreviation;
@@ -32,6 +35,7 @@ public class CantonEntity {
     public String getCanton() {
         return canton;
     }
+    @NonNull
     public String getAbbreviation() {
         return abbreviation;
     }

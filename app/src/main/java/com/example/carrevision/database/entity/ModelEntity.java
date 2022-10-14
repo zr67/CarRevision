@@ -4,22 +4,38 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "models")
+@Entity(tableName = "models",
+        foreignKeys =
+        @ForeignKey(
+                entity = BrandEntity.class,
+                parentColumns = "id",
+                childColumns = "brand_id"
+        ),
+        indices = {
+        @Index(
+                value = {"brand_id"}
+        )}
+)
 public class ModelEntity {
     // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "brand_id")
     private int brandId;
+    @NonNull
     @ColumnInfo(name = "model")
     private String model;
 
     // Constructors
     @Ignore
-    public ModelEntity() {}
+    public ModelEntity() {
+        this.model = "";
+    }
     public ModelEntity(int brandId, @NonNull String model) {
         this.brandId = brandId;
         this.model = model;
@@ -32,6 +48,7 @@ public class ModelEntity {
     public int getBrandId() {
         return brandId;
     }
+    @NonNull
     public String getModel() {
         return model;
     }

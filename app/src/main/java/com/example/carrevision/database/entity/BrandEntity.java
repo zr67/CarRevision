@@ -12,12 +12,15 @@ public class BrandEntity {
     // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
+    @NonNull
     @ColumnInfo(name = "brand")
     private String brand;
 
     // Constructors
     @Ignore
-    public BrandEntity() {}
+    public BrandEntity() {
+        this.brand = "";
+    }
     public BrandEntity(@NonNull String brand) {
         this.brand = brand;
     }
@@ -26,6 +29,7 @@ public class BrandEntity {
     public int getId() {
         return id;
     }
+    @NonNull
     public String getBrand() {
         return brand;
     }

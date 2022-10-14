@@ -4,12 +4,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "revision")
+@Entity(tableName = "revision",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = TechnicianEntity.class,
+                        parentColumns = "id",
+                        childColumns = "technician_id"
+                ),
+                @ForeignKey(
+                        entity = CarEntity.class,
+                        parentColumns = "id",
+                        childColumns = "car_id"
+                )},
+                indices = {
+                @Index(
+                        value = {"technician_id"}
+                ),
+                @Index(
+                        value = {"car_id"}
+                )}
+        )
 public class RevisionEntity {
     // Fields
     @PrimaryKey(autoGenerate = true)
