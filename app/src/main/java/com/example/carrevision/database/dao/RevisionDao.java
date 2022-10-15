@@ -2,15 +2,61 @@ package com.example.carrevision.database.dao;
 
 import android.database.sqlite.SQLiteConstraintException;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
+
 import com.example.carrevision.database.entity.RevisionEntity;
 
+import java.util.List;
+
+/**
+ * Dao interface to interact with the table revisions in the database
+ */
 @Dao
 public interface RevisionDao {
+    /**
+     * Gets a revision by its unique identifier
+     * @param id Revision's unique identifier
+     * @return RevisionEntity corresponding to the identifier
+     */
+    @Query("SELECT * FROM revisions WHERE id = :id")
+    LiveData<RevisionEntity> getById(int id);
+
+    /**
+     * Gets all revisions
+     * @return List of all RevisionEntity
+     */
+    @Query("SELECT * FROM revisions")
+    LiveData<List<RevisionEntity>> getAll();
+
+    /**
+     * Insert a new revision into the database
+     * @param revision RevisionEntity to insert
+     * @throws SQLiteConstraintException Exception thrown if constraints are not matched
+     */
     @Insert
     void insert(RevisionEntity revision) throws SQLiteConstraintException;
-    @Query("DELETE FROM revision")
+
+    /**
+     * Updates a revision existing into the database
+     * @param revision RevisionEntity to update
+     */
+    @Update
+    void update(RevisionEntity revision);
+
+    /**
+     * Removes a revision from the database by its unique identifier
+     * @param id Revision's unique identifier
+     */
+    @Query("DELETE FROM revisions WHERE id = :id")
+    void deleteById(int id);
+
+    /**
+     * Removes all revisions from the database
+     */
+    @Query("DELETE FROM revisions")
     void deleteAll();
 }

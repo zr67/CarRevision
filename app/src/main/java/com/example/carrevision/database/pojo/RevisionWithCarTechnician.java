@@ -7,6 +7,9 @@ import com.example.carrevision.database.entity.CarEntity;
 import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
 
+/**
+ * Pojo containing a revision with the linked car and technician
+ */
 public class RevisionWithCarTechnician {
     @Embedded
     public RevisionEntity revision;

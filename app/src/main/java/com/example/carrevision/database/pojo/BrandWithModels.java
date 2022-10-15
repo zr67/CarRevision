@@ -8,6 +8,9 @@ import com.example.carrevision.database.entity.ModelEntity;
 
 import java.util.List;
 
+/**
+ * Pojo containing the brand with all its models
+ */
 public class BrandWithModels {
     @Embedded
     public BrandEntity brand;

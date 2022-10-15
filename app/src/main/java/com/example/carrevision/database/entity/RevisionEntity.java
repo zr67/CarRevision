@@ -11,7 +11,10 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "revision",
+/**
+ * Revision entity class
+ */
+@Entity(tableName = "revisions",
         foreignKeys = {
                 @ForeignKey(
                         entity = TechnicianEntity.class,
@@ -32,7 +35,6 @@ import java.util.Date;
                 )}
         )
 public class RevisionEntity {
-    // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "technician_id")
@@ -46,9 +48,20 @@ public class RevisionEntity {
     @ColumnInfo(name = "status")
     private String status;
 
-    // Constructors
+    /**
+     * Default constructor for the revision entity class
+     */
     @Ignore
     public RevisionEntity() {}
+
+    /**
+     * Constructor for the revision entity class
+     * @param technicianId Technician's identifier
+     * @param carId Car's identifier
+     * @param start Revision's start date and time
+     * @param end Revision's end date and time
+     * @param status Revision's status
+     */
     public RevisionEntity(int technicianId, int carId, @NonNull Date start, Date end, String status) {
         this.technicianId = technicianId;
         this.carId = carId;
@@ -57,47 +70,102 @@ public class RevisionEntity {
         this.status = status;
     }
 
-    // Getters
+    /**
+     * Gets the revision's identifier
+     * @return Revision's identifier
+     */
     public int getId() {
         return id;
     }
+
+    /**
+     * Gets the technician's identifier
+     * @return Technician's identifier
+     */
     public int getTechnicianId() {
         return technicianId;
     }
+
+    /**
+     * Gets the car's identifier
+     * @return Car's identifier
+     */
     public int getCarId() {
         return carId;
     }
+
+    /**
+     * Gets the revision's start date and time
+     * @return Revision's start date and time
+     */
     public Date getStart() {
         return start;
     }
+
+    /**
+     * Gets the revision's end date and time
+     * @return Revision's end date and time
+     */
     public Date getEnd() {
         return end;
     }
+
+    /**
+     * Gets the revision's status
+     * @return Revision's status
+     */
     public String getStatus() {
         return status;
     }
 
-    // Setters
+    /**
+     * Sets the revision's identifier
+     * @param id Revision's identifier
+     */
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Sets the technician's identifier
+     * @param technicianId Technician's identifier
+     */
     public void setTechnicianId(int technicianId) {
         this.technicianId = technicianId;
     }
+
+    /**
+     * Sets the car's identifier
+     * @param carId Car's identifier
+     */
     public void setCarId(int carId) {
         this.carId = carId;
     }
+
+    /**
+     * Sets the revision's start date and time
+     * @param start Revision's start date and time
+     */
     public void setStart(@NonNull Date start) {
         this.start = start;
     }
+
+    /**
+     * Sets the revision's end date and time
+     * @param end Revision's end date and time
+     */
     public void setEnd(Date end) {
         this.end = end;
     }
+
+    /**
+     * Sets the revision's status
+     * @param status Revision's status
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
-    // Overridden methods
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof RevisionEntity) {

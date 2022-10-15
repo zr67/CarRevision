@@ -9,6 +9,9 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+/**
+ * Model entity class
+ */
 @Entity(tableName = "models",
         foreignKeys =
         @ForeignKey(
@@ -22,7 +25,6 @@ import androidx.room.PrimaryKey;
         )}
 )
 public class ModelEntity {
-    // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "brand_id")
@@ -31,40 +33,73 @@ public class ModelEntity {
     @ColumnInfo(name = "model")
     private String model;
 
-    // Constructors
+    /**
+     * Default constructor for the model entity class
+     */
     @Ignore
     public ModelEntity() {
         this.model = "";
     }
+
+    /**
+     * Constructor for the model entity class
+     * @param brandId Brand's identifier
+     * @param model Model's name
+     */
     public ModelEntity(int brandId, @NonNull String model) {
         this.brandId = brandId;
         this.model = model;
     }
 
-    // Getters
+    /**
+     * Gets the model's identifier
+     * @return Model's identifier
+     */
     public int getId() {
         return id;
     }
+
+    /**
+     * Gets the brand's identifier
+     * @return Brand's identifier
+     */
     public int getBrandId() {
         return brandId;
     }
+
+    /**
+     * Gets the model's name
+     * @return Model's name
+     */
     @NonNull
     public String getModel() {
         return model;
     }
 
-    // Setters
+    /**
+     * Sets the model identifier
+     * @param id Model identifier
+     */
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Sets the brand's identifier
+     * @param brandId Brand's identifier
+     */
     public void setBrandId(int brandId) {
         this.brandId = brandId;
     }
+
+    /**
+     * Sets the model's name
+     * @param model Model's name
+     */
     public void setModel(@NonNull String model) {
         this.model = model;
     }
 
-    // Overridden methods
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof ModelEntity) {

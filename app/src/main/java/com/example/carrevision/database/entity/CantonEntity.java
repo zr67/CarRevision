@@ -7,9 +7,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+/**
+ * Canton entity class
+ */
 @Entity(tableName = "cantons")
 public class CantonEntity {
-    // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "canton")
@@ -18,40 +20,73 @@ public class CantonEntity {
     @ColumnInfo(name = "abbr")
     private String abbreviation;
 
-    // Constructors
+    /**
+     * Default constructor for the canton entity class
+     */
     @Ignore
     public CantonEntity() {
         this.abbreviation = "";
     }
+
+    /**
+     * Constructor for the canton entity class
+     * @param canton Canton's name
+     * @param abbreviation Canton's abbreviation
+     */
     public CantonEntity(@NonNull String canton, @NonNull String abbreviation) {
         this.canton = canton;
         this.abbreviation = abbreviation;
     }
 
-    // Getters
+    /**
+     * Gets the canton's identifier
+     * @return Canton's identifier
+     */
     public int getId() {
         return id;
     }
+
+    /**
+     * Gets the canton's name
+     * @return Canton's name
+     */
     public String getCanton() {
         return canton;
     }
+
+    /**
+     * Gets the canton's abbreviation
+     * @return Canton's abbreviation
+     */
     @NonNull
     public String getAbbreviation() {
         return abbreviation;
     }
 
-    // Setters
+    /**
+     * Sets the canton's identifier
+     * @param id Canton's identifier
+     */
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Sets the canton's name
+     * @param canton Canton's name
+     */
     public void setCanton(@NonNull String canton) {
         this.canton = canton;
     }
+
+    /**
+     * Sets the canton's abbreviation
+     * @param abbreviation Canton's abbreviation
+     */
     public void setAbbreviation(@NonNull String abbreviation) {
         this.abbreviation = abbreviation;
     }
 
-    // Overridden methods
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof CantonEntity) {

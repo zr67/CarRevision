@@ -14,40 +14,98 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Database initializer class
+ */
 public class DBInitializer {
     public static final String TAG = "DBInitializer";
 
+    /**
+     * Populates the database with the base data
+     * @param db Database to populate
+     */
     public static void populateDatabase(final AppDatabase db) {
         Log.i(TAG, "Inserting base data.");
         PopulateDbAsync task = new PopulateDbAsync(db);
         task.execute();
     }
-    
+
+    /**
+     * Adds a brand to the database
+     * @param db Database
+     * @param brand Brand's name
+     */
     private static void addBrand(final AppDatabase db, final String brand) {
         BrandEntity brandEntity = new BrandEntity(brand);
         db.brandDao().insert(brandEntity);
     }
+
+    /**
+     * Adds a model to the database
+     * @param db Database
+     * @param brandId Brand's identifier
+     * @param model Model's name
+     */
     private static void addModel(final AppDatabase db, final int brandId, final String model) {
         ModelEntity modelEntity = new ModelEntity(brandId, model);
         db.modelDao().insert(modelEntity);
     }
+
+    /**
+     * Adds a canton to the database
+     * @param db Database
+     * @param canton Canton's name
+     * @param abbreviation Canton's abbreviation
+     */
     private static void addCanton(final AppDatabase db, final String canton, final String abbreviation) {
         CantonEntity cantonEntity = new CantonEntity(canton, abbreviation);
         db.cantonDao().insert(cantonEntity);
     }
+
+    /**
+     * Adds a car to the database
+     * @param db Database
+     * @param modelId Model's identifier
+     * @param plate Car's plate number
+     * @param year Car's issuance year
+     * @param kilometers Car's mileage
+     */
     private static void addCar(final AppDatabase db, final int modelId, final String plate, final Date year, final int kilometers) {
         CarEntity carEntity = new CarEntity(modelId, plate, year, kilometers);
         db.carDao().insert(carEntity);
     }
+
+    /**
+     * Adds a technician to the database
+     * @param db Database
+     * @param title Technician's title
+     * @param firstname Technician's first name
+     * @param lastname Technician's last name
+     * @param email Technician's email
+     */
     private static void addTechnician(final AppDatabase db, final String title, final String firstname, final String lastname, final String email) {
         TechnicianEntity technicianEntity = new TechnicianEntity(title, firstname, lastname, email);
         db.technicianDao().insert(technicianEntity);
     }
+
+    /**
+     * Adds a revision to the database
+     * @param db Database
+     * @param technicianId Technician's identifier
+     * @param carId Car's identifier
+     * @param start Revision's start date and time
+     * @param end Revision's end date and time
+     * @param status Revision's status
+     */
     private static void addRevision(final AppDatabase db, final int technicianId, final int carId, final Date start, final Date end, final String status) {
         RevisionEntity revisionEntity = new RevisionEntity(technicianId, carId, start, end, status);
         db.revisionDao().insert(revisionEntity);
     }
 
+    /**
+     * Adds all base brands to the database
+     * @param db Database
+     */
     private static void addBrands(AppDatabase db) {
         db.brandDao().deleteAll();
 
@@ -58,6 +116,11 @@ public class DBInitializer {
         addBrand(db, "Mercury");
         addBrand(db, "Subaru");
     }
+
+    /**
+     * Adds all base models to the database
+     * @param db Database
+     */
     private static void addModels(AppDatabase db) {
         db.modelDao().deleteAll();
 
@@ -127,6 +190,11 @@ public class DBInitializer {
         addModel(db, 6, "WRX");
         addModel(db, 6, "XV Crosstrek");
     }
+
+    /**
+     * Adds all cantons to the database
+     * @param db Database
+     */
     private static void addCantons(AppDatabase db) {
         db.cantonDao().deleteAll();
 
@@ -157,6 +225,11 @@ public class DBInitializer {
         addCanton(db, "Genève", "GE");
         addCanton(db, "Jura", "JU");
     }
+
+    /**
+     * Adds all base cars to the database
+     * @param db Database
+     */
     private static void addCars(AppDatabase db) {
         db.carDao().deleteAll();
 
@@ -191,6 +264,11 @@ public class DBInitializer {
         addCar(db, 50, "NW427084", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 190928);
         addCar(db, 38, "TI331739", new GregorianCalendar(2014, Calendar.JANUARY, 1).getTime(), 120531);
     }
+
+    /**
+     * Adds all base technicians to the database
+     * @param db Database
+     */
     private static void addTechnicians(AppDatabase db) {
         db.technicianDao().deleteAll();
 
@@ -200,6 +278,11 @@ public class DBInitializer {
         addTechnician(db, "Ms.", "Daphne", "Blake", "daphne.blake@sbg.com");
         addTechnician(db, "M.", "Scooby", "Doo", "scooby.doo@sbg.com");
     }
+
+    /**
+     * Adds all base revisions to the database
+     * @param db Database
+     */
     private static void addRevisions(AppDatabase db) {
         db.revisionDao().deleteAll();
 
@@ -214,6 +297,10 @@ public class DBInitializer {
         addRevision(db, 5, 1, new GregorianCalendar(2022, Calendar.DECEMBER, 11, 8, 45).getTime(), null, "Awaiting");
     }
 
+    /**
+     * Populates the database with the base data
+     * @param db Database
+     */
     private static void populateWithBaseData(AppDatabase db) {
         addBrands(db);
         addModels(db);
@@ -223,8 +310,16 @@ public class DBInitializer {
         addRevisions(db);
     }
 
+    /**
+     * Async class for base data insertion
+     */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final AppDatabase db;
+
+        /**
+         * Async class for base data insertion constructor
+         * @param db Database
+         */
         PopulateDbAsync(AppDatabase db) {
             this.db = db;
         }

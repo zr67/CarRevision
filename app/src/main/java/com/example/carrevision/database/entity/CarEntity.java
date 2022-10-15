@@ -11,6 +11,9 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
+/**
+ * Car entity class
+ */
 @Entity(tableName = "cars",
         foreignKeys =
         @ForeignKey(
@@ -24,7 +27,6 @@ import java.util.Date;
         )}
 )
 public class CarEntity {
-    // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "model_id")
@@ -37,11 +39,21 @@ public class CarEntity {
     @ColumnInfo(name = "kilometers")
     private int kilometers;
 
-    // Constructors
+    /**
+     * Default constructor for the car entity class
+     */
     @Ignore
     public CarEntity() {
         this.plate = "";
     }
+
+    /**
+     * Constructor for the car entity class
+     * @param modelId Car's model identifier
+     * @param plate Car's plate number
+     * @param year Car's issuance year
+     * @param kilometers Car's mileage
+     */
     public CarEntity(int modelId, @NonNull String plate, @NonNull Date year, int kilometers) {
         this.modelId = modelId;
         this.plate = plate;
@@ -49,42 +61,87 @@ public class CarEntity {
         this.kilometers = kilometers;
     }
 
-    // Getters
+    /**
+     * Gets the car's identifier
+     * @return Car's identifier
+     */
     public int getId() {
         return id;
     }
+
+    /**
+     * Gets the car's model identifier
+     * @return Car's model identifier
+     */
     public int getModelId() {
         return modelId;
     }
+
+    /**
+     * Gets the car's plate number
+     * @return Car's plate number
+     */
     @NonNull
     public String getPlate() {
         return plate;
     }
+
+    /**
+     * Gets the car's issuance year
+     * @return Car's issuance year
+     */
     public Date getYear() {
         return year;
     }
+
+    /**
+     * Gets the car's mileage
+     * @return Car's mileage
+     */
     public int getKilometers() {
         return kilometers;
     }
 
-    // Setters
+    /**
+     * Sets the car's identifier
+     * @param id Car's identifier
+     */
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Sets the car's model identifier
+     * @param modelId Car's model identifier
+     */
     public void setModelId(int modelId) {
         this.modelId = modelId;
     }
+
+    /**
+     * Sets the car's plate number
+     * @param plate Car's plate number
+     */
     public void setPlate(@NonNull String plate) {
         this.plate = plate;
     }
+
+    /**
+     * Sets the car's issuance year
+     * @param year Car's issuance year
+     */
     public void setYear(@NonNull Date year) {
         this.year = year;
     }
+
+    /**
+     * Sets the car's mileage
+     * @param kilometers Car's mileage
+     */
     public void setKilometers(int kilometers) {
         this.kilometers = kilometers;
     }
 
-    // Overridden methods
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof CarEntity) {

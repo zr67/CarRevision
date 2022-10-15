@@ -7,9 +7,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+/**
+ * Technician entity class
+ */
 @Entity(tableName = "technicians")
 public class TechnicianEntity {
-    // Fields
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "title")
@@ -22,11 +24,21 @@ public class TechnicianEntity {
     @ColumnInfo(name = "email")
     private String email;
 
-    // Constructors
+    /**
+     * Default constructor for the technician entity class
+     */
     @Ignore
     public TechnicianEntity() {
         this.email = "";
     }
+
+    /**
+     * Constructor for the technician entity class
+     * @param title Technician's title
+     * @param firstname Technician's first name
+     * @param lastname Technician's last name
+     * @param email Technician's email
+     */
     public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email) {
         this.title = title;
         this.firstname = firstname;
@@ -34,42 +46,87 @@ public class TechnicianEntity {
         this.email = email;
     }
 
-    // Getters
+    /**
+     * Gets the technician's identifier
+     * @return Technician's identifier
+     */
     public int getId() {
         return id;
     }
+
+    /**
+     * Gets the technician's title
+     * @return Technician's title
+     */
     public String getTitle() {
         return title;
     }
+
+    /**
+     * Gets the technician's first name
+     * @return Technician's first name
+     */
     public String getFirstname() {
         return firstname;
     }
+
+    /**
+     * Gets the technician's last name
+     * @return Technician's last name
+     */
     public String getLastname() {
         return lastname;
     }
+
+    /**
+     * Gets the technician's email
+     * @return Technician's email
+     */
     @NonNull
     public String getEmail() {
         return email;
     }
 
-    // Setters
+    /**
+     * Sets the technician's identifier
+     * @param id Technician's identifier
+     */
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Sets the technician's title
+     * @param title Technician's title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
+
+    /**
+     * Sets the technician's first name
+     * @param firstname Technician's first name
+     */
     public void setFirstname(@NonNull String firstname) {
         this.firstname = firstname;
     }
+
+    /**
+     * Sets the technician's last name
+     * @param lastname Technician's last name
+     */
     public void setLastname(@NonNull String lastname) {
         this.lastname = lastname;
     }
+
+    /**
+     * Sets the technician's email
+     * @param email Technician's email
+     */
     public void setEmail(@NonNull String email) {
         this.email = email;
     }
 
-    // Overridden methods
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof TechnicianEntity) {
