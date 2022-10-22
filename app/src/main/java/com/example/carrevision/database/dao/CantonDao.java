@@ -27,7 +27,7 @@ public interface CantonDao {
      * Gets all cantons
      * @return List of all CantonEntity
      */
-    @Query("SELECT * FROM cantons")
+    @Query("SELECT * FROM cantons ORDER BY canton ASC")
     LiveData<List<CantonEntity>> getAll();
 
     /**

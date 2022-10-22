@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.carrevision.database.entity.CarEntity;
+import com.example.carrevision.database.pojo.CompleteCar;
 
 import java.util.List;
 
@@ -22,15 +24,17 @@ public interface CarDao {
      * @param id Car's unique identifier
      * @return CarEntity corresponding to the identifier
      */
+    @Transaction
     @Query("SELECT * FROM cars WHERE id = :id")
-    LiveData<CarEntity> getById(int id);
+    LiveData<CompleteCar> getById(int id);
 
     /**
      * Gets all cars
      * @return List of all CarEntity
      */
-    @Query("SELECT * FROM cars")
-    LiveData<List<CarEntity>> getAll();
+    @Transaction
+    @Query("SELECT * FROM cars ORDER BY plate ASC")
+    LiveData<List<CompleteCar>> getAll();
 
     /**
      * Insert a new car into the database

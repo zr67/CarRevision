@@ -8,13 +8,13 @@ import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
 
 /**
- * Pojo containing a revision with the linked car and technician
+ * Pojo containing a revision with it's car and it's technician
  */
-public class RevisionWithCarTechnician {
+public class CompleteRevision {
     @Embedded
     public RevisionEntity revision;
     @Relation(parentColumn = "car_id", entityColumn = "id", entity = CarEntity.class)
-    public CarEntity car;
+    public CompleteCar completeCar;
     @Relation(parentColumn = "technician_id", entityColumn = "id", entity = TechnicianEntity.class)
     public TechnicianEntity technician;
 }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -19,9 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrevision.R;
-import com.example.carrevision.adapter.RecyclerAdapter;
-import com.example.carrevision.database.entity.CarEntity;
+import com.example.carrevision.adapter.CarRecyclerAdapter;
+import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.ui.BaseActivity;
+import com.example.carrevision.ui.revision.RevisionActivity;
 import com.example.carrevision.util.RecyclerViewItemClickListener;
 import com.example.carrevision.viewmodel.car.CarListVM;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,12 +29,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
+/**
+ * Cars activity class
+ */
 public class CarsActivity extends BaseActivity {
     private static final String TAG = "CarsActivity";
 
-    private List<CarEntity> cars;
-    private RecyclerAdapter<CarEntity> adapter;
+    private List<CompleteCar> cars;
+    private CarRecyclerAdapter adapter;
     private CarListVM carsVM;
 
     @Override
@@ -55,14 +59,14 @@ public class CarsActivity extends BaseActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         cars = new ArrayList<>();
-        adapter = new RecyclerAdapter<>(new RecyclerViewItemClickListener() {
+        adapter = new CarRecyclerAdapter(new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.d(TAG, "clicked position: " + position + " on " + cars.get(position).getId());
+                Log.d(TAG, "clicked position: " + position + " on " + cars.get(position).car.getId());
 
                 Intent intent = new Intent(CarsActivity.this, CarDetailsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.putExtra("carId", cars.get(position).getId());
+                intent.putExtra("carId", cars.get(position).car.getId());
                 startActivity(intent);
             }
         });
@@ -105,10 +109,14 @@ public class CarsActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Searches in the cars list for the typed text
+     * @param text Text to search
+     */
     private void filter(String text) {
-        ArrayList<CarEntity> filtered = new ArrayList<>();
-        for (CarEntity ce : cars) {
-            if (ce.getPlate().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+        ArrayList<CompleteCar> filtered = new ArrayList<>();
+        for (CompleteCar ce : cars) {
+            if (ce.car.getPlate().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
                 filtered.add(ce);
             }
         }

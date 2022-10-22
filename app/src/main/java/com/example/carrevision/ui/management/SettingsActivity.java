@@ -5,13 +5,16 @@ import android.os.Bundle;
 import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.util.LocaleManager;
 
+/**
+ * Settings activity class
+ */
 public class SettingsActivity extends BaseActivity {
     private LocaleManager localeManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        localeManager = new LocaleManager();
+        localeManager = LocaleManager.getInstance();
 
         /*
         EXAMPLE OF USE

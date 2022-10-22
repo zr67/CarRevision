@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.carrevision.database.entity.RevisionEntity;
+import com.example.carrevision.database.pojo.CompleteRevision;
 
 import java.util.List;
 
@@ -22,15 +24,17 @@ public interface RevisionDao {
      * @param id Revision's unique identifier
      * @return RevisionEntity corresponding to the identifier
      */
+    @Transaction
     @Query("SELECT * FROM revisions WHERE id = :id")
-    LiveData<RevisionEntity> getById(int id);
+    LiveData<CompleteRevision> getById(int id);
 
     /**
      * Gets all revisions
      * @return List of all RevisionEntity
      */
+    @Transaction
     @Query("SELECT * FROM revisions")
-    LiveData<List<RevisionEntity>> getAll();
+    LiveData<List<CompleteRevision>> getAll();
 
     /**
      * Insert a new revision into the database
