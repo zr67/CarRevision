@@ -97,6 +97,6 @@ public class CantonEntity {
     @NonNull
     @Override
     public String toString() {
-        return getId() + " " + getCanton() + " " + getAbbreviation();
+        return getAbbreviation();
     }
 }

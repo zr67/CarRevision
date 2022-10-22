@@ -138,6 +138,6 @@ public class TechnicianEntity {
     @NonNull
     @Override
     public String toString() {
-        return getId() + " " + getTitle() + " " + getFirstname() + " " + getLastname() + " " + getEmail();
+        return getTitle() + " " + getFirstname() + " " + getLastname();
     }
 }

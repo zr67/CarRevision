@@ -9,17 +9,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
 import com.example.carrevision.R;
+import com.example.carrevision.adapter.CantonListAdapter;
 import com.example.carrevision.adapter.ListAdapter;
 import com.example.carrevision.database.entity.CantonEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
+import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.util.StringUtility;
 import com.example.carrevision.viewmodel.canton.CantonListVM;
+import com.example.carrevision.viewmodel.car.CarListVM;
 import com.example.carrevision.viewmodel.revision.RevisionVM;
 import com.example.carrevision.viewmodel.technician.TechnicianListVM;
 
@@ -52,37 +56,22 @@ public class RevisionActivity extends BaseActivity {
     private Spinner spnStatus;
     private Spinner spnTechnician;
 
-    private ListAdapter<CantonEntity> adapterCantons;
+    private CantonListAdapter adapterCantons;
     private ListAdapter<String> adapterStatus;
     private ListAdapter<TechnicianEntity> adapterTechnician;
 
     private RevisionVM revisionVM;
     private TechnicianListVM techniciansVM;
     private CantonListVM cantonsVM;
+    private CarListVM carsVM;
     private CompleteRevision revision;
-    private List<CantonEntity> cantons;
-    private List<TechnicianEntity> technicians;
+    private List<CompleteCar> cars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_revision, frameLayout);
         initView();
-
-        CantonListVM.Factory cFact = new CantonListVM.Factory(getApplication());
-        cantonsVM = new ViewModelProvider(new ViewModelStore(), cFact).get(CantonListVM.class);
-        cantonsVM.getCantons().observe(this, cantonEntities -> {
-            if (cantonEntities != null) {
-                cantons = cantonEntities;
-            }
-        });
-        TechnicianListVM.Factory tFact = new TechnicianListVM.Factory(getApplication());
-        techniciansVM = new ViewModelProvider(new ViewModelStore(), tFact).get(TechnicianListVM.class);
-        techniciansVM.getTechnicians().observe(this, technicianEntities -> {
-            if (technicianEntities != null) {
-                technicians = technicianEntities;
-            }
-        });
 
         String rev = getIntent().getStringExtra("revisionId");
         if (rev == null) {
@@ -102,35 +91,47 @@ public class RevisionActivity extends BaseActivity {
             setTitle("Revision Details");
         }
 
-        setupCantonsSpinner();
-        setupStatusSpinner();
-        setupTechnicianSpinner();
+        CarListVM.Factory caFact = new CarListVM.Factory(getApplication());
+        carsVM = new ViewModelProvider(new ViewModelStore(), caFact).get(CarListVM.class);
+        carsVM.getCars().observe(this, carEntities -> {
+            if (carEntities != null) {
+                cars = carEntities;
+            }
+        });
+        setupSpinners();
+        setupSpinnerVMs();
     }
 
     /**
-     * Prepares the cantons spinner
+     * Prepares the spinners
      */
-    private void setupCantonsSpinner() {
-        Log.e("cantons", cantons == null ? "null" : "nn");
-        adapterCantons = new ListAdapter<>(this, R.layout.tv_list_view, new ArrayList<>());
+    private void setupSpinners() {
+        adapterCantons = new CantonListAdapter(this, R.layout.tv_list_view, new ArrayList<>());
         spnCantons.setAdapter(adapterCantons);
-    }
-
-    /**
-     * Prepares the status spinner
-     */
-    private void setupStatusSpinner() {
-        //adapterStatus = new ListAdapter<>(this, R.layout.tv_list_view, );
-        //spnStatus.setAdapter(adapterStatus);
-    }
-
-    /**
-     * Prepares the technician spinner
-     */
-    private void setupTechnicianSpinner() {
-        Log.e("technicians", technicians == null ? "null" : "nn");
+        //adapterStatus = new ListAdapter<>(this, R.layout.tv_list_view, R.array.status); // string resources = bullshit !!! translations
+        spnStatus.setAdapter(adapterStatus);
         adapterTechnician = new ListAdapter<>(this, R.layout.tv_list_view, new ArrayList<>());
         spnTechnician.setAdapter(adapterTechnician);
+    }
+
+    /**
+     * Sets up the spinner view-models
+     */
+    private void setupSpinnerVMs() {
+        CantonListVM.Factory cFact = new CantonListVM.Factory(getApplication());
+        cantonsVM = new ViewModelProvider(new ViewModelStore(), cFact).get(CantonListVM.class);
+        cantonsVM.getCantons().observe(this, cantonEntities -> {
+            if (cantonEntities != null) {
+                adapterCantons.updateData(cantonEntities);
+            }
+        });
+        TechnicianListVM.Factory tFact = new TechnicianListVM.Factory(getApplication());
+        techniciansVM = new ViewModelProvider(new ViewModelStore(), tFact).get(TechnicianListVM.class);
+        techniciansVM.getTechnicians().observe(this, technicianEntities -> {
+            if (technicianEntities != null) {
+                adapterTechnician.updateData(technicianEntities);
+            }
+        });
     }
 
     /**
@@ -175,7 +176,8 @@ public class RevisionActivity extends BaseActivity {
      */
     private void updateContent() {
         if (revision != null) {
-            //spnCantons
+            String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
+            spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton)));
             etPlate.setText(StringUtility.plateWithoutAbbreviation(revision.completeCar.car.getPlate()));
             etBrand.setText(revision.completeCar.modelWithBrand.brand.getBrand());
             etModel.setText(revision.completeCar.modelWithBrand.model.getModel());
@@ -187,7 +189,7 @@ public class RevisionActivity extends BaseActivity {
                 etDateEnd.setText(StringUtility.dateToDateTimeString(end, getApplicationContext()));
             }
             //spnStatus
-            //spnTechnicians
+            spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician));
         }
     }
 

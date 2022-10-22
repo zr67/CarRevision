@@ -64,4 +64,13 @@ public class StringUtility {
         }
         return df.format(date);
     }
+
+    /**
+     * Gets the canton's abbreviation from a plate
+     * @param plate Plate
+     * @return Canton's abbreviation
+     */
+    public static String abbreviationFromPlate(String plate) {
+        return plate.substring(0, 2);
+    }
 }

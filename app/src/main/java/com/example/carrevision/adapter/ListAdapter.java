@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ListAdapter<T> extends ArrayAdapter<T> {
     private int resource;
-    private List<T> data;
+    protected List<T> data;
 
     /**
      * Constructor of the list adapter class
@@ -56,6 +56,22 @@ public class ListAdapter<T> extends ArrayAdapter<T> {
     }
 
     /**
+     * Returns the item's position
+     * @param item Item to search
+     * @return Item index
+     */
+    public int getPosition(T item) {
+        if (this.data.contains(item)) {
+            for (int i = 0; i < this.data.size(); i++) {
+                if (this.data.get(i).equals(item)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Gets the custom view containing the item
      * @param position View position
      * @param convertView Item position
@@ -64,7 +80,6 @@ public class ListAdapter<T> extends ArrayAdapter<T> {
      */
     private View getCustomView(int position, View convertView, ViewGroup parent) {
         ListAdapter.ViewHolder viewHolder;
-
         if (convertView == null) {
             convertView = LayoutInflater.from(this.getContext()).inflate(this.resource, parent, false);
             viewHolder = new ListAdapter.ViewHolder();
