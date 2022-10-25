@@ -1,5 +1,6 @@
 package com.example.carrevision.ui.revision;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,19 +42,15 @@ import java.util.List;
  */
 public class RevisionActivity extends BaseActivity {
     private static final String TAG = "RevisionActivity";
+    private boolean noUp;
     private boolean editable;
+    private boolean hasChanges;
 
-    private Spinner spnCantons;
-    private EditText etPlate;
     private ImageButton bAddCar;
-    private EditText etBrand;
-    private EditText etModel;
-    private EditText etMileage;
-    private EditText etYear;
-    private EditText etDateStart;
-    private EditText etDateEnd;
-    private Spinner spnStatus;
-    private Spinner spnTechnician;
+    private Spinner spnCantons, spnStatus, spnTechnician;
+    private EditText etPlate, etBrand, etModel, etMileage, etYear, etDateStart, etDateEnd;
+
+    private Toast toast;
 
     private CantonListAdapter adapterCantons;
     private StatusListAdapter adapterStatus;
@@ -63,8 +60,10 @@ public class RevisionActivity extends BaseActivity {
     private TechnicianListVM techniciansVM;
     private CantonListVM cantonsVM;
     private CarListVM carsVM;
+
     private CompleteRevision revision;
     private List<CompleteCar> cars;
+    private CompleteCar matchingCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +71,22 @@ public class RevisionActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_revision, frameLayout);
         initView();
 
-        String rev = getIntent().getStringExtra("revisionId");
-        if (rev == null) {
+        noUp = false;
+        hasChanges = false;
+        int revisionId = getIntent().getIntExtra("revisionId", -1);
+        if (revisionId <= 0) {
             setTitle("Create Revision");
+            matchingCar = null;
             switchMode();
         }
         else {
             setTitle("Revision Details");
-            int revisionId = Integer.parseInt(rev);
             RevisionVM.Factory factory = new RevisionVM.Factory(getApplication(), revisionId);
             revisionVM = new ViewModelProvider(new ViewModelStore(), factory).get(RevisionVM.class);
             revisionVM.getRevision().observe(this, revisionEntity -> {
                 if (revisionEntity != null) {
                     revision = revisionEntity;
+                    matchingCar = revision.completeCar;
                     updateContent();
                 }
             });
@@ -174,21 +176,30 @@ public class RevisionActivity extends BaseActivity {
      * Saves the changes made to the revision
      */
     private void saveChanges(String startDate, String endDate, Status status, TechnicianEntity technician) {
-        // check if dates are valid
-        if (true) {
-
-        }
         RevisionEntity rev = revision.revision;
+        //if (StringUtility.isValidDate(startDate)) {
+        //    rev.setStart(StringUtility.dateFromString(startDate));
+        //}
+        //if (StringUtility.isValidDate(endDate)) {
+        //    rev.setEnd(StringUtility.dateFromString(endDate));
+        //}
+        //else {
+        //    rev.setEnd(null);
+        //}
         rev.setStatus(status);
         rev.setTechnicianId(technician.getId());
         revisionVM.updateRevision(rev, new OnAsyncEventListener() {
             @Override
             public void onSuccess() {
-                Log.e("UPDATE", "SUCCESS");
+                Log.d(TAG, "Revision " + revision.revision.getId() + " successfully updated");
+                toast = Toast.makeText(getApplicationContext(), getString(R.string.revision_update_success), Toast.LENGTH_LONG);
+                toast.show();
             }
             @Override
             public void onFailure(Exception e) {
-                Log.e("UPDATE", "FAILED");
+                Log.w(TAG, "Failed to update the revision " + revision.revision.getId());
+                toast = Toast.makeText(getApplicationContext(), getString(R.string.revision_update_fail), Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }
@@ -198,7 +209,6 @@ public class RevisionActivity extends BaseActivity {
      */
     private void switchMode() {
         if (editable) {
-            // figure out how to do the update for the carid
             saveChanges(etDateStart.getText().toString(), etDateEnd.getText().toString(), (Status) spnStatus.getSelectedItem(), (TechnicianEntity) spnTechnician.getSelectedItem());
         }
         spnCantons.setFocusable(!editable);
@@ -229,6 +239,7 @@ public class RevisionActivity extends BaseActivity {
      */
     private void updateContent() {
         if (revision != null) {
+            noUp = true;
             String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
             spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton)));
             etPlate.setText(StringUtility.plateWithoutAbbreviation(revision.completeCar.car.getPlate()));
@@ -243,7 +254,24 @@ public class RevisionActivity extends BaseActivity {
             }
             spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus()));
             spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician));
+            noUp = false;
         }
+    }
+
+    /**
+     * Searches for an existing car matching the plate entered by the user
+     */
+    private void searchForMatchingCar() {
+        for (CompleteCar cc : cars) {
+            String abbr = ((CantonEntity)spnCantons.getSelectedItem()).getAbbreviation();
+            if (cc.car.getPlate().equals(abbr + etPlate.getText().toString())) {
+                matchingCar = cc;
+                bAddCar.setImageResource(R.drawable.ic_done_white_24dp);
+                return;
+            }
+        }
+        matchingCar = null;
+        bAddCar.setImageResource(R.drawable.ic_action_add);
     }
 
     /**
@@ -260,7 +288,9 @@ public class RevisionActivity extends BaseActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable) {
-                //updateCarInfo();
+                if (!noUp) {
+                    searchForMatchingCar();
+                }
             }
         });
         bAddCar = findViewById(R.id.b_checkPlate);
@@ -279,8 +309,15 @@ public class RevisionActivity extends BaseActivity {
         etPlate.setEnabled(false);
         bAddCar.setEnabled(false);
         bAddCar.setOnClickListener(view -> {
-            // if car exists, toast with info msg
-            // else go to car creation
+            if (matchingCar != null) {
+                revision.revision.setCarId(matchingCar.car.getId());
+            }
+            else {
+                /*Intent intent = new Intent(RevisionActivity.this, CarActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.putExtra("plate", ((CantonEntity) spnCantons.getSelectedItem()).getAbbreviation() + etPlate.getText().toString());
+                startActivity(intent);*/
+            }
         });
         etBrand.setFocusable(false);
         etBrand.setEnabled(false);

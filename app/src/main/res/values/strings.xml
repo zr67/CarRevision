@@ -24,4 +24,6 @@
     <string name="status">Status</string>
     <string name="technician">Technician</string>
     <string name="action_add">Add</string>
+    <string name="revision_update_success">Revision successfully updated</string>
+    <string name="revision_update_fail">Failed to update the revision</string>
 </resources>

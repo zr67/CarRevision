@@ -25,4 +25,6 @@
     <string name="status">Statut</string>
     <string name="technician">Technicien</string>
     <string name="action_add">Ajouter</string>
+    <string name="revision_update_success">Révision mise à jour</string>
+    <string name="revision_update_fail">Erreur lors de la mise à jour de la révision</string>
 </resources>
