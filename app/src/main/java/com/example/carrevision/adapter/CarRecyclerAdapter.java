@@ -106,8 +106,8 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         public ViewHolder(View itemView) {
             super(itemView);
             this.tvPlate = itemView.findViewById(R.id.tv_plate);
-            this.tvBrand = itemView.findViewById(R.id.tv_brand);
-            this.tvModel = itemView.findViewById(R.id.tv_model);
+            this.tvBrand = itemView.findViewById(R.id.tv_datetime);
+            this.tvModel = itemView.findViewById(R.id.tv_status);
         }
     }
 }

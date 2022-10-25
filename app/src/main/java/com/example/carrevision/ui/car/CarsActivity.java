@@ -63,7 +63,7 @@ public class CarsActivity extends BaseActivity {
             public void onItemClick(View v, int position) {
                 Log.d(TAG, "clicked position: " + position + " on " + cars.get(position).car.getId());
 
-                Intent intent = new Intent(CarsActivity.this, CarDetailsActivity.class);
+                Intent intent = new Intent(CarsActivity.this, CarsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra("carId", cars.get(position).car.getId());
                 startActivity(intent);
@@ -72,7 +72,7 @@ public class CarsActivity extends BaseActivity {
 
         FloatingActionButton btnAdd = findViewById(R.id.button_add);
         btnAdd.setOnClickListener(view -> {
-            Intent intent = new Intent(CarsActivity.this, CarEditActivity.class);
+            Intent intent = new Intent(CarsActivity.this, CarsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });

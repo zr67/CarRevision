@@ -33,7 +33,7 @@ public interface RevisionDao {
      * @return List of all RevisionEntity
      */
     @Transaction
-    @Query("SELECT * FROM revisions")
+    @Query("SELECT * FROM revisions ORDER BY start")
     LiveData<List<CompleteRevision>> getAll();
 
     /**

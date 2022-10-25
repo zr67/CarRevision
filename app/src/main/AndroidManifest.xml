@@ -14,7 +14,7 @@
         android:theme="@style/Theme.CarRevision"
         tools:targetApi="33">
         <activity
-            android:name="com.example.carrevision.ui.car.CarsActivity"
+            android:name="com.example.carrevision.ui.revision.RevisionsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.revision.RevisionActivity"/>
+        <activity android:name=".ui.car.CarsActivity"/>
     </application>
 
 </manifest>
