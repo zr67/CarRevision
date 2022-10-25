@@ -144,7 +144,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fab_margin">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_rev_date_start"

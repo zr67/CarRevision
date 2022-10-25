@@ -24,4 +24,5 @@
     <string name="date_end">Date de fin</string>
     <string name="status">Statut</string>
     <string name="technician">Technicien</string>
+    <string name="action_add">Ajouter</string>
 </resources>

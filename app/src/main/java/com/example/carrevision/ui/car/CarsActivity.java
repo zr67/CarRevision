@@ -29,7 +29,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * Cars activity class
@@ -45,12 +44,12 @@ public class CarsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getLayoutInflater().inflate(R.layout.activity_cars, frameLayout);
+        getLayoutInflater().inflate(R.layout.activity_list, frameLayout);
 
         setTitle(getString(R.string.title_activity_cars));
         navigationView.setCheckedItem(position);
 
-        RecyclerView recyclerView = findViewById(R.id.carsRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -71,7 +70,7 @@ public class CarsActivity extends BaseActivity {
             }
         });
 
-        FloatingActionButton btnAdd = findViewById(R.id.floatingActionButton);
+        FloatingActionButton btnAdd = findViewById(R.id.button_add);
         btnAdd.setOnClickListener(view -> {
             Intent intent = new Intent(CarsActivity.this, CarEditActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
