@@ -7,8 +7,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.database.repository.RevisionRepository;
+import com.example.carrevision.util.OnAsyncEventListener;
 import com.example.carrevision.viewmodel.BaseVM;
 
 /**
@@ -66,5 +68,14 @@ public class RevisionVM extends BaseVM {
      */
     public LiveData<CompleteRevision> getRevision() {
         return observableRevision;
+    }
+
+    /**
+     * Updates a revision
+     * @param revision Revision to update
+     * @param callback Callback
+     */
+    public void updateRevision(RevisionEntity revision, OnAsyncEventListener callback) {
+        repository.update(revision, callback, application);
     }
 }

@@ -1,26 +1,31 @@
 package com.example.carrevision.ui.revision;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
 import com.example.carrevision.R;
 import com.example.carrevision.adapter.CantonListAdapter;
 import com.example.carrevision.adapter.ListAdapter;
+import com.example.carrevision.adapter.StatusListAdapter;
 import com.example.carrevision.database.entity.CantonEntity;
+import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
 import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.ui.BaseActivity;
+import com.example.carrevision.util.OnAsyncEventListener;
+import com.example.carrevision.util.Status;
 import com.example.carrevision.util.StringUtility;
 import com.example.carrevision.viewmodel.canton.CantonListVM;
 import com.example.carrevision.viewmodel.car.CarListVM;
@@ -36,17 +41,11 @@ import java.util.List;
  */
 public class RevisionActivity extends BaseActivity {
     private static final String TAG = "RevisionActivity";
-
-    private static final int CREATE_REVISION = 0;
-    private static final int EDIT_REVISION = 1;
-    private static final int DELETE_REVISION = 2;
-
-    private Toast toast;
     private boolean editable;
 
     private Spinner spnCantons;
     private EditText etPlate;
-    private Button bAddCar;
+    private ImageButton bAddCar;
     private EditText etBrand;
     private EditText etModel;
     private EditText etMileage;
@@ -57,7 +56,7 @@ public class RevisionActivity extends BaseActivity {
     private Spinner spnTechnician;
 
     private CantonListAdapter adapterCantons;
-    private ListAdapter<String> adapterStatus;
+    private StatusListAdapter adapterStatus;
     private ListAdapter<TechnicianEntity> adapterTechnician;
 
     private RevisionVM revisionVM;
@@ -79,6 +78,7 @@ public class RevisionActivity extends BaseActivity {
             switchMode();
         }
         else {
+            setTitle("Revision Details");
             int revisionId = Integer.parseInt(rev);
             RevisionVM.Factory factory = new RevisionVM.Factory(getApplication(), revisionId);
             revisionVM = new ViewModelProvider(new ViewModelStore(), factory).get(RevisionVM.class);
@@ -88,7 +88,6 @@ public class RevisionActivity extends BaseActivity {
                     updateContent();
                 }
             });
-            setTitle("Revision Details");
         }
 
         CarListVM.Factory caFact = new CarListVM.Factory(getApplication());
@@ -102,13 +101,50 @@ public class RevisionActivity extends BaseActivity {
         setupSpinnerVMs();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (revision != null) {
+            getMenuInflater().inflate(R.menu.edit_delete, menu);
+        }
+        else {
+            getMenuInflater().inflate(R.menu.apply, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_edit) {
+            if (!editable) {
+                Log.i(TAG, "Edit button clicked for the revision " + revision.revision.getId());
+                item.setIcon(R.drawable.ic_done_white_24dp);
+            }
+            else {
+                Log.i(TAG, "Done button clicked for the revision " + revision.revision.getId());
+                item.setIcon(R.drawable.ic_edit_white_24dp);
+            }
+            switchMode();
+        }
+        else if (item.getItemId() == R.id.action_delete) {
+            Log.e(TAG, "Delete button clicked for the revision " + revision.revision.getId());
+        }
+        else if (item.getItemId() == R.id.action_apply) {
+            Log.e(TAG, "Create button clicked");
+        }
+        else {//if (hasChanges) {
+            // ask to save or discard
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Prepares the spinners
      */
     private void setupSpinners() {
         adapterCantons = new CantonListAdapter(this, R.layout.tv_list_view, new ArrayList<>());
         spnCantons.setAdapter(adapterCantons);
-        //adapterStatus = new ListAdapter<>(this, R.layout.tv_list_view, R.array.status); // string resources = bullshit !!! translations
+        adapterStatus = new StatusListAdapter(this, R.layout.tv_list_view, Status.getAllStatus());
         spnStatus.setAdapter(adapterStatus);
         adapterTechnician = new ListAdapter<>(this, R.layout.tv_list_view, new ArrayList<>());
         spnTechnician.setAdapter(adapterTechnician);
@@ -137,8 +173,24 @@ public class RevisionActivity extends BaseActivity {
     /**
      * Saves the changes made to the revision
      */
-    private void saveChanges() {
+    private void saveChanges(String startDate, String endDate, Status status, TechnicianEntity technician) {
+        // check if dates are valid
+        if (true) {
 
+        }
+        RevisionEntity rev = revision.revision;
+        rev.setStatus(status);
+        rev.setTechnicianId(technician.getId());
+        revisionVM.updateRevision(rev, new OnAsyncEventListener() {
+            @Override
+            public void onSuccess() {
+                Log.e("UPDATE", "SUCCESS");
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("UPDATE", "FAILED");
+            }
+        });
     }
 
     /**
@@ -146,7 +198,8 @@ public class RevisionActivity extends BaseActivity {
      */
     private void switchMode() {
         if (editable) {
-            saveChanges();
+            // figure out how to do the update for the carid
+            saveChanges(etDateStart.getText().toString(), etDateEnd.getText().toString(), (Status) spnStatus.getSelectedItem(), (TechnicianEntity) spnTechnician.getSelectedItem());
         }
         spnCantons.setFocusable(!editable);
         spnCantons.setEnabled(!editable);
@@ -188,7 +241,7 @@ public class RevisionActivity extends BaseActivity {
             if (end != null) {
                 etDateEnd.setText(StringUtility.dateToDateTimeString(end, getApplicationContext()));
             }
-            //spnStatus
+            spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus()));
             spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician));
         }
     }
@@ -198,28 +251,36 @@ public class RevisionActivity extends BaseActivity {
      */
     private void initView() {
         editable = false;
-        spnCantons = findViewById(R.id.spinner_rev_canton);
+        spnCantons = findViewById(R.id.spn_rev_canton);
         etPlate = findViewById(R.id.et_rev_plate);
-        bAddCar = findViewById(R.id.b_rev_add_car);
+        etPlate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //updateCarInfo();
+            }
+        });
+        bAddCar = findViewById(R.id.b_checkPlate);
         etBrand = findViewById(R.id.et_rev_brand);
         etModel = findViewById(R.id.et_rev_model);
         etMileage = findViewById(R.id.et_rev_mileage);
         etYear = findViewById(R.id.et_rev_year);
         etDateStart = findViewById(R.id.et_rev_date_start);
         etDateEnd = findViewById(R.id.et_rev_date_end);
-        spnStatus = findViewById(R.id.spinner_rev_status);
-        spnTechnician = findViewById(R.id.spinner_rev_technician);
+        spnStatus = findViewById(R.id.spn_rev_status);
+        spnTechnician = findViewById(R.id.spn_rev_technician);
 
         spnCantons.setFocusable(false);
         spnCantons.setEnabled(false);
         etPlate.setFocusable(false);
         etPlate.setEnabled(false);
         bAddCar.setEnabled(false);
-        bAddCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        bAddCar.setOnClickListener(view -> {
+            // if car exists, toast with info msg
+            // else go to car creation
         });
         etBrand.setFocusable(false);
         etBrand.setEnabled(false);

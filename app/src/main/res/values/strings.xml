@@ -6,4 +6,21 @@
     <string name="title_activity_revisions">Revisions</string>
     <string name="title_activity_cars">Cars</string>
     <string name="action_search">Search</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_apply">Apply</string>
+    <string name="stat_awaiting">Awaiting</string>
+    <string name="stat_ongoing">Ongoing</string>
+    <string name="stat_finished">Finished</string>
+    <string name="stat_canceled">Canceled</string>
+    <string name="canton">Canton</string>
+    <string name="plate">Plate</string>
+    <string name="brand">Brand</string>
+    <string name="model">Model</string>
+    <string name="mileage">Mileage</string>
+    <string name="year">Year</string>
+    <string name="date_start">Start date</string>
+    <string name="date_end">End date</string>
+    <string name="status">Status</string>
+    <string name="technician">Technician</string>
 </resources>

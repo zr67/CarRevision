@@ -9,6 +9,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.carrevision.util.Status;
+
 import java.util.Date;
 
 /**
@@ -46,7 +48,7 @@ public class RevisionEntity {
     @ColumnInfo(name = "end")
     private Date end;
     @ColumnInfo(name = "status")
-    private String status;
+    private Status status;
 
     /**
      * Default constructor for the revision entity class
@@ -62,7 +64,7 @@ public class RevisionEntity {
      * @param end Revision's end date and time
      * @param status Revision's status
      */
-    public RevisionEntity(int technicianId, int carId, @NonNull Date start, Date end, String status) {
+    public RevisionEntity(int technicianId, int carId, @NonNull Date start, Date end, Status status) {
         this.technicianId = technicianId;
         this.carId = carId;
         this.start = start;
@@ -114,7 +116,7 @@ public class RevisionEntity {
      * Gets the revision's status
      * @return Revision's status
      */
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -162,7 +164,7 @@ public class RevisionEntity {
      * Sets the revision's status
      * @param status Revision's status
      */
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

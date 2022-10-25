@@ -91,9 +91,18 @@ public class ListAdapter<T> extends ArrayAdapter<T> {
         }
         T item = getItem(position);
         if (item != null) {
-            viewHolder.itemView.setText(item.toString());
+            viewHolder.itemView.setText(getItemString(item));
         }
         return convertView;
+    }
+
+    /**
+     * Gets the string representation of the item
+     * @param item Item
+     * @return String representation
+     */
+    protected String getItemString(T item) {
+        return item.toString();
     }
 
     /**

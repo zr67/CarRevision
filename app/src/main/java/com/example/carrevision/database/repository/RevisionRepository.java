@@ -5,7 +5,10 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.example.carrevision.BaseApp;
+import com.example.carrevision.database.async.revision.UpdateRevision;
+import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.pojo.CompleteRevision;
+import com.example.carrevision.util.OnAsyncEventListener;
 
 /**
  * Revision repository singleton
@@ -41,5 +44,15 @@ public class RevisionRepository {
      */
     public LiveData<CompleteRevision> getRevision(Application application, int revisionId) {
         return ((BaseApp) application).getDatabase().revisionDao().getById(revisionId);
+    }
+
+    /**
+     * Updates a revision
+     * @param revision Revision to update
+     * @param callback Callback
+     * @param application Application
+     */
+    public void update(final RevisionEntity revision, OnAsyncEventListener callback, Application application) {
+        new UpdateRevision((BaseApp) application, callback).execute(revision);
     }
 }

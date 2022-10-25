@@ -9,6 +9,7 @@ import com.example.carrevision.database.entity.CarEntity;
 import com.example.carrevision.database.entity.ModelEntity;
 import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
+import com.example.carrevision.util.Status;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -97,7 +98,7 @@ public class DBInitializer {
      * @param end Revision's end date and time
      * @param status Revision's status
      */
-    private static void addRevision(final AppDatabase db, final int technicianId, final int carId, final Date start, final Date end, final String status) {
+    private static void addRevision(final AppDatabase db, final int technicianId, final int carId, final Date start, final Date end, final Status status) {
         RevisionEntity revisionEntity = new RevisionEntity(technicianId, carId, start, end, status);
         db.revisionDao().insert(revisionEntity);
     }
@@ -286,15 +287,15 @@ public class DBInitializer {
     private static void addRevisions(AppDatabase db) {
         db.revisionDao().deleteAll();
 
-        addRevision(db, 3, 3, new GregorianCalendar(2022, Calendar.JUNE, 9, 10, 30).getTime(), new GregorianCalendar(2022, Calendar.JUNE, 9, 17, 0).getTime(), "Finished");
-        addRevision(db, 1, 10, new GregorianCalendar(2022, Calendar.JULY, 3, 14, 30).getTime(), new GregorianCalendar(2022, Calendar.JULY, 4, 10, 45).getTime(), "Finished");
-        addRevision(db, 1, 23, new GregorianCalendar(2022, Calendar.AUGUST, 14, 13, 30).getTime(), new GregorianCalendar(2022, Calendar.AUGUST, 13, 18, 10).getTime(), "Finished");
-        addRevision(db, 3, 18, new GregorianCalendar(2022, Calendar.OCTOBER, 8, 8, 45).getTime(), new GregorianCalendar(2022, Calendar.OCTOBER, 8, 12, 0).getTime(), "Finished");
-        addRevision(db, 4, 7, new GregorianCalendar(2022, Calendar.OCTOBER, 14, 11, 30).getTime(), null, "Processing");
-        addRevision(db, 2, 4, new GregorianCalendar(2022, Calendar.OCTOBER, 17, 14, 0).getTime(), null, "Processing");
-        addRevision(db, 3, 5, new GregorianCalendar(2022, Calendar.OCTOBER, 10, 10, 10).getTime(), null, "Processing");
-        addRevision(db, 1, 9, new GregorianCalendar(2022, Calendar.NOVEMBER, 23, 14, 30).getTime(), null, "Awaiting");
-        addRevision(db, 5, 1, new GregorianCalendar(2022, Calendar.DECEMBER, 11, 8, 45).getTime(), null, "Awaiting");
+        addRevision(db, 3, 3, new GregorianCalendar(2022, Calendar.JUNE, 9, 10, 30).getTime(), new GregorianCalendar(2022, Calendar.JUNE, 9, 17, 0).getTime(), Status.FINISHED);
+        addRevision(db, 1, 10, new GregorianCalendar(2022, Calendar.JULY, 3, 14, 30).getTime(), new GregorianCalendar(2022, Calendar.JULY, 4, 10, 45).getTime(), Status.FINISHED);
+        addRevision(db, 1, 23, new GregorianCalendar(2022, Calendar.AUGUST, 14, 13, 30).getTime(), new GregorianCalendar(2022, Calendar.AUGUST, 13, 18, 10).getTime(), Status.FINISHED);
+        addRevision(db, 3, 18, new GregorianCalendar(2022, Calendar.OCTOBER, 8, 8, 45).getTime(), new GregorianCalendar(2022, Calendar.OCTOBER, 8, 12, 0).getTime(), Status.FINISHED);
+        addRevision(db, 4, 7, new GregorianCalendar(2022, Calendar.OCTOBER, 14, 11, 30).getTime(), null, Status.ONGOING);
+        addRevision(db, 2, 4, new GregorianCalendar(2022, Calendar.OCTOBER, 17, 14, 0).getTime(), null, Status.ONGOING);
+        addRevision(db, 3, 5, new GregorianCalendar(2022, Calendar.OCTOBER, 10, 10, 10).getTime(), null, Status.ONGOING);
+        addRevision(db, 1, 9, new GregorianCalendar(2022, Calendar.NOVEMBER, 23, 14, 30).getTime(), null, Status.AWAITING);
+        addRevision(db, 5, 1, new GregorianCalendar(2022, Calendar.DECEMBER, 11, 8, 45).getTime(), null, Status.AWAITING);
     }
 
     /**
