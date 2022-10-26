@@ -10,22 +10,29 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrevision.R;
-import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.pojo.CompleteRevision;
+import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.util.RecyclerViewItemClickListener;
 import com.example.carrevision.util.StringUtility;
 
 import java.util.List;
 
+/**
+ * Adapter class for the revisions recycle view
+ */
 public class RevisionRecyclerAdapter extends RecyclerView.Adapter<RevisionRecyclerAdapter.ViewHolder> {
     private List<CompleteRevision> data;
     private final RecyclerViewItemClickListener listener;
+    private final BaseActivity activity;
 
     /**
      * Adapter class fot the revisions recycle view constructor
      * @param listener List's items listener
      */
-    public RevisionRecyclerAdapter(RecyclerViewItemClickListener listener) { this.listener = listener; }
+    public RevisionRecyclerAdapter(RecyclerViewItemClickListener listener, BaseActivity activity) {
+        this.listener = listener;
+        this.activity = activity;
+    }
 
     @NonNull
     @Override
@@ -43,8 +50,8 @@ public class RevisionRecyclerAdapter extends RecyclerView.Adapter<RevisionRecycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CompleteRevision revision = data.get(position);
         holder.tvPlate.setText(revision.completeCar.car.getPlate());
-        holder.tvDatetime.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), holder.tvDatetime.getContext())); // A revoir
-        holder.tvStatus.setText(holder.tvStatus.getContext().getString(revision.revision.getStatus().getStringResourceId())); // A revoir
+        holder.tvDatetime.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), activity));
+        holder.tvStatus.setText(activity.getString(revision.revision.getStatus().getStringResourceId()));
     }
 
     @Override

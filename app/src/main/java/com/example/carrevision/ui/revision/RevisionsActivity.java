@@ -19,12 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrevision.R;
 import com.example.carrevision.adapter.RevisionRecyclerAdapter;
-import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.ui.BaseActivity;
-import com.example.carrevision.ui.car.CarsActivity;
 import com.example.carrevision.util.RecyclerViewItemClickListener;
-import com.example.carrevision.viewmodel.car.CarListVM;
 import com.example.carrevision.viewmodel.revision.RevisionListVM;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -46,7 +43,7 @@ public class RevisionsActivity extends BaseActivity {
 
         getLayoutInflater().inflate(R.layout.activity_list, frameLayout);
 
-        setTitle("Revisions");
+        setTitle(R.string.title_activity_revisions);
         navigationView.setCheckedItem(position);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -68,7 +65,7 @@ public class RevisionsActivity extends BaseActivity {
                 intent.putExtra("revisionId", revisions.get(position).revision.getId());
                 startActivity(intent);
             }
-        });
+        }, this);
 
         FloatingActionButton btnAdd = findViewById(R.id.button_add);
         btnAdd.setOnClickListener(view -> {

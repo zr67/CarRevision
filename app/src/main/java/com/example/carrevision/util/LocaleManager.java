@@ -1,87 +1,66 @@
 package com.example.carrevision.util;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
+
+import com.example.carrevision.ui.BaseActivity;
 
 import java.util.Locale;
 
 /**
- * Locale manager singleton
+ * Locale manager class to manage application language and formats
  */
 public class LocaleManager {
-    private final String LANG = "Locale.Helper.Selected.Language";
-    private String language;
-    private static LocaleManager instance;
+    public final static String LANG_FR = "fr";
+    public final static String LANG_EN = "en";
+    private final String PREFS_LANG = "LANGUAGE";
+    private final Activity activity;
+    private final SharedPreferences sharedPrefs;
 
     /**
-     * Locale manager private constructor
+     * Locale manager class constructor
+     * @param activity Activity
      */
-    private LocaleManager() {
-        language = "en";
-    }
-
-    /**
-     * Gets the locale manager instance
-     * @return Locale manager instance
-     */
-    public static LocaleManager getInstance() {
-        if (instance == null) {
-            synchronized (LocaleManager.class) {
-                if (instance == null) {
-                    instance = new LocaleManager();
-                }
-            }
+    public LocaleManager(Activity activity) {
+        this.activity = activity;
+        sharedPrefs = activity.getSharedPreferences(BaseActivity.PREFS_NAME, 0);
+        if (!sharedPrefs.contains(PREFS_LANG)) {
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putString(PREFS_LANG, LANG_EN);
+            editor.apply();
         }
-        return instance;
     }
 
     /**
-     * Sets the language
-     * @param context Context
-     * @param language Language
-     * @return New context
+     * Gets the current language
+     * @return Current language
      */
-    public Context setLocale(Context context, String language) {
-        setLanguage(context, language);
-        this.language = language;
-        return updateResources(context, language);
+    public String getLanguage() {
+        return sharedPrefs.getString(PREFS_LANG, null);
     }
 
     /**
-     * Gets the language
-     * @param context Context
-     * @return Language
-     */
-    public String getLanguage(Context context) {
-        return language;
-    }
-
-    /**
-     * Sets the language in the preferences
-     * @param context Context
-     * @param language Language
-     */
-    private void setLanguage(Context context, String language) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(LANG, language);
-        editor.apply();
-    }
-
-    /**
-     * Updates the context with the new language
-     * @param context Context
+     * Sets the current language
      * @param language New language
-     * @return Updated context
      */
-    private Context updateResources(Context context, String language) {
-        Locale locale = new Locale(language);
+    public void setLanguage(String language) {
+        if (language.equals(LANG_FR) || language.equals(LANG_EN)) {
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putString(PREFS_LANG, language);
+            editor.apply();
+            applyLanguage();
+        }
+    }
+
+    /**
+     * Applies the language stored in the preferences
+     */
+    public void applyLanguage() {
+        Locale locale = new Locale(sharedPrefs.getString(PREFS_LANG, null));
         Locale.setDefault(locale);
-        Configuration conf = context.getResources().getConfiguration();
-        conf.setLocale(locale);
-        conf.setLayoutDirection(locale);
-        return context.createConfigurationContext(conf);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
     }
 }

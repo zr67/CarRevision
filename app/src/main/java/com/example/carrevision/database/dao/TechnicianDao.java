@@ -27,7 +27,7 @@ public interface TechnicianDao {
      * Gets all technicians
      * @return List of all TechnicianEntity
      */
-    @Query("SELECT * FROM technicians")
+    @Query("SELECT * FROM technicians ORDER BY email ASC")
     LiveData<List<TechnicianEntity>> getAll();
 
     /**

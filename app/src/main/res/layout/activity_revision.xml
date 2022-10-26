@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/fab_margin"
@@ -48,7 +43,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:hint="@string/plate" />
+                    android:hint="@string/plate"
+                    android:inputType="numberSigned" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageButton
@@ -56,6 +52,7 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_marginTop="@dimen/fab_margin"
+                android:contentDescription="@string/verify_plate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_done_white_24dp" />
@@ -83,7 +80,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/fab_margin"
-                        android:hint="@string/brand" />
+                        android:hint="@string/brand"
+                        android:inputType="textShortMessage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +94,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/fab_margin"
-                        android:hint="@string/mileage" />
+                        android:hint="@string/mileage"
+                        android:inputType="numberSigned" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -116,7 +115,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/fab_margin"
-                        android:hint="@string/model" />
+                        android:hint="@string/model"
+                        android:inputType="textShortMessage" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -128,7 +128,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/fab_margin"
-                        android:hint="@string/year" />
+                        android:hint="@string/year"
+                        android:inputType="date" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -165,7 +166,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-                android:hint="@string/date_end" />
+                android:hint="@string/date_end"
+                android:inputType="date|time" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -195,4 +197,3 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
-</LinearLayout>

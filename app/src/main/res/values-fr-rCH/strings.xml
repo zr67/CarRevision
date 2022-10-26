@@ -27,4 +27,11 @@
     <string name="action_add">Ajouter</string>
     <string name="revision_update_success">Révision mise à jour</string>
     <string name="revision_update_fail">Erreur lors de la mise à jour de la révision</string>
+    <string name="unsaved_changes">Modifications non sauvegardées</string>
+    <string name="unsaved_changes_msg">Des modifications apportées n\'ont pas été sauvegardées. Que voulez-vous faire?</string>
+    <string name="action_save">Sauvegarder</string>
+    <string name="action_discard">Abandonner</string>
+    <string name="title_new_revision">Nouvelle révision</string>
+    <string name="title_details_revision">Détail de la révision</string>
+    <string name="verify_plate">Vérifier la plaque</string>
 </resources>

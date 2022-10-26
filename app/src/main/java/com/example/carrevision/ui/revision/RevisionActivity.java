@@ -1,5 +1,6 @@
 package com.example.carrevision.ui.revision;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -7,6 +8,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -33,6 +36,7 @@ import com.example.carrevision.viewmodel.car.CarListVM;
 import com.example.carrevision.viewmodel.revision.RevisionVM;
 import com.example.carrevision.viewmodel.technician.TechnicianListVM;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,12 +79,12 @@ public class RevisionActivity extends BaseActivity {
         hasChanges = false;
         int revisionId = getIntent().getIntExtra("revisionId", -1);
         if (revisionId <= 0) {
-            setTitle("Create Revision");
+            setTitle(R.string.title_new_revision);
             matchingCar = null;
             switchMode();
         }
         else {
-            setTitle("Revision Details");
+            setTitle(R.string.title_details_revision);
             RevisionVM.Factory factory = new RevisionVM.Factory(getApplication(), revisionId);
             revisionVM = new ViewModelProvider(new ViewModelStore(), factory).get(RevisionVM.class);
             revisionVM.getRevision().observe(this, revisionEntity -> {
@@ -134,8 +138,8 @@ public class RevisionActivity extends BaseActivity {
         else if (item.getItemId() == R.id.action_apply) {
             Log.e(TAG, "Create button clicked");
         }
-        else {//if (hasChanges) {
-            // ask to save or discard
+        else if (hasChanges) {
+            showUnsavedChangesDlg();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -172,20 +176,44 @@ public class RevisionActivity extends BaseActivity {
         });
     }
 
+    private void showUnsavedChangesDlg() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.unsaved_changes));
+        alertDialog.setCancelable(false);
+        alertDialog.setMessage(getString(R.string.unsaved_changes_msg));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.action_save), (dialog, which) -> saveChanges(etDateStart.getText().toString(), etDateEnd.getText().toString(), (Status) spnStatus.getSelectedItem(), (TechnicianEntity) spnTechnician.getSelectedItem()));
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.action_discard), (dialog, which) -> alertDialog.dismiss());
+        alertDialog.show();
+    }
+
     /**
      * Saves the changes made to the revision
      */
     private void saveChanges(String startDate, String endDate, Status status, TechnicianEntity technician) {
         RevisionEntity rev = revision.revision;
-        //if (StringUtility.isValidDate(startDate)) {
-        //    rev.setStart(StringUtility.dateFromString(startDate));
-        //}
-        //if (StringUtility.isValidDate(endDate)) {
-        //    rev.setEnd(StringUtility.dateFromString(endDate));
-        //}
-        //else {
-        //    rev.setEnd(null);
-        //}
+        Date start = null;
+        Date end = null;
+        try {
+            start = StringUtility.dateTimeStringToDate(startDate, this);
+        }
+        catch (ParseException e) {
+            start = null;
+        }
+        if (start == null) {
+            Log.w(TAG, "Start date entered not valid. Incorrect format or empty input");
+            // TODO show error msg start date
+        }
+        else {
+            rev.setStart(start);
+        }
+        try {
+            end = StringUtility.dateTimeStringToDate(endDate, this);
+            rev.setEnd(end);
+        }
+        catch (ParseException e) {
+            Log.w(TAG, "End date entered not valid. Incorrect format input.");
+            // TODO show error msg end date
+        }
         rev.setStatus(status);
         rev.setTechnicianId(technician.getId());
         revisionVM.updateRevision(rev, new OnAsyncEventListener() {
@@ -223,6 +251,7 @@ public class RevisionActivity extends BaseActivity {
         spnStatus.setEnabled(!editable);
         spnTechnician.setFocusable(!editable);
         spnTechnician.setEnabled(!editable);
+        bAddCar.setEnabled(!editable);
         if (!editable) {
             spnCantons.setFocusableInTouchMode(true);
             etPlate.setFocusableInTouchMode(true);
@@ -240,20 +269,21 @@ public class RevisionActivity extends BaseActivity {
     private void updateContent() {
         if (revision != null) {
             noUp = true;
-            String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
-            spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton)));
             etPlate.setText(StringUtility.plateWithoutAbbreviation(revision.completeCar.car.getPlate()));
             etBrand.setText(revision.completeCar.modelWithBrand.brand.getBrand());
             etModel.setText(revision.completeCar.modelWithBrand.model.getModel());
-            etMileage.setText(StringUtility.intToString(revision.completeCar.car.getKilometers(), getApplicationContext()));
-            etYear.setText(StringUtility.dateToYearString(revision.completeCar.car.getYear(), getApplicationContext()));
-            etDateStart.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), getApplicationContext()));
+            etMileage.setText(StringUtility.intToString(revision.completeCar.car.getKilometers(), this));
+            etYear.setText(StringUtility.dateToYearString(revision.completeCar.car.getYear(), this));
+            etDateStart.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), this));
             Date end = revision.revision.getEnd();
             if (end != null) {
-                etDateEnd.setText(StringUtility.dateToDateTimeString(end, getApplicationContext()));
+                etDateEnd.setText(StringUtility.dateToDateTimeString(end, this));
             }
-            spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus()));
-            spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician));
+            String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
+            // TODO check if those runnables don't break the hasChanges
+            spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton))));
+            spnStatus.post(() -> spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus())));
+            spnStatus.post(() -> spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician)));
             noUp = false;
         }
     }
@@ -280,6 +310,7 @@ public class RevisionActivity extends BaseActivity {
     private void initView() {
         editable = false;
         spnCantons = findViewById(R.id.spn_rev_canton);
+        spnCantons.setOnItemSelectedListener(new SpinnerListener());
         etPlate = findViewById(R.id.et_rev_plate);
         etPlate.addTextChangedListener(new TextWatcher() {
             @Override
@@ -290,6 +321,7 @@ public class RevisionActivity extends BaseActivity {
             public void afterTextChanged(Editable editable) {
                 if (!noUp) {
                     searchForMatchingCar();
+                    hasChanges = true;
                 }
             }
         });
@@ -301,7 +333,19 @@ public class RevisionActivity extends BaseActivity {
         etDateStart = findViewById(R.id.et_rev_date_start);
         etDateEnd = findViewById(R.id.et_rev_date_end);
         spnStatus = findViewById(R.id.spn_rev_status);
+        spnStatus.setOnItemSelectedListener(new SpinnerListener());
         spnTechnician = findViewById(R.id.spn_rev_technician);
+        spnTechnician.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!noUp) {
+                    searchForMatchingCar();
+                    hasChanges = true;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { }
+        });
 
         spnCantons.setFocusable(false);
         spnCantons.setEnabled(false);
@@ -316,6 +360,10 @@ public class RevisionActivity extends BaseActivity {
                 /*Intent intent = new Intent(RevisionActivity.this, CarActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra("plate", ((CantonEntity) spnCantons.getSelectedItem()).getAbbreviation() + etPlate.getText().toString());
+                intent.putExtra("start", etDateStart.getText().toString());
+                intent.putExtra("end", etDateEnd.getText().toString());
+                intent.putExtra("statusPosition", spnStatus.getSelectedItemPosition());
+                intent.putExtra("technicianPosition", spnTechnician.getSelectedItemPosition());
                 startActivity(intent);*/
             }
         });
@@ -335,5 +383,16 @@ public class RevisionActivity extends BaseActivity {
         spnStatus.setEnabled(false);
         spnTechnician.setFocusable(false);
         spnTechnician.setEnabled(false);
+    }
+
+    private class SpinnerListener implements AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            if (!noUp) {
+                hasChanges = true;
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) { }
     }
 }

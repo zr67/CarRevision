@@ -17,6 +17,7 @@ import com.example.carrevision.R;
 import com.example.carrevision.ui.car.CarsActivity;
 import com.example.carrevision.ui.management.SettingsActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
+import com.example.carrevision.util.LocaleManager;
 import com.google.android.material.navigation.NavigationView;
 
 /**
@@ -32,6 +33,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new LocaleManager(this).applyLanguage();
 
         setContentView(R.layout.activity_base);
         Toolbar toolbar = findViewById(R.id.toolbar);

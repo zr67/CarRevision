@@ -14,7 +14,7 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        localeManager = LocaleManager.getInstance();
+        this.localeManager = new LocaleManager(this);
 
         /*
         EXAMPLE OF USE
