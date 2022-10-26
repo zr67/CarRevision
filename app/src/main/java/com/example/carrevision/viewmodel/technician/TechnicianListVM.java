@@ -17,7 +17,6 @@ import java.util.List;
  * Technician list view-model class
  */
 public class TechnicianListVM extends BaseVM {
-    private final TechnicianRepository repository;
     private final MediatorLiveData<List<TechnicianEntity>> observableTechnicians;
 
     /**
@@ -27,7 +26,6 @@ public class TechnicianListVM extends BaseVM {
      */
     public TechnicianListVM(@NonNull Application application, TechnicianRepository repository) {
         super(application);
-        this.repository = repository;
         observableTechnicians = new MediatorLiveData<>();
         observableTechnicians.setValue(null);
 
@@ -54,6 +52,7 @@ public class TechnicianListVM extends BaseVM {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            //noinspection unchecked
             return (T) new TechnicianListVM(getApp(), repository);
         }
     }

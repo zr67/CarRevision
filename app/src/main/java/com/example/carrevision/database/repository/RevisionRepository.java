@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.database.async.revision.UpdateRevision;
 import com.example.carrevision.database.entity.RevisionEntity;
-import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.util.OnAsyncEventListener;
 
@@ -17,7 +16,7 @@ import java.util.List;
  * Revision repository singleton
  */
 public class RevisionRepository {
-    private static RevisionRepository instance;
+    private static volatile RevisionRepository instance;
 
     /**
      * Revision repository private constructor

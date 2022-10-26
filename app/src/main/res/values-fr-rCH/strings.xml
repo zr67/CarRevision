@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Révision des voitures</string>
+    <string name="app_name">Services</string>
     <string name="open_nav_drawer">Ouvrir le menu de navigation</string>
     <string name="close_nav_drawer">Fermer le menu de navigation</string>
     <string name="action_settings">Paramètres</string>
@@ -34,4 +34,6 @@
     <string name="title_new_revision">Nouvelle révision</string>
     <string name="title_details_revision">Détail de la révision</string>
     <string name="verify_plate">Vérifier la plaque</string>
+    <string name="app_icon_desc">Icône de l\'application</string>
+    <string name="no_matching_item">Aucun résultat correspondant</string>
 </resources>

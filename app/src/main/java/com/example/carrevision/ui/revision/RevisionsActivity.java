@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,6 @@ import com.example.carrevision.R;
 import com.example.carrevision.adapter.RevisionRecyclerAdapter;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.ui.BaseActivity;
-import com.example.carrevision.util.RecyclerViewItemClickListener;
 import com.example.carrevision.viewmodel.revision.RevisionListVM;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -35,7 +33,6 @@ public class RevisionsActivity extends BaseActivity {
 
     private List<CompleteRevision> revisions;
     private RevisionRecyclerAdapter adapter;
-    private RevisionListVM revisionsVM;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -55,16 +52,13 @@ public class RevisionsActivity extends BaseActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         revisions = new ArrayList<>();
-        adapter = new RevisionRecyclerAdapter (new RecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Log.d(TAG, "clicked position: " + position + " on " + revisions.get(position).revision.getId());
+        adapter = new RevisionRecyclerAdapter ((v, position) -> {
+            Log.d(TAG, "clicked position: " + position + " on " + revisions.get(position).revision.getId());
 
-                Intent intent = new Intent(RevisionsActivity.this, RevisionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.putExtra("revisionId", revisions.get(position).revision.getId());
-                startActivity(intent);
-            }
+            Intent intent = new Intent(RevisionsActivity.this, RevisionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.putExtra("revisionId", revisions.get(position).revision.getId());
+            startActivity(intent);
         }, this);
 
         FloatingActionButton btnAdd = findViewById(R.id.button_add);
@@ -75,7 +69,7 @@ public class RevisionsActivity extends BaseActivity {
         });
 
         RevisionListVM.Factory factory = new RevisionListVM.Factory(getApplication());
-        revisionsVM = new ViewModelProvider(new ViewModelStore(), factory).get(RevisionListVM.class);
+        RevisionListVM revisionsVM = new ViewModelProvider(new ViewModelStore(), factory).get(RevisionListVM.class);
         revisionsVM.getRevisions().observe(this, revisionEntities -> {
             if (revisionEntities != null) {
                 revisions = revisionEntities;
@@ -117,7 +111,7 @@ public class RevisionsActivity extends BaseActivity {
             }
         }
         if (filtered.isEmpty()) {
-            Toast.makeText(this, "en bas les larmes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_matching_item), Toast.LENGTH_SHORT).show();
         }
         else {
             adapter.setData(filtered);

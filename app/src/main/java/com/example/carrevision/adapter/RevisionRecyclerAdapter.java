@@ -40,9 +40,7 @@ public class RevisionRecyclerAdapter extends RecyclerView.Adapter<RevisionRecycl
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.revision_recycler_view, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        view.setOnClickListener(v -> {
-            listener.onItemClick(v, holder.getAdapterPosition());
-        });
+        view.setOnClickListener(v -> listener.onItemClick(v, holder.getAdapterPosition()));
         return holder;
     }
 

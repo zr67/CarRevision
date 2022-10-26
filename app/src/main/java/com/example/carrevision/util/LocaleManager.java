@@ -1,5 +1,6 @@
 package com.example.carrevision.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -56,6 +57,7 @@ public class LocaleManager {
     /**
      * Applies the language stored in the preferences
      */
+    @SuppressLint("AppBundleLocaleChanges")
     public void applyLanguage() {
         Locale locale = new Locale(sharedPrefs.getString(PREFS_LANG, null));
         Locale.setDefault(locale);

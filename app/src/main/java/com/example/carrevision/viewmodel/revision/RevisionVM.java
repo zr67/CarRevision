@@ -45,7 +45,7 @@ public class RevisionVM extends BaseVM {
         private final int revisionId;
 
         /**
-         * Inner class factory construactor
+         * Inner class factory constructor
          * @param application Application
          * @param revisionId Revision identifier
          */
@@ -58,6 +58,7 @@ public class RevisionVM extends BaseVM {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            //noinspection unchecked
             return (T) new RevisionVM(getApp(), repository, revisionId);
         }
     }

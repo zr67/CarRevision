@@ -20,8 +20,8 @@ import java.util.List;
  * @param <T> List object's type
  */
 public class ListAdapter<T> extends ArrayAdapter<T> {
-    private int resource;
-    protected List<T> data;
+    private final int resource;
+    protected final List<T> data;
 
     /**
      * Constructor of the list adapter class

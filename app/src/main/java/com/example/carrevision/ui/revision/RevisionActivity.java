@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
@@ -61,9 +62,6 @@ public class RevisionActivity extends BaseActivity {
     private ListAdapter<TechnicianEntity> adapterTechnician;
 
     private RevisionVM revisionVM;
-    private TechnicianListVM techniciansVM;
-    private CantonListVM cantonsVM;
-    private CarListVM carsVM;
 
     private CompleteRevision revision;
     private List<CompleteCar> cars;
@@ -97,7 +95,7 @@ public class RevisionActivity extends BaseActivity {
         }
 
         CarListVM.Factory caFact = new CarListVM.Factory(getApplication());
-        carsVM = new ViewModelProvider(new ViewModelStore(), caFact).get(CarListVM.class);
+        CarListVM carsVM = new ViewModelProvider(new ViewModelStore(), caFact).get(CarListVM.class);
         carsVM.getCars().observe(this, carEntities -> {
             if (carEntities != null) {
                 cars = carEntities;
@@ -117,6 +115,14 @@ public class RevisionActivity extends BaseActivity {
             getMenuInflater().inflate(R.menu.apply, menu);
         }
         return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (hasChanges) {
+            showUnsavedChangesDlg();
+        }
+        return super.onNavigationItemSelected(item);
     }
 
     @Override
@@ -161,14 +167,14 @@ public class RevisionActivity extends BaseActivity {
      */
     private void setupSpinnerVMs() {
         CantonListVM.Factory cFact = new CantonListVM.Factory(getApplication());
-        cantonsVM = new ViewModelProvider(new ViewModelStore(), cFact).get(CantonListVM.class);
+        CantonListVM cantonsVM = new ViewModelProvider(new ViewModelStore(), cFact).get(CantonListVM.class);
         cantonsVM.getCantons().observe(this, cantonEntities -> {
             if (cantonEntities != null) {
                 adapterCantons.updateData(cantonEntities);
             }
         });
         TechnicianListVM.Factory tFact = new TechnicianListVM.Factory(getApplication());
-        techniciansVM = new ViewModelProvider(new ViewModelStore(), tFact).get(TechnicianListVM.class);
+        TechnicianListVM techniciansVM = new ViewModelProvider(new ViewModelStore(), tFact).get(TechnicianListVM.class);
         techniciansVM.getTechnicians().observe(this, technicianEntities -> {
             if (technicianEntities != null) {
                 adapterTechnician.updateData(technicianEntities);
@@ -176,6 +182,9 @@ public class RevisionActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Shows the dialog to save or discard changes
+     */
     private void showUnsavedChangesDlg() {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.unsaved_changes));
@@ -191,8 +200,7 @@ public class RevisionActivity extends BaseActivity {
      */
     private void saveChanges(String startDate, String endDate, Status status, TechnicianEntity technician) {
         RevisionEntity rev = revision.revision;
-        Date start = null;
-        Date end = null;
+        Date start, end;
         try {
             start = StringUtility.dateTimeStringToDate(startDate, this);
         }
@@ -280,7 +288,7 @@ public class RevisionActivity extends BaseActivity {
                 etDateEnd.setText(StringUtility.dateToDateTimeString(end, this));
             }
             String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
-            // TODO check if those runnables don't break the hasChanges
+            // TODO check if those runnable methods don't break the hasChanges
             spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton))));
             spnStatus.post(() -> spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus())));
             spnStatus.post(() -> spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician)));

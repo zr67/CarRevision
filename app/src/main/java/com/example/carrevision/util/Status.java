@@ -17,20 +17,18 @@ public enum Status {
     CANCELED(3);
 
     private final int value;
-    private static Map map = new HashMap();
+    private static final Map<Integer, Status> map;
 
     /**
      * Enum constructor
-     * @param value
+     * @param value Enum's integer value
      */
     Status(int value) {
         this.value = value;
     }
 
-    /**
-     * Static constructor to get all enum values in a map
-     */
     static {
+        map = new HashMap<>();
         for (Status status : Status.values()) {
             map.put(status.value, status);
         }
@@ -42,7 +40,7 @@ public enum Status {
      * @return Status value of the integer
      */
     public static Status valueOf(int status) {
-        return (Status) map.get(status);
+        return map.get(status);
     }
 
     /**

@@ -32,7 +32,7 @@ import com.example.carrevision.database.entity.TechnicianEntity;
 public abstract class AppDatabase extends RoomDatabase {
     private static final String TAG = "AppDatabase";
     private static final String DBNAME = "db-carrevisions";
-    private static AppDatabase instance;
+    private static volatile AppDatabase instance;
     private final MutableLiveData<Boolean> isDBCreated = new MutableLiveData<>();
 
     /**

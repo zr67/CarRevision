@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,8 +20,6 @@ import com.example.carrevision.R;
 import com.example.carrevision.adapter.CarRecyclerAdapter;
 import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.ui.BaseActivity;
-import com.example.carrevision.ui.revision.RevisionActivity;
-import com.example.carrevision.util.RecyclerViewItemClickListener;
 import com.example.carrevision.viewmodel.car.CarListVM;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,7 +35,6 @@ public class CarsActivity extends BaseActivity {
 
     private List<CompleteCar> cars;
     private CarRecyclerAdapter adapter;
-    private CarListVM carsVM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +54,13 @@ public class CarsActivity extends BaseActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         cars = new ArrayList<>();
-        adapter = new CarRecyclerAdapter(new RecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Log.d(TAG, "clicked position: " + position + " on " + cars.get(position).car.getId());
+        adapter = new CarRecyclerAdapter((v, position) -> {
+            Log.d(TAG, "clicked position: " + position + " on " + cars.get(position).car.getId());
 
-                Intent intent = new Intent(CarsActivity.this, CarsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.putExtra("carId", cars.get(position).car.getId());
-                startActivity(intent);
-            }
+            Intent intent = new Intent(CarsActivity.this, CarsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.putExtra("carId", cars.get(position).car.getId());
+            startActivity(intent);
         });
 
         FloatingActionButton btnAdd = findViewById(R.id.button_add);
@@ -78,7 +71,7 @@ public class CarsActivity extends BaseActivity {
         });
 
         CarListVM.Factory factory = new CarListVM.Factory(getApplication());
-        carsVM = new ViewModelProvider(new ViewModelStore(), factory).get(CarListVM.class);
+        CarListVM carsVM = new ViewModelProvider(new ViewModelStore(), factory).get(CarListVM.class);
         carsVM.getCars().observe(this, carEntities -> {
             if (carEntities != null) {
                 cars = carEntities;
@@ -120,7 +113,7 @@ public class CarsActivity extends BaseActivity {
             }
         }
         if (filtered.isEmpty()) {
-            Toast.makeText(this, "en bas les larmes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_matching_item), Toast.LENGTH_SHORT).show();
         }
         else {
             adapter.setData(filtered);

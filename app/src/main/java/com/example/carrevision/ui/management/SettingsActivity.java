@@ -9,12 +9,10 @@ import com.example.carrevision.util.LocaleManager;
  * Settings activity class
  */
 public class SettingsActivity extends BaseActivity {
-    private LocaleManager localeManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.localeManager = new LocaleManager(this);
+        LocaleManager localeManager = new LocaleManager(this);
 
         /*
         EXAMPLE OF USE

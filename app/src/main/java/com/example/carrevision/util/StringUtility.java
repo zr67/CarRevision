@@ -1,14 +1,10 @@
 package com.example.carrevision.util;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.example.carrevision.ui.BaseActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 

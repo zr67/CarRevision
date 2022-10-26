@@ -13,7 +13,7 @@ import java.util.List;
  * Canton repository singleton
  */
 public class CantonRepository {
-    private static CantonRepository instance;
+    private static volatile CantonRepository instance;
 
     /**
      * Canton repository class private constructor

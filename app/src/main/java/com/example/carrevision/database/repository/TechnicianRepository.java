@@ -13,7 +13,7 @@ import java.util.List;
  * Technician repository singleton
  */
 public class TechnicianRepository {
-    private static TechnicianRepository instance;
+    private static volatile TechnicianRepository instance;
 
     /**
      * Technician repository class private constructor

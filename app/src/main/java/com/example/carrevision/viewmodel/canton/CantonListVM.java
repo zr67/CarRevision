@@ -17,7 +17,6 @@ import java.util.List;
  * Canton list view-model class
  */
 public class CantonListVM extends BaseVM {
-    private final CantonRepository repository;
     private final MediatorLiveData<List<CantonEntity>> observableCantons;
 
     /**
@@ -27,7 +26,6 @@ public class CantonListVM extends BaseVM {
      */
     public CantonListVM(@NonNull Application application, CantonRepository repository) {
         super(application);
-        this.repository = repository;
         observableCantons = new MediatorLiveData<>();
         observableCantons.setValue(null);
 
@@ -54,6 +52,7 @@ public class CantonListVM extends BaseVM {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            //noinspection unchecked
             return (T) new CantonListVM(getApp(), repository);
         }
     }

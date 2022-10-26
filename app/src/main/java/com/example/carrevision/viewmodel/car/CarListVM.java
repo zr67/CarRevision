@@ -17,7 +17,6 @@ import java.util.List;
  * Car list view-model class
  */
 public class CarListVM extends BaseVM {
-    private final CarRepository repository;
     private final MediatorLiveData<List<CompleteCar>> observableCars;
 
     /**
@@ -27,7 +26,6 @@ public class CarListVM extends BaseVM {
      */
     public CarListVM(@NonNull Application application, CarRepository repository) {
         super(application);
-        this.repository = repository;
         observableCars = new MediatorLiveData<>();
         observableCars.setValue(null);
 
@@ -54,6 +52,7 @@ public class CarListVM extends BaseVM {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            //noinspection unchecked
             return (T) new CarListVM(getApp(), repository);
         }
     }

@@ -33,4 +33,6 @@
     <string name="title_new_revision">New Revision</string>
     <string name="title_details_revision">Revision Details</string>
     <string name="verify_plate">Verify plate</string>
+    <string name="app_icon_desc">Application icon</string>
+    <string name="no_matching_item">No matching item found</string>
 </resources>

@@ -13,7 +13,7 @@ import java.util.List;
  * Car repository singleton
  */
 public class CarRepository {
-    private static CarRepository instance;
+    private static volatile CarRepository instance;
 
     /**
      * Car repository class private constructor
