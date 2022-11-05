@@ -72,11 +72,29 @@ public class RevisionVM extends BaseVM {
     }
 
     /**
+     * Creates a revision
+     * @param revision Revision to create
+     * @param callback Callback
+     */
+    public void createRevision(RevisionEntity revision, OnAsyncEventListener callback) {
+        repository.create(revision, callback, application);
+    }
+
+    /**
      * Updates a revision
      * @param revision Revision to update
      * @param callback Callback
      */
     public void updateRevision(RevisionEntity revision, OnAsyncEventListener callback) {
         repository.update(revision, callback, application);
+    }
+
+    /**
+     * Deletes a revision
+     * @param revision Revision to delete
+     * @param callback Callback
+     */
+    public void deleteRevision(RevisionEntity revision, OnAsyncEventListener callback) {
+        repository.delete(revision, callback, application);
     }
 }

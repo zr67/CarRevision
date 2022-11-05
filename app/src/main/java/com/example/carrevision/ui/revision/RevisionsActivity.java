@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -27,8 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Revisions activity class
+ */
 public class RevisionsActivity extends BaseActivity {
-
     private static final String TAG = "RevisionsActivity";
 
     private List<CompleteRevision> revisions;
@@ -37,7 +38,6 @@ public class RevisionsActivity extends BaseActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getLayoutInflater().inflate(R.layout.activity_list, frameLayout);
 
         setTitle(R.string.title_activity_revisions);
@@ -47,13 +47,12 @@ public class RevisionsActivity extends BaseActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         revisions = new ArrayList<>();
         adapter = new RevisionRecyclerAdapter ((v, position) -> {
-            Log.d(TAG, "clicked position: " + position + " on " + revisions.get(position).revision.getId());
+            Log.d(TAG, "Clicked position: " + position + " on revision " + revisions.get(position).revision.getId());
 
             Intent intent = new Intent(RevisionsActivity.this, RevisionActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -76,7 +75,6 @@ public class RevisionsActivity extends BaseActivity {
                 adapter.setData(revisions);
             }
         });
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -111,9 +109,8 @@ public class RevisionsActivity extends BaseActivity {
             }
         }
         if (filtered.isEmpty()) {
-            Toast.makeText(this, getString(R.string.no_matching_item), Toast.LENGTH_SHORT).show();
-        }
-        else {
+            showSnack(R.string.no_matching_item);
+        } else {
             adapter.setData(filtered);
         }
     }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- These settings headers are only used on tablets. -->
+    <header
+        android:fragment="com.example.carrevision.ui.management.SettingsActivity$AboutPreferenceFragment"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_about" />
+    <header
+        android:fragment="com.example.carrevision.ui.management.SettingsActivity$LanguagePreferenceFragment"
+        android:icon="@drawable/ic_language_black_24dp"
+        android:title="@string/language" />
+</preference-headers>

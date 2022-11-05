@@ -53,11 +53,26 @@ public class StringUtility {
      */
     private static SimpleDateFormat getDateFormat(BaseActivity activity) {
         LocaleManager localeManager = new LocaleManager(activity);
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.ENGLISH);
+        String pattern = getDateFormatPattern(activity);
+        SimpleDateFormat df = new SimpleDateFormat(pattern, Locale.ENGLISH);
         if (localeManager.getLanguage().equals(LocaleManager.LANG_FR)) {
-            df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.FRENCH);
+            df = new SimpleDateFormat(pattern, Locale.FRENCH);
         }
         return df;
+    }
+
+    /**
+     * Gets the correct date format pattern
+     * @param activity Activity
+     * @return Date format pattern
+     */
+    public static String getDateFormatPattern(BaseActivity activity) {
+        LocaleManager localeManager = new LocaleManager(activity);
+        String pattern = "MM/dd/yyyy HH:mm";
+        if (localeManager.getLanguage().equals(LocaleManager.LANG_FR)) {
+            pattern = "dd.MM.yyyy HH:mm";
+        }
+        return pattern;
     }
 
     /**

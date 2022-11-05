@@ -36,4 +36,17 @@
     <string name="verify_plate">Vérifier la plaque</string>
     <string name="app_icon_desc">Icône de l\'application</string>
     <string name="no_matching_item">Aucun résultat correspondant</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_delete_msg">Cet objet sera supprimé définitivement. Procéder à la suppression?</string>
+    <string name="revision_delete_success">Révision supprimée</string>
+    <string name="revision_delete_fail">Erreur lors de la suppression de la révision</string>
+    <string name="revision_create_success">Révision enregistrée</string>
+    <string name="revision_create_fail">Erreur lors de l\'enregistrement de la révision</string>
+    <string name="date_start_invalid">Date de début invalide</string>
+    <string name="date_end_invalid">Date de fin invalide</string>
+    <string name="use_format">Utiliser le format \"%s\"</string>
+    <string name="revision_car_not_existing">Nouvelle voiture détectée, passage à la création de voiture...</string>
+    <string name="pref_header_about">A propos</string>
+    <string name="pref_about_text">TODO</string>
+    <string name="language">Langue</string>
 </resources>

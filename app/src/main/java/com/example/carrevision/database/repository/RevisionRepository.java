@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.example.carrevision.BaseApp;
+import com.example.carrevision.database.async.revision.CreateRevision;
+import com.example.carrevision.database.async.revision.DeleteRevision;
 import com.example.carrevision.database.async.revision.UpdateRevision;
 import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.pojo.CompleteRevision;
@@ -39,6 +41,15 @@ public class RevisionRepository {
     }
 
     /**
+     * Gets all revisions from the database
+     * @param application Application
+     * @return List with all the revisions
+     */
+    public LiveData<List<CompleteRevision>> getRevisions(Application application) {
+        return ((BaseApp) application).getDatabase().revisionDao().getAll();
+    }
+
+    /**
      * Gets a revision by it's identifier
      * @param application Application
      * @param revisionId Revision's identifier
@@ -46,6 +57,16 @@ public class RevisionRepository {
      */
     public LiveData<CompleteRevision> getRevision(Application application, int revisionId) {
         return ((BaseApp) application).getDatabase().revisionDao().getById(revisionId);
+    }
+
+    /**
+     * Creates a new revision
+     * @param revision Revision to create
+     * @param callback Callback
+     * @param application Application
+     */
+    public void create(final RevisionEntity revision, OnAsyncEventListener callback, Application application) {
+        new CreateRevision((BaseApp) application, callback).execute(revision);
     }
 
     /**
@@ -59,11 +80,12 @@ public class RevisionRepository {
     }
 
     /**
-     * Gets all revisions from the database
+     * Deletes a revision
+     * @param revision Revision to delete
+     * @param callback Callback
      * @param application Application
-     * @return List with all the revisions
      */
-    public LiveData<List<CompleteRevision>> getRevisions(Application application) {
-        return ((BaseApp) application).getDatabase().revisionDao().getAll();
+    public void delete(final RevisionEntity revision, OnAsyncEventListener callback, Application application) {
+        new DeleteRevision((BaseApp) application, callback).execute(revision);
     }
 }

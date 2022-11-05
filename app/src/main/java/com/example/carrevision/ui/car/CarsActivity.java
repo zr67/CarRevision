@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -39,7 +38,6 @@ public class CarsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getLayoutInflater().inflate(R.layout.activity_list, frameLayout);
 
         setTitle(getString(R.string.title_activity_cars));
@@ -49,15 +47,14 @@ public class CarsActivity extends BaseActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         cars = new ArrayList<>();
         adapter = new CarRecyclerAdapter((v, position) -> {
-            Log.d(TAG, "clicked position: " + position + " on " + cars.get(position).car.getId());
+            Log.d(TAG, "Clicked position: " + position + " on car " + cars.get(position).car.getId());
 
-            Intent intent = new Intent(CarsActivity.this, CarsActivity.class);
+            Intent intent = new Intent(CarsActivity.this, CarActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.putExtra("carId", cars.get(position).car.getId());
             startActivity(intent);
@@ -65,7 +62,7 @@ public class CarsActivity extends BaseActivity {
 
         FloatingActionButton btnAdd = findViewById(R.id.button_add);
         btnAdd.setOnClickListener(view -> {
-            Intent intent = new Intent(CarsActivity.this, CarsActivity.class);
+            Intent intent = new Intent(CarsActivity.this, CarActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });
@@ -78,7 +75,6 @@ public class CarsActivity extends BaseActivity {
                 adapter.setData(cars);
             }
         });
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -113,9 +109,8 @@ public class CarsActivity extends BaseActivity {
             }
         }
         if (filtered.isEmpty()) {
-            Toast.makeText(this, getString(R.string.no_matching_item), Toast.LENGTH_SHORT).show();
-        }
-        else {
+            showSnack(R.string.no_matching_item);
+        } else {
             adapter.setData(filtered);
         }
     }
