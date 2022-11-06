@@ -1,6 +1,7 @@
 package com.example.carrevision.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.carrevision.R;
 import com.example.carrevision.ui.car.CarsActivity;
+import com.example.carrevision.ui.management.LoginActivity;
 import com.example.carrevision.ui.management.SettingsActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.LocaleManager;
@@ -26,17 +28,60 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String PREFS_NAME = "SharedPrefs";
+    public static final String PREFS_USER = "LoggedTech";
+    public static final String PREFS_ADMIN = "AdminPrivileges";
     protected FrameLayout frameLayout;
     protected DrawerLayout drawerLayout;
     protected NavigationView navigationView;
     protected static int position;
 
     /**
+     * Gets if the technician is connected
+     * @return True if connected, false otherwise
+     */
+    protected boolean technicianIsConnected() {
+        return getConnectedTechnicianId() >= 0;
+    }
+
+    /**
+     * Gets the connected technician identifier
+     * @return Connected technician's identifier, -1 if no technician is connected
+     */
+    protected int getConnectedTechnicianId() {
+        return getSharedPreferences(PREFS_NAME, 0).getInt(PREFS_USER, -1);
+    }
+
+    /**
+     * Gets if the connected technician is an administrator
+     * @return True if administrator, false otherwise
+     */
+    protected boolean technicianIsAdmin() {
+        return getSharedPreferences(PREFS_NAME, 0).getBoolean(PREFS_ADMIN, false);
+    }
+
+    /**
      * Shows a message to the user in a snack bar
-     * @param resource Resource identifier
+     * @param text Text to display
+     */
+    protected void showSnack(String text) {
+        Snackbar.make(BaseActivity.this, frameLayout, text, Snackbar.LENGTH_LONG).show();
+    }
+
+    /**
+     * Shows a message to the user in a snack bar
+     * @param resource Text's resource identifier
      */
     protected void showSnack(int resource) {
-        Snackbar.make(BaseActivity.this, frameLayout, getString(resource), Snackbar.LENGTH_LONG).show();
+        showSnack(getString(resource));
+    }
+
+    /**
+     * Updates the navigation menu with the correct options
+     */
+    protected void updateNavMenu() {
+        boolean loggedIn = technicianIsConnected();
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(!loggedIn);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(loggedIn);
     }
 
     @Override
@@ -54,10 +99,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         toggle.syncState();
         navigationView = findViewById(R.id.base_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        updateNavMenu();
 
-        int resourceMsg = getIntent().getIntExtra("snackMsg", -1);
-        if (resourceMsg != -1) {
-            showSnack(resourceMsg);
+        if (getIntent().hasExtra("snackMsg")) {
+            showSnack(getIntent().getStringExtra("snackMsg"));
         }
     }
 
@@ -93,14 +138,29 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             drawerLayout.closeDrawer(GravityCompat.START);
             return false;
         }
-        BaseActivity.position = id;
-        navigationView.setCheckedItem(id);
+        if (id != R.id.nav_login && id != R.id.nav_logout) {
+            BaseActivity.position = id;
+            navigationView.setCheckedItem(id);
+        }
 
         Intent intent = null;
         if (id == R.id.nav_revisions) {
             intent = new Intent(this, RevisionsActivity.class);
         } else if (id == R.id.nav_cars) {
             intent = new Intent(this, CarsActivity.class);
+        } else if (id == R.id.nav_login) {
+            intent = new Intent(this, LoginActivity.class);
+        } else if (id == R.id.nav_logout) {
+            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
+            editor.remove(PREFS_USER);
+            editor.remove(PREFS_ADMIN);
+            editor.apply();
+            updateNavMenu();
+            if (position == R.id.nav_revisions) {
+                intent = new Intent(this, RevisionsActivity.class);
+            } else if (position == R.id.nav_cars) {
+                intent = new Intent(this, CarsActivity.class);
+            }
         }
         if (intent != null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

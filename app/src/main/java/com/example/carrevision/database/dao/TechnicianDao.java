@@ -24,6 +24,14 @@ public interface TechnicianDao {
     LiveData<TechnicianEntity> getById(int id);
 
     /**
+     * Gets a technician by its email address
+     * @param email Technician's email address
+     * @return TechnicianEntity corresponding to the email
+     */
+    @Query("SELECT * FROM technicians WHERE email = :email")
+    LiveData<TechnicianEntity> getByEmail(String email);
+
+    /**
      * Gets all technicians
      * @return List of all TechnicianEntity
      */

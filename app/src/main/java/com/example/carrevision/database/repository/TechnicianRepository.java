@@ -43,4 +43,24 @@ public class TechnicianRepository {
     public LiveData<List<TechnicianEntity>> getTechnicians(Application application) {
         return ((BaseApp) application).getDatabase().technicianDao().getAll();
     }
+
+    /**
+     * Gets a technician by it's identifier
+     * @param application Application
+     * @param technicianId Technician's identifier
+     * @return Technician corresponding to the identifier
+     */
+    public LiveData<TechnicianEntity> getTechnician(Application application, final int technicianId) {
+        return ((BaseApp) application).getDatabase().technicianDao().getById(technicianId);
+    }
+
+    /**
+     * Gets a technician by it's email
+     * @param application Application
+     * @param email Technician's email
+     * @return Technician corresponding to the email
+     */
+    public LiveData<TechnicianEntity> getTechnician(Application application, final String email) {
+        return ((BaseApp) application).getDatabase().technicianDao().getByEmail(email);
+    }
 }

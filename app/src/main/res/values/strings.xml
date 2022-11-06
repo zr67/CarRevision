@@ -46,6 +46,24 @@
     <string name="use_format">Please use format \"%s\"</string>
     <string name="revision_car_not_existing">New car detected, switching to car creation...</string>
     <string name="pref_header_about">About</string>
-    <string name="pref_about_text">TODO</string>
+    <string name="pref_about_text">This application has been made for the module 644-1 \"Mobile development and cloud\" by Arthur Avez and Zacharie Renna.</string>
     <string name="language">Language</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="err_password_empty">Password can\'t be empty</string>
+    <string name="err_email_empty">Email can\'t be empty</string>
+    <string name="err_firstname_empty">Firstname can\'t be empty</string>
+    <string name="err_lastname_empty">Lastname can\'t be empty</string>
+    <string name="err_email_invalid">Invalid email address</string>
+    <string name="err_password_incorrect">Incorrect password</string>
+    <string name="err_creds_unknown">No account linked to this email</string>
+    <string name="err_email_inuse">Email already in use</string>
+    <string name="err_password_mismatch">Passwords not matching</string>
+    <string name="welcome_msg">Welcome, %s</string>
+    <string name="welcome_back_msg">Welcome back, %s</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="password">Password</string>
+    <string name="email">Email address</string>
+    <string name="lastname">Last name</string>
+    <string name="firstname">First name</string>
 </resources>

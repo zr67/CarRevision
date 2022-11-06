@@ -34,6 +34,7 @@ import com.example.carrevision.viewmodel.canton.CantonListVM;
 import com.example.carrevision.viewmodel.car.CarListVM;
 import com.example.carrevision.viewmodel.revision.RevisionVM;
 import com.example.carrevision.viewmodel.technician.TechnicianListVM;
+import com.example.carrevision.viewmodel.technician.TechnicianVM;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -70,6 +71,15 @@ public class RevisionActivity extends SingleObjectActivity {
         if (revisionId < 0) {
             setTitle(R.string.title_new_revision);
             matchingCar = null;
+            if (technicianIsConnected()) {
+                TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), getConnectedTechnicianId());
+                TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
+                technicianVM.getTechnician().observe(this, technicianEntity -> {
+                    if (technicianEntity != null) {
+                        spnTechnician.setSelection(adapterTechnician.getPosition(technicianEntity));
+                    }
+                });
+            }
             switchMode();
         } else {
             setTitle(R.string.title_details_revision);
@@ -105,10 +115,10 @@ public class RevisionActivity extends SingleObjectActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (revision != null) {
-            getMenuInflater().inflate(R.menu.edit_delete, menu);
-        } else {
+        if (revision == null) {
             getMenuInflater().inflate(R.menu.apply, menu);
+        } else if (revision.technician.getId() == getConnectedTechnicianId() || technicianIsAdmin()) {
+            getMenuInflater().inflate(R.menu.edit_delete, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -145,7 +155,7 @@ public class RevisionActivity extends SingleObjectActivity {
     private void startListActivity(int resource) {
         Intent intent = new Intent(RevisionActivity.this, RevisionsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        intent.putExtra("snackMsg", resource);
+        intent.putExtra("snackMsg", getString(resource));
         startActivity(intent);
     }
 
@@ -263,8 +273,10 @@ public class RevisionActivity extends SingleObjectActivity {
         etDateEnd.setEnabled(!editable);
         spnStatus.setFocusable(!editable);
         spnStatus.setEnabled(!editable);
-        spnTechnician.setFocusable(!editable);
-        spnTechnician.setEnabled(!editable);
+        if (technicianIsAdmin()) {
+            spnTechnician.setFocusable(!editable);
+            spnTechnician.setEnabled(!editable);
+        }
         bCheckPlate.setEnabled(!editable);
         if (!editable) {
             spnCantons.setFocusableInTouchMode(true);
@@ -272,7 +284,9 @@ public class RevisionActivity extends SingleObjectActivity {
             etDateStart.setFocusableInTouchMode(true);
             etDateEnd.setFocusableInTouchMode(true);
             spnStatus.setFocusableInTouchMode(true);
-            spnTechnician.setFocusableInTouchMode(true);
+            if (technicianIsAdmin()) {
+                spnTechnician.setFocusableInTouchMode(true);
+            }
         }
         editable = !editable;
     }

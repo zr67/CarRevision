@@ -1,7 +1,6 @@
 package com.example.carrevision.ui;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 

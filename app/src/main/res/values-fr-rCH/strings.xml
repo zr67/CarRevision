@@ -47,6 +47,24 @@
     <string name="use_format">Utiliser le format \"%s\"</string>
     <string name="revision_car_not_existing">Nouvelle voiture détectée, passage à la création de voiture...</string>
     <string name="pref_header_about">A propos</string>
-    <string name="pref_about_text">TODO</string>
+    <string name="pref_about_text">Cette application a été réalisée dans le cadre du module 644-1 \"Développement mobile et cloud\" par Arthur Avez et Zacharie Renna.</string>
     <string name="language">Langue</string>
+    <string name="title_activity_login">Connexion</string>
+    <string name="title_activity_register">S\'enregistrer</string>
+    <string name="err_password_empty">Le mot de passe ne peut pas être vide</string>
+    <string name="err_email_empty">L\'email ne peux pas être vide</string>
+    <string name="err_firstname_empty">Le prénom ne peux pas être vide</string>
+    <string name="err_lastname_empty">Le nom ne peux pas être vide</string>
+    <string name="err_email_invalid">Adresse email invalide</string>
+    <string name="err_password_incorrect">Mot de passe incorrect</string>
+    <string name="err_creds_unknown">Aucun compte lié à cet email</string>
+    <string name="err_email_inuse">Adresse email déjà utilisée</string>
+    <string name="err_password_mismatch">Les mots de passe ne correspondent pas</string>
+    <string name="welcome_msg">Bienvenue, %s</string>
+    <string name="welcome_back_msg">Bienvenue, %s</string>
+    <string name="repeat_password">Répéter le mot de passe</string>
+    <string name="password">Mot de passe</string>
+    <string name="email">Adresse email</string>
+    <string name="lastname">Nom</string>
+    <string name="firstname">Prénom</string>
 </resources>

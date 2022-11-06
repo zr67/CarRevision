@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
-import com.example.carrevision.ui.BaseActivity;
-
 import java.util.Locale;
 
 /**

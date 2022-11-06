@@ -5,12 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.example.carrevision.util.SecurePassword;
 
 /**
  * Technician entity class
  */
-@Entity(tableName = "technicians")
+@Entity(tableName = "technicians", indices = { @Index(value = {"email"}, unique = true) })
 public class TechnicianEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -23,6 +26,12 @@ public class TechnicianEntity {
     @NonNull
     @ColumnInfo(name = "email")
     private String email;
+    @ColumnInfo(name = "hash")
+    private byte[] hash;
+    @ColumnInfo(name = "slt")
+    private byte[] salt;
+    @ColumnInfo(name = "admin")
+    private final boolean admin;
 
     /**
      * Default constructor for the technician entity class
@@ -30,6 +39,27 @@ public class TechnicianEntity {
     @Ignore
     public TechnicianEntity() {
         this.email = "";
+        this.hash = new byte[0];
+        this.salt = new byte[0];
+        this.admin = false;
+    }
+
+    /**
+     * Constructor for the technician entity class
+     * @param title Technician's title
+     * @param firstname Technician's first name
+     * @param lastname Technician's last name
+     * @param email Technician's email
+     * @param password Technician's password
+     */
+    @Ignore
+    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String password, boolean admin) {
+        this.title = title;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        setPassword(password);
+        this.admin = admin;
     }
 
     /**
@@ -39,11 +69,14 @@ public class TechnicianEntity {
      * @param lastname Technician's last name
      * @param email Technician's email
      */
-    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email) {
+    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email, byte[] hash, byte[] salt, boolean admin) {
         this.title = title;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.hash = hash;
+        this.salt = salt;
+        this.admin = admin;
     }
 
     /**
@@ -88,6 +121,30 @@ public class TechnicianEntity {
     }
 
     /**
+     * Gets the technician's password's salt
+     * @return Technician's password's salt
+     */
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    /**
+     * Gets the technician's password's hash
+     * @return Technician's password's hash
+     */
+    public byte[] getHash() {
+        return hash;
+    }
+
+    /**
+     * Gets if the technician is an admin
+     * @return True if the technician is an admin, false otherwise
+     */
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    /**
      * Sets the technician's identifier
      * @param id Technician's identifier
      */
@@ -125,6 +182,15 @@ public class TechnicianEntity {
      */
     public void setEmail(@NonNull String email) {
         this.email = email;
+    }
+
+    /**
+     * Sets the technician's password
+     * @param password Technician's password
+     */
+    public void setPassword(@NonNull String password) {
+        this.salt = SecurePassword.generateSalt();
+        this.hash = SecurePassword.generateHash(password, salt);
     }
 
     @Override

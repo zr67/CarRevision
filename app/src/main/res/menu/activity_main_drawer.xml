@@ -8,5 +8,11 @@
         <item
             android:id="@+id/nav_cars"
             android:title="@string/title_activity_cars" />
+        <item
+            android:id="@+id/nav_login"
+            android:title="@string/title_activity_login" />
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/title_activity_register" />
     </group>
 </menu>

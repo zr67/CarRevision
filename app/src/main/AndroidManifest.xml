@@ -25,6 +25,8 @@
         <activity android:name=".ui.car.CarActivity"/>
         <activity android:name=".ui.car.CarsActivity"/>
         <activity android:name=".ui.management.SettingsActivity"/>
+        <activity android:name=".ui.management.LoginActivity"/>
+        <activity android:name=".ui.management.RegisterActivity"/>
     </application>
 
 </manifest>

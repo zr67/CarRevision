@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -61,6 +62,9 @@ public class CarsActivity extends BaseActivity {
         });
 
         FloatingActionButton btnAdd = findViewById(R.id.button_add);
+        if (!technicianIsConnected()) {
+            btnAdd.setVisibility(View.INVISIBLE);
+        }
         btnAdd.setOnClickListener(view -> {
             Intent intent = new Intent(CarsActivity.this, CarActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
