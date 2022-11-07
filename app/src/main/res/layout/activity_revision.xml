@@ -159,8 +159,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-                android:hint="@string/date_start"
-                android:inputType="date|time" />
+                android:digits="01234567890.: "
+                android:hint="@string/date_start" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -172,8 +172,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-                android:hint="@string/date_end"
-                android:inputType="date|time" />
+                android:digits="0123456789.: "
+                android:hint="@string/date_end" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

@@ -132,10 +132,8 @@ public class RevisionActivity extends SingleObjectActivity {
             if (toggle) {
                 if (!editable) {
                     Log.i(TAG, "Edit button clicked for the revision " + revision.revision.getId());
-                    item.setIcon(R.drawable.ic_done_white_24dp);
                 } else {
                     Log.i(TAG, "Done button clicked for the revision " + revision.revision.getId());
-                    item.setIcon(R.drawable.ic_edit_white_24dp);
                 }
                 switchMode();
             }
