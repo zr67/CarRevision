@@ -67,4 +67,5 @@
     <string name="email">Adresse email</string>
     <string name="lastname">Nom</string>
     <string name="firstname">Prénom</string>
+    <string name="logout">Se déconnecter</string>
 </resources>
