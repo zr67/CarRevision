@@ -37,7 +37,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="@dimen/fab_margin"
                 app:layout_constraintEnd_toStartOf="@+id/b_checkPlate"
