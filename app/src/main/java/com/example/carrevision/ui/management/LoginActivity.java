@@ -67,6 +67,7 @@ public class LoginActivity extends BaseActivity {
                     Intent intent = new Intent(LoginActivity.this, RevisionsActivity.class);
                     intent.putExtra("snackMsg", String.format(getString(R.string.welcome_back_msg), technicianEntity.getFirstname()));
                     updateNavMenu();
+                    finish();
                     startActivity(intent);
                 } else {
                     etPassword.setError(getString(R.string.err_password_incorrect));

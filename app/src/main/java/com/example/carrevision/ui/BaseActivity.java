@@ -33,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected FrameLayout frameLayout;
     protected DrawerLayout drawerLayout;
     protected NavigationView navigationView;
-    protected static int position;
+    protected static int position = R.id.nav_revisions;
 
     /**
      * Gets if the technician is connected
@@ -138,12 +138,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             drawerLayout.closeDrawer(GravityCompat.START);
             return false;
         }
-        if (id != R.id.nav_login && id != R.id.nav_logout) {
-            BaseActivity.position = id;
-            navigationView.setCheckedItem(id);
-        }
-
         Intent intent = null;
+        if (id != R.id.nav_login) {
+            finish();
+        }
         if (id == R.id.nav_revisions) {
             intent = new Intent(this, RevisionsActivity.class);
         } else if (id == R.id.nav_cars) {
@@ -156,15 +154,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             editor.remove(PREFS_ADMIN);
             editor.apply();
             updateNavMenu();
-            if (position == R.id.nav_revisions) {
-                intent = new Intent(this, RevisionsActivity.class);
-            } else if (position == R.id.nav_cars) {
+            if (position == R.id.nav_cars) {
                 intent = new Intent(this, CarsActivity.class);
+            } else {
+                intent = new Intent(this, RevisionsActivity.class);
             }
         }
         if (intent != null) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+        }
+        if (id != R.id.nav_logout) {
+            BaseActivity.position = id;
+            navigationView.setCheckedItem(id);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

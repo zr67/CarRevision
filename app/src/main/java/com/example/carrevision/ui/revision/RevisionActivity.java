@@ -50,6 +50,7 @@ public class RevisionActivity extends SingleObjectActivity {
     private ImageButton bCheckPlate;
     private Spinner spnCantons, spnStatus, spnTechnician;
     private EditText etPlate, etBrand, etModel, etMileage, etYear, etDateStart, etDateEnd;
+    private MenuItem miAction;
 
     private CantonListAdapter adapterCantons;
     private StatusListAdapter adapterStatus;
@@ -119,6 +120,7 @@ public class RevisionActivity extends SingleObjectActivity {
             getMenuInflater().inflate(R.menu.apply, menu);
         } else if (revision.technician.getId() == getConnectedTechnicianId() || technicianIsAdmin()) {
             getMenuInflater().inflate(R.menu.edit_delete, menu);
+            miAction = menu.findItem(R.id.action_edit);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -259,10 +261,8 @@ public class RevisionActivity extends SingleObjectActivity {
         return rv;
     }
 
-    /**
-     * Switches between the edit and the read-only mode
-     */
-    private void switchMode() {
+    @Override
+    protected void switchMode() {
         spnCantons.setFocusable(!editable);
         spnCantons.setEnabled(!editable);
         etPlate.setFocusable(!editable);
@@ -287,6 +287,11 @@ public class RevisionActivity extends SingleObjectActivity {
             if (technicianIsAdmin()) {
                 spnTechnician.setFocusableInTouchMode(true);
             }
+            if (miAction != null) {
+                miAction.setIcon(R.drawable.ic_done_white_24dp);
+            }
+        } else if (miAction != null) {
+            miAction.setIcon(R.drawable.ic_edit_white_24dp);
         }
         editable = !editable;
     }
@@ -384,7 +389,7 @@ public class RevisionActivity extends SingleObjectActivity {
             else {
                 Intent intent = new Intent(RevisionActivity.this, CarActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.putExtra("plate", ((CantonEntity) spnCantons.getSelectedItem()).getAbbreviation() + etPlate.getText().toString());
+                intent.putExtra("plate", etPlate.getText().toString());
                 intent.putExtra("start", etDateStart.getText().toString());
                 intent.putExtra("end", etDateEnd.getText().toString());
                 intent.putExtra("cantonPosition", spnCantons.getSelectedItemPosition());

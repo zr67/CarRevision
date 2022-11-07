@@ -121,6 +121,7 @@ public class RegisterActivity extends BaseActivity {
                     Intent intent = new Intent(RegisterActivity.this, RevisionsActivity.class);
                     intent.putExtra("snackMsg", String.format(getString(R.string.welcome_msg), technicianEntity.getFirstname()));
                     updateNavMenu();
+                    finish();
                     startActivity(intent);
                 }
             });

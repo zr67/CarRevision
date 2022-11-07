@@ -7,9 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.GravityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -117,15 +115,5 @@ public class CarsActivity extends BaseActivity {
         } else {
             adapter.setData(filtered);
         }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == BaseActivity.position) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return false;
-        }
-        finish();
-        return super.onNavigationItemSelected(item);
     }
 }

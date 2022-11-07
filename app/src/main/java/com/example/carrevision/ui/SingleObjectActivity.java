@@ -2,6 +2,7 @@ package com.example.carrevision.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -57,8 +58,9 @@ public abstract class SingleObjectActivity extends BaseActivity {
                 onBackPressed();
             });
             dlg.show();
-        }
-        else {
+        } else if (editable) {
+            switchMode();
+        } else {
             super.onBackPressed();
         }
     }
@@ -99,6 +101,12 @@ public abstract class SingleObjectActivity extends BaseActivity {
             dlg.dismiss();
             deleteItem();
         });
+        dlg.setOnKeyListener((dialogInterface, i, keyEvent) -> {
+            if (i == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                dlg.dismiss();
+            }
+            return true;
+        });
         return dlg;
     }
 
@@ -107,12 +115,24 @@ public abstract class SingleObjectActivity extends BaseActivity {
      * @return Base dialog without buttons
      */
     private AlertDialog getUnsavedChangesDlg() {
-        return new AlertDialog.Builder(SingleObjectActivity.this)
+        final AlertDialog dlg = new AlertDialog.Builder(SingleObjectActivity.this)
                 .setTitle(R.string.unsaved_changes)
                 .setCancelable(false)
                 .setMessage(R.string.unsaved_changes_msg)
                 .create();
+        dlg.setOnKeyListener((dialogInterface, i, keyEvent) -> {
+            if (i == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                dlg.dismiss();
+            }
+            return true;
+        });
+        return dlg;
     }
+
+    /**
+     * Switches between the edit and the read-only mode
+     */
+    protected abstract void switchMode();
 
     /**
      * Saves all changes made to the item by the user
