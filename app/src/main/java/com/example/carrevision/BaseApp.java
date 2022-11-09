@@ -7,6 +7,7 @@ import com.example.carrevision.database.repository.CantonRepository;
 import com.example.carrevision.database.repository.CarRepository;
 import com.example.carrevision.database.repository.RevisionRepository;
 import com.example.carrevision.database.repository.TechnicianRepository;
+import com.example.carrevision.util.AccountManager;
 
 /**
  * Base application class
@@ -49,5 +50,13 @@ public class BaseApp extends Application {
      */
     public TechnicianRepository getTechnicianRepository() {
         return TechnicianRepository.getInstance();
+    }
+
+    /**
+     * Gets the application account manager
+     * @return Application account manager
+     */
+    public AccountManager getAccountManager() {
+        return AccountManager.getInstance(this);
     }
 }

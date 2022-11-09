@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -17,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 
 import com.example.carrevision.R;
+import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.LocaleManager;
 
 import java.util.List;
@@ -25,6 +27,8 @@ import java.util.List;
  * Settings activity class
  */
 public class SettingsActivity extends PreferenceActivity {
+    private static SettingsActivity thisActivity;
+
     /**
      * Helper method to determine if the device has extra-large screen
      * @param context Context
@@ -42,6 +46,7 @@ public class SettingsActivity extends PreferenceActivity {
         localeManager.applyLanguage();
         setupActionBar();
         setActionBarTitle(R.string.action_settings);
+        thisActivity = this;
     }
 
     /**
@@ -127,7 +132,11 @@ public class SettingsActivity extends PreferenceActivity {
                 ListPreference listPref = (ListPreference) preference;
                 int idx = listPref.findIndexOfValue(o.toString());
                 preference.setSummary(idx >= 0 ? listPref.getEntries()[idx] : null);
-                // TODO translate page or warning restart needed?
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && thisActivity != null) {
+                    Intent intent = new Intent(getContext(), RevisionsActivity.class);
+                    thisActivity.finish();
+                    startActivity(intent);
+                }
                 return true;
             });
             langPref.setSummary(PreferenceManager.getDefaultSharedPreferences(langPref.getContext()).getString(LANG, ""));

@@ -12,7 +12,7 @@
         android:id="@+id/iv_login_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/car_revision" />
+        app:srcCompat="@drawable/login" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -40,12 +40,27 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sw_login_remember"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:minHeight="48dp"
+        android:text="REMEMBER ME" />
+
     <Button
         android:id="@+id/b_login_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/fab_margin"
         android:text="@string/title_activity_login" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:background="?android:attr/listDivider" />
 
     <Button
         android:id="@+id/b_login_register"
