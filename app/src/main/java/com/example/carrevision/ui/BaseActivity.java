@@ -1,7 +1,6 @@
 package com.example.carrevision.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.carrevision.BaseApp;
 import com.example.carrevision.R;
 import com.example.carrevision.ui.car.CarsActivity;
 import com.example.carrevision.ui.management.LoginActivity;
@@ -28,8 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String PREFS_NAME = "SharedPrefs";
-    public static final String PREFS_USER = "LoggedTech";
-    public static final String PREFS_ADMIN = "AdminPrivileges";
     protected FrameLayout frameLayout;
     protected DrawerLayout drawerLayout;
     protected NavigationView navigationView;
@@ -40,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
      * @return True if connected, false otherwise
      */
     protected boolean technicianIsConnected() {
-        return getConnectedTechnicianId() >= 0;
+        return ((BaseApp) getApplication()).getAccountManager().isTechnicianConnected();
     }
 
     /**
@@ -48,7 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
      * @return Connected technician's identifier, -1 if no technician is connected
      */
     protected int getConnectedTechnicianId() {
-        return getSharedPreferences(PREFS_NAME, 0).getInt(PREFS_USER, -1);
+        return ((BaseApp) getApplication()).getAccountManager().getConnectedTechnicianId();
     }
 
     /**
@@ -56,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
      * @return True if administrator, false otherwise
      */
     protected boolean technicianIsAdmin() {
-        return getSharedPreferences(PREFS_NAME, 0).getBoolean(PREFS_ADMIN, false);
+        return ((BaseApp) getApplication()).getAccountManager().isConnectedTechnicianAdmin();
     }
 
     /**
@@ -149,16 +147,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         } else if (id == R.id.nav_login) {
             intent = new Intent(this, LoginActivity.class);
         } else if (id == R.id.nav_logout) {
-            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
-            editor.remove(PREFS_USER);
-            editor.remove(PREFS_ADMIN);
-            editor.apply();
+            ((BaseApp) getApplication()).getAccountManager().logout();
             updateNavMenu();
             if (position == R.id.nav_cars) {
                 intent = new Intent(this, CarsActivity.class);
             } else {
                 intent = new Intent(this, RevisionsActivity.class);
             }
+            intent.putExtra("snackMsg", "See you soon!"); // TODO translation
         }
         if (intent != null) {
             startActivity(intent);

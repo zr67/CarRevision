@@ -1,6 +1,7 @@
 package com.example.carrevision.ui.revision;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
@@ -49,8 +51,9 @@ public class RevisionActivity extends SingleObjectActivity {
 
     private ImageButton bCheckPlate;
     private Spinner spnCantons, spnStatus, spnTechnician;
-    private EditText etPlate, etBrand, etModel, etMileage, etYear, etDateStart, etDateEnd;
+    private EditText etPlate, etBrand, etModel, etMileage, etYear, etDateStart, etDateEnd, etTechnician, etStatus, etCanton;
     private MenuItem miAction;
+    private Drawable arrow, arrowDisabled;
 
     private CantonListAdapter adapterCantons;
     private StatusListAdapter adapterStatus;
@@ -112,6 +115,8 @@ public class RevisionActivity extends SingleObjectActivity {
         if (getIntent().hasExtra("end")) {
             etDateEnd.setText(getIntent().getStringExtra("end"));
         }
+        arrow = ResourcesCompat.getDrawable(getResources(), R.drawable.arrow_down, null);
+        arrowDisabled = ResourcesCompat.getDrawable(getResources(), R.drawable.arrow_down_disabled, null);
     }
 
     @Override
@@ -132,10 +137,8 @@ public class RevisionActivity extends SingleObjectActivity {
             if (toggle) {
                 if (!editable) {
                     Log.i(TAG, "Edit button clicked for the revision " + revision.revision.getId());
-                    item.setIcon(R.drawable.ic_done_white_24dp);
                 } else {
                     Log.i(TAG, "Done button clicked for the revision " + revision.revision.getId());
-                    item.setIcon(R.drawable.ic_edit_white_24dp);
                 }
                 switchMode();
             }
@@ -271,11 +274,12 @@ public class RevisionActivity extends SingleObjectActivity {
         etDateStart.setEnabled(!editable);
         etDateEnd.setFocusable(!editable);
         etDateEnd.setEnabled(!editable);
+        etStatus.setEnabled(!editable);
+        etCanton.setEnabled(!editable);
         spnStatus.setFocusable(!editable);
         spnStatus.setEnabled(!editable);
         if (technicianIsAdmin()) {
-            spnTechnician.setFocusable(!editable);
-            spnTechnician.setEnabled(!editable);
+            etTechnician.setEnabled(!editable);
         }
         bCheckPlate.setEnabled(!editable);
         if (!editable) {
@@ -285,13 +289,20 @@ public class RevisionActivity extends SingleObjectActivity {
             etDateEnd.setFocusableInTouchMode(true);
             spnStatus.setFocusableInTouchMode(true);
             if (technicianIsAdmin()) {
-                spnTechnician.setFocusableInTouchMode(true);
+                etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null);
             }
+            etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null);
+            etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null);
             if (miAction != null) {
                 miAction.setIcon(R.drawable.ic_done_white_24dp);
             }
-        } else if (miAction != null) {
-            miAction.setIcon(R.drawable.ic_edit_white_24dp);
+        } else {
+            etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDisabled, null);
+            etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDisabled, null);
+            etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDisabled, null);
+            if (miAction != null) {
+                miAction.setIcon(R.drawable.ic_edit_white_24dp);
+            }
         }
         editable = !editable;
     }
@@ -356,6 +367,9 @@ public class RevisionActivity extends SingleObjectActivity {
         etYear = findViewById(R.id.et_rev_year);
         etDateStart = findViewById(R.id.et_rev_date_start);
         etDateEnd = findViewById(R.id.et_rev_date_end);
+        etTechnician = findViewById(R.id.et_rev_technician);
+        etStatus = findViewById(R.id.et_rev_status);
+        etCanton = findViewById(R.id.et_rev_canton);
         spnCantons = findViewById(R.id.spn_rev_canton);
         spnStatus = findViewById(R.id.spn_rev_status);
         spnTechnician = findViewById(R.id.spn_rev_technician);
@@ -377,6 +391,12 @@ public class RevisionActivity extends SingleObjectActivity {
         etDateStart.setEnabled(false);
         etDateEnd.setFocusable(false);
         etDateEnd.setEnabled(false);
+        etTechnician.setFocusable(false);
+        etTechnician.setEnabled(false);
+        etStatus.setFocusable(false);
+        etStatus.setEnabled(false);
+        etCanton.setFocusable(false);
+        etCanton.setEnabled(false);
         spnStatus.setFocusable(false);
         spnStatus.setEnabled(false);
         spnTechnician.setFocusable(false);
@@ -408,14 +428,35 @@ public class RevisionActivity extends SingleObjectActivity {
                 searchForMatchingCar();
             }
         });
+        etTechnician.setOnClickListener(view -> spnTechnician.performClick());
+        etStatus.setOnClickListener(view -> spnStatus.performClick());
+        etCanton.setOnClickListener(view -> spnCantons.performClick());
         spnCantons.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                etCanton.setText(adapterCantons.getItem(i).toString());
                 searchForMatchingCar();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) { }
         });
+        spnTechnician.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                etTechnician.setText(adapterTechnician.getItem(i).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { }
+        });
+        spnStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                etStatus.setText(getString(adapterStatus.getItem(i).getStringResourceId()));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { }
+        });
+
 
         adapterCantons = new CantonListAdapter(this, R.layout.tv_list_view, new ArrayList<>());
         spnCantons.setAdapter(adapterCantons);

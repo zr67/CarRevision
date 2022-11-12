@@ -1,11 +1,12 @@
 package com.example.carrevision.ui.management;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.R;
@@ -19,6 +20,7 @@ import com.example.carrevision.util.SecurePassword;
  */
 public class LoginActivity extends BaseActivity {
     private EditText etEmail, etPassword;
+    private SwitchCompat swRememberMe;
     private TechnicianRepository repository;
 
     @Override
@@ -29,6 +31,7 @@ public class LoginActivity extends BaseActivity {
         repository = ((BaseApp) getApplication()).getTechnicianRepository();
         etEmail = findViewById(R.id.et_login_mail);
         etPassword = findViewById(R.id.et_login_password);
+        swRememberMe = findViewById(R.id.sw_login_remember);
         Button bLogin = findViewById(R.id.b_login_login);
         bLogin.setOnClickListener(view -> login());
         Button bRegister = findViewById(R.id.b_login_register);
@@ -60,10 +63,7 @@ public class LoginActivity extends BaseActivity {
         repository.getTechnician(getApplication(), email).observe(LoginActivity.this, technicianEntity -> {
             if (technicianEntity != null) {
                 if (SecurePassword.verifyPassword(password, technicianEntity.getSalt(), technicianEntity.getHash())) {
-                    SharedPreferences.Editor editor = getSharedPreferences(BaseActivity.PREFS_NAME, 0).edit();
-                    editor.putInt(BaseActivity.PREFS_USER, technicianEntity.getId());
-                    editor.putBoolean(BaseActivity.PREFS_ADMIN, technicianEntity.isAdmin());
-                    editor.apply();
+                    ((BaseApp) getApplication()).getAccountManager().login(technicianEntity.getId(), technicianEntity.isAdmin(), swRememberMe.isChecked());
                     Intent intent = new Intent(LoginActivity.this, RevisionsActivity.class);
                     intent.putExtra("snackMsg", String.format(getString(R.string.welcome_back_msg), technicianEntity.getFirstname()));
                     updateNavMenu();

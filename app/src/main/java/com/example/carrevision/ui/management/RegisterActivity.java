@@ -1,17 +1,21 @@
 package com.example.carrevision.ui.management;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.R;
+import com.example.carrevision.adapter.ListAdapter;
 import com.example.carrevision.database.async.technician.CreateTechnician;
 import com.example.carrevision.database.entity.TechnicianEntity;
 import com.example.carrevision.database.repository.TechnicianRepository;
@@ -19,14 +23,18 @@ import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.OnAsyncEventListener;
 
+import java.util.Arrays;
+
 /**
  * Register activity class
  */
 public class RegisterActivity extends BaseActivity {
     private final String TAG = "RegisterActivity";
     private Spinner spnTitle;
-    private EditText etFirstname, etLastname, etEmail, etPassword1, etPassword2;
+    private EditText etFirstname, etLastname, etEmail, etPassword1, etPassword2, etTitle;
+    private SwitchCompat swRememberMe;
     private TechnicianRepository repository;
+    private ListAdapter<String> adapterTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +42,27 @@ public class RegisterActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_register, frameLayout);
         setTitle(R.string.title_activity_register);
         repository = ((BaseApp) getApplication()).getTechnicianRepository();
+        adapterTitle = new ListAdapter<>(this, R.layout.tv_list_view, Arrays.asList(getResources().getStringArray(R.array.titles)));
         spnTitle = findViewById(R.id.spn_register_title);
+        spnTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                etTitle.setText(adapterTitle.getItem(i));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { }
+        });
+        etTitle = findViewById(R.id.et_register_title);
+        etTitle.setOnClickListener(view -> spnTitle.performClick());
         etFirstname = findViewById(R.id.et_register_firstname);
         etLastname = findViewById(R.id.et_register_lastname);
         etEmail = findViewById(R.id.et_register_email);
         etPassword1 = findViewById(R.id.et_register_password1);
         etPassword2 = findViewById(R.id.et_register_password2);
+        swRememberMe = findViewById(R.id.sw_register_remember);
         Button bRegister = findViewById(R.id.b_register_register);
         bRegister.setOnClickListener(view -> createTech((String) spnTitle.getSelectedItem(), etFirstname.getText().toString(), etLastname.getText().toString(), etEmail.getText().toString(), etPassword1.getText().toString(), etPassword2.getText().toString()));
+        spnTitle.setAdapter(adapterTitle);
     }
 
     /**
@@ -114,10 +135,7 @@ public class RegisterActivity extends BaseActivity {
         if (response) {
             repository.getTechnician(getApplication(), etEmail.getText().toString()).observe(RegisterActivity.this, technicianEntity -> {
                 if (technicianEntity != null) {
-                    SharedPreferences.Editor editor = getSharedPreferences(BaseActivity.PREFS_NAME, 0).edit();
-                    editor.putInt(BaseActivity.PREFS_USER, technicianEntity.getId());
-                    editor.putBoolean(BaseActivity.PREFS_ADMIN, technicianEntity.isAdmin());
-                    editor.apply();
+                    ((BaseApp) getApplication()).getAccountManager().login(technicianEntity.getId(), technicianEntity.isAdmin(), swRememberMe.isChecked());
                     Intent intent = new Intent(RegisterActivity.this, RevisionsActivity.class);
                     intent.putExtra("snackMsg", String.format(getString(R.string.welcome_msg), technicianEntity.getFirstname()));
                     updateNavMenu();

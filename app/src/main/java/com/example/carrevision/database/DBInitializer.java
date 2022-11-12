@@ -275,18 +275,17 @@ public class DBInitializer {
     private static void addTechnicians(AppDatabase db) {
         db.technicianDao().deleteAll();
 
-        addTechnician(db, "M.", "Fred", "Jones", "fred.jones@sbg.com", new byte[] {-37, -111, -75, 16, -60, 21, 33, 55, 47, -76, 67, 41, -99, 68, 49, 98}, new byte[] {-33, 108, 78, 55, -41, -105, -40, -21, 43, -26, 30, 120, -102, -119, 40, -74}, true);
-        addTechnician(db, "M.", "Shaggy", "Rogers", "shaggy.rogers@sbg.com", new byte[] {43, 115, 24, 111, 85, 16, 123, 14, -114, 39, -73, -80, 103, -128, -49, -5}, new byte[] {64, -29, -55, -120, -67, -15, -4, 77, 22, 73, 111, -31, -46, 100, 126, -30}, true);
-        addTechnician(db, "Ms.", "Vera", "Dinkley", "vera.dinkley@sbg.com", new byte[] {-127, -90, -41, 84, 36, -17, 72, -57, 20, 28, 91, -30, -48, -12, -57, -72}, new byte[] {105, 113, -107, 108, -108, 121, -114, -28, 105, 81, -27, 40, 95, 127, -39, 99}, false);
-        addTechnician(db, "Ms.", "Daphne", "Blake", "daphne.blake@sbg.com", new byte[] {-108, -110, 78, -92, 117, 70, 54, 18, 113, -110, -79, 107, -123, 6, -31, -55}, new byte[] {-106, 115, -34, 125, -47, 2, -65, 70, 69, -49, -100, 102, -32, 69, 50, -65}, false);
-        addTechnician(db, "M.", "Scooby", "Doo", "scooby.doo@sbg.com", new byte[] {-66, -93, -70, 11, 126, -25, -115, -37, -128, 112, -103, -118, 38, -81, -2, -17}, new byte[] {64, 45, -116, 92, -48, -48, -97, 109, -25, -121, 14, -26, 97, 1, -67, -103}, false);
-
         // Plain text passwords
         //  Fred: MysteryMachine78
         //  Shaggy: Zoinks!
         //  Vera: Jinkies!
         //  Daphne: Jeepers!
         //  Scoob: Ruh-roh-RAGGY
+        addTechnician(db, "M.", "Fred", "Jones", "fred.jones@sbg.com", new byte[] {-37, -111, -75, 16, -60, 21, 33, 55, 47, -76, 67, 41, -99, 68, 49, 98}, new byte[] {-33, 108, 78, 55, -41, -105, -40, -21, 43, -26, 30, 120, -102, -119, 40, -74}, true);
+        addTechnician(db, "M.", "Shaggy", "Rogers", "shaggy.rogers@sbg.com", new byte[] {43, 115, 24, 111, 85, 16, 123, 14, -114, 39, -73, -80, 103, -128, -49, -5}, new byte[] {64, -29, -55, -120, -67, -15, -4, 77, 22, 73, 111, -31, -46, 100, 126, -30}, true);
+        addTechnician(db, "Ms.", "Vera", "Dinkley", "vera.dinkley@sbg.com", new byte[] {-127, -90, -41, 84, 36, -17, 72, -57, 20, 28, 91, -30, -48, -12, -57, -72}, new byte[] {105, 113, -107, 108, -108, 121, -114, -28, 105, 81, -27, 40, 95, 127, -39, 99}, false);
+        addTechnician(db, "Ms.", "Daphne", "Blake", "daphne.blake@sbg.com", new byte[] {-108, -110, 78, -92, 117, 70, 54, 18, 113, -110, -79, 107, -123, 6, -31, -55}, new byte[] {-106, 115, -34, 125, -47, 2, -65, 70, 69, -49, -100, 102, -32, 69, 50, -65}, false);
+        addTechnician(db, "M.", "Scooby", "Doo", "scooby.doo@sbg.com", new byte[] {-66, -93, -70, 11, 126, -25, -115, -37, -128, 112, -103, -118, 38, -81, -2, -17}, new byte[] {64, 45, -116, 92, -48, -48, -97, 109, -25, -121, 14, -26, 97, 1, -67, -103}, false);
     }
 
     /**
