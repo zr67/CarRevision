@@ -21,15 +21,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/spn_car_brand"
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_car_brand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
-            android:contentDescription="@string/brand"
-            android:minHeight="60dp" />
-
+            android:drawableEnd="@drawable/arrow_down_disabled"
+            android:hint="@string/brand"
+            android:inputType="none"
+            android:minHeight="48dp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spn_car_brand"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/brand"
+        android:visibility="invisible" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -37,15 +46,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/spn_car_model"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_car_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
-            android:contentDescription="@string/model"
-            android:minHeight="60dp" />
-
+            android:drawableEnd="@drawable/arrow_down_disabled"
+            android:hint="@string/model"
+            android:inputType="none"
+            android:minHeight="48dp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spn_car_model"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/model"
+        android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -71,19 +88,31 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout2"
-            android:layout_width="80dp"
+            android:layout_width="90dp"
             android:layout_height="72dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <Spinner
-                android:id="@+id/spn_car_canton"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_car_canton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-                android:contentDescription="@string/canton"
-                android:minHeight="60dp" />
+                android:drawableEnd="@drawable/arrow_down_disabled"
+                android:hint="@string/canton"
+                android:inputType="none"
+                android:minHeight="48dp" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spn_car_canton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/canton"
+            android:minHeight="60dp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -104,13 +133,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Spinner
-            android:id="@+id/spn_car_year"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_car_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
-            android:contentDescription="@string/year"
-            android:minHeight="60dp" />
+            android:drawableEnd="@drawable/arrow_down_disabled"
+            android:hint="@string/year"
+            android:inputType="none"
+            android:minHeight="48dp" />
     </com.google.android.material.textfield.TextInputLayout>
+    <Spinner
+        android:id="@+id/spn_car_year"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/year"
+        android:visibility="invisible"/>
 
 </LinearLayout>

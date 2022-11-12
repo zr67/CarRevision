@@ -45,12 +45,12 @@ public class CarActivity extends SingleObjectActivity {
     private MenuItem menuItem;
 
     private Spinner spnBrand, spnModel, spnCantons, spnYear;
-    private EditText etPlate, etMileage;
+    private EditText etPlate, etMileage, etBrand, etModel, etCanton, etYear;
 
     private ListAdapter<BrandEntity> adapterBrand;
     private ListAdapter<ModelEntity> adapterModel;
     private CantonListAdapter adapterCantons;
-    private ListAdapter<Integer> adapterYear;
+    private ListAdapter<String> adapterYear;
 
     private CarVM carVM;
     private CompleteCar car;
@@ -99,13 +99,13 @@ public class CarActivity extends SingleObjectActivity {
     // OK
     @Override
     protected void switchMode() {
-        spnBrand.setFocusable(!editable);
+        etBrand.setEnabled(!editable);
         spnBrand.setEnabled(!editable);
-        spnModel.setFocusable(!editable);
+        etModel.setEnabled(!editable);
         spnModel.setEnabled(!editable);
-        spnCantons.setFocusable(!editable);
+        etCanton.setEnabled(!editable);
         spnCantons.setEnabled(!editable);
-        spnYear.setFocusable(!editable);
+        etYear.setEnabled(!editable);
         spnYear.setEnabled(!editable);
         etPlate.setFocusable(!editable);
         etPlate.setEnabled(!editable);
@@ -113,10 +113,6 @@ public class CarActivity extends SingleObjectActivity {
         etMileage.setEnabled(!editable);
 
         if (!editable) {
-            spnBrand.setFocusableInTouchMode(true);
-            spnModel.setFocusableInTouchMode(true);
-            spnCantons.setFocusableInTouchMode(true);
-            spnYear.setFocusableInTouchMode(true);
             etPlate.setFocusableInTouchMode(true);
             etMileage.setFocusableInTouchMode(true);
 
@@ -149,6 +145,10 @@ public class CarActivity extends SingleObjectActivity {
         etPlate = findViewById(R.id.et_car_plate);
         etMileage = findViewById(R.id.et_car_mileage);
         spnYear = findViewById(R.id.spn_car_year);
+        etBrand = findViewById(R.id.et_car_brand);
+        etModel = findViewById(R.id.et_car_model);
+        etYear = findViewById(R.id.et_car_year);
+        etCanton = findViewById(R.id.et_car_canton);
 
         spnBrand.setFocusable(false);
         spnBrand.setEnabled(false);
@@ -162,41 +162,84 @@ public class CarActivity extends SingleObjectActivity {
         etMileage.setEnabled(false);
         spnYear.setFocusable(false);
         spnYear.setEnabled(false);
+        etBrand.setFocusable(false);
+        etBrand.setEnabled(false);
+        etModel.setFocusable(false);
+        etModel.setEnabled(false);
+        etYear.setEnabled(false);
+        etYear.setFocusable(false);
+        etCanton.setEnabled(false);
+        etCanton.setFocusable(false);
+
+        etBrand.setOnClickListener((view) -> spnBrand.performClick());
+        etModel.setOnClickListener((view) -> spnModel.performClick());
+        etYear.setOnClickListener((view) -> spnYear.performClick());
+        etCanton.setOnClickListener((view) -> spnCantons.performClick());
 
         adapterBrand = new ListAdapter<>(this, R.layout.tv_list_view, new ArrayList<>());
         spnBrand.setAdapter(adapterBrand);
         spnBrand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                etBrand.setText(((BrandEntity) spnBrand.getSelectedItem()).toString());
                 if (brandWithModels != null){
+                    boolean modelUpdated = false;
                     for (BrandWithModels bm : brandWithModels) {
                         if (bm.brand.equals((BrandEntity) spnBrand.getSelectedItem())) {
                             adapterModel.updateData(bm.models);
                             break;
                         }
                     }
+                    if (car != null) {
+                        if (car.modelWithBrand.brand.equals((BrandEntity) spnBrand.getSelectedItem())) {
+                            spnModel.post(() -> spnModel.setSelection(adapterModel.getPosition(car.modelWithBrand.model)));
+                            modelUpdated = true;
+                        }
+                    }
+                    if (!modelUpdated) {
+                        spnModel.performItemClick(spnModel, 0, 0); // TODO corriger ce chenil
+                    }
                 }
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
 
         adapterModel = new ListAdapter<>(this, R.layout.tv_list_view, new ArrayList<>());
         spnModel.setAdapter(adapterModel);
+        spnModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etModel.setText(((ModelEntity) spnModel.getSelectedItem()).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
         adapterCantons = new CantonListAdapter(this, R.layout.tv_list_view, new ArrayList<>());
         spnCantons.setAdapter(adapterCantons);
-
-        ArrayList<Integer> years = new ArrayList<>();
+        spnCantons.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etCanton.setText(((CantonEntity) spnCantons.getSelectedItem()).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        ArrayList<String> years = new ArrayList<>();
         for (int i = 1950; i < 2023; i++){
-            years.add(i);
+            years.add(String.valueOf(i));
         }
-
         adapterYear = new ListAdapter<>(this, R.layout.tv_list_view, years);
         spnYear.setAdapter(adapterYear);
+        spnYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etYear.setText(spnYear.getSelectedItem().toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     // OK
@@ -246,7 +289,7 @@ public class CarActivity extends SingleObjectActivity {
         int idModel = ((ModelEntity) spnModel.getSelectedItem()).getId();
         plate = ((CantonEntity)spnCantons.getSelectedItem()).getAbbreviation() + etPlate.getText().toString();
         int m = Integer.parseInt(etMileage.getText().toString());
-        int annee = (Integer) spnYear.getSelectedItem();
+        int annee = Integer.parseInt(spnYear.getSelectedItem().toString());
 
         // En cas de modif
         if (car != null) {
@@ -299,7 +342,7 @@ public class CarActivity extends SingleObjectActivity {
             spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition( new CantonEntity(canton, canton))));
             spnBrand.post(() -> spnBrand.setSelection(adapterBrand.getPosition(car.modelWithBrand.brand)));
             spnModel.post(() -> spnModel.setSelection(adapterModel.getPosition(car.modelWithBrand.model)));
-            spnYear.post(() -> spnYear.setSelection(adapterYear.getPosition(car.car.getYear().getYear())));
+            spnYear.post(() -> spnYear.setSelection(adapterYear.getPosition(StringUtility.dateToYearString(car.car.getYear(), this))));
         }
     }
 
@@ -312,7 +355,7 @@ public class CarActivity extends SingleObjectActivity {
             rv = !((CantonEntity) spnCantons.getSelectedItem()).getAbbreviation().equals(StringUtility.abbreviationFromPlate(car.car.getPlate()))
                     || ! ((BrandEntity) spnBrand.getSelectedItem()).equals(car.modelWithBrand.brand)
                     || ! ((ModelEntity) spnModel.getSelectedItem()).equals(car.modelWithBrand.model)
-                    || ((Integer) spnYear.getSelectedItem()) != car.car.getYear().getYear()
+                    || !spnYear.getSelectedItem().toString().equals(StringUtility.dateToYearString(car.car.getYear(), this))
                     || Integer.parseInt(etMileage.getText().toString()) != car.car.getKilometers()
                     || !etPlate.getText().toString().equals(StringUtility.plateWithoutAbbreviation(car.car.getPlate()));
         } else {
