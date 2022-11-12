@@ -3,6 +3,7 @@ package com.example.carrevision;
 import android.app.Application;
 
 import com.example.carrevision.database.AppDatabase;
+import com.example.carrevision.database.repository.BrandRepository;
 import com.example.carrevision.database.repository.CantonRepository;
 import com.example.carrevision.database.repository.CarRepository;
 import com.example.carrevision.database.repository.RevisionRepository;
@@ -49,5 +50,9 @@ public class BaseApp extends Application {
      */
     public TechnicianRepository getTechnicianRepository() {
         return TechnicianRepository.getInstance();
+    }
+
+    public BrandRepository getBrandRepository() {
+        return BrandRepository.getInstance();
     }
 }

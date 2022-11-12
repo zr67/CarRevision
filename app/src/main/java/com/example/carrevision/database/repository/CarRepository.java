@@ -5,7 +5,17 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.example.carrevision.BaseApp;
+import com.example.carrevision.database.async.car.CreateCar;
+import com.example.carrevision.database.async.car.DeleteCar;
+import com.example.carrevision.database.async.car.UpdateCar;
+import com.example.carrevision.database.async.revision.CreateRevision;
+import com.example.carrevision.database.async.revision.DeleteRevision;
+import com.example.carrevision.database.async.revision.UpdateRevision;
+import com.example.carrevision.database.entity.CantonEntity;
+import com.example.carrevision.database.entity.CarEntity;
+import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.pojo.CompleteCar;
+import com.example.carrevision.util.OnAsyncEventListener;
 
 import java.util.List;
 
@@ -42,5 +52,21 @@ public class CarRepository {
      */
     public LiveData<List<CompleteCar>> getCars(Application application) {
         return ((BaseApp) application).getDatabase().carDao().getAll();
+    }
+
+    public LiveData<CompleteCar> getCar(Application application, int carId) {
+        return ((BaseApp) application).getDatabase().carDao().getById(carId);
+    }
+
+    public void update(final CarEntity car, OnAsyncEventListener callback, Application application) {
+        new UpdateCar((BaseApp) application, callback).execute(car);
+    }
+
+    public void create(final CarEntity car, OnAsyncEventListener callback, Application application) {
+        new CreateCar((BaseApp) application, callback).execute(car);
+    }
+
+    public void delete(final CarEntity car, OnAsyncEventListener callback, Application application) {
+        new DeleteCar((BaseApp) application, callback).execute(car);
     }
 }

@@ -7,6 +7,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import com.example.carrevision.database.entity.BrandEntity;
+import com.example.carrevision.database.pojo.BrandWithModels;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface BrandDao {
      * @return List of all BrandEntity
      */
     @Query("SELECT * FROM brands")
-    LiveData<List<BrandEntity>> getAll();
+    LiveData<List<BrandWithModels>> getAll();
 
     /**
      * Insert a new brand into the database

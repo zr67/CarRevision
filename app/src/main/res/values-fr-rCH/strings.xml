@@ -32,7 +32,9 @@
     <string name="action_save">Sauvegarder</string>
     <string name="action_discard">Abandonner</string>
     <string name="title_new_revision">Nouvelle révision</string>
-    <string name="title_details_revision">Détail de la révision</string>
+    <string name="title_new_car">Nouvelle voiture</string>
+    <string name="title_details_revision">Détails de la révision</string>
+    <string name="title_details_car">Détails de la voiture</string>
     <string name="verify_plate">Vérifier la plaque</string>
     <string name="app_icon_desc">Icône de l\'application</string>
     <string name="no_matching_item">Aucun résultat correspondant</string>
@@ -68,4 +70,12 @@
     <string name="lastname">Nom</string>
     <string name="firstname">Prénom</string>
     <string name="logout">Se déconnecter</string>
+    <string name="car_update_success">Voiture mise à jour</string>
+    <string name="car_update_fail">Erreur lors de la mise à jour de la voiture</string>
+    <string name="car_create_success">Voiture enregistrée</string>
+    <string name="car_create_fail">Erreur lors de l\'enregistrement de la voiture</string>
+    <string name="err_plate_empty">La plaque ne peut pas être vide</string>
+    <string name="err_mileage_empty">Le kilométrage ne peut pas être vide</string>
+    <string name="car_delete_success">Voiture supprimée</string>
+    <string name="car_delete_fail">Erreur lors de la suppression de la voiture</string>
 </resources>

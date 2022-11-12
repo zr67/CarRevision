@@ -25,13 +25,17 @@
     <string name="technician">Technician</string>
     <string name="action_add">Add</string>
     <string name="revision_update_success">Revision successfully updated</string>
+    <string name="car_update_success">Car successfully updated</string>
     <string name="revision_update_fail">Failed to update the revision</string>
+    <string name="car_update_fail">Failed to update the car</string>
     <string name="unsaved_changes">Unsaved changes</string>
     <string name="unsaved_changes_msg">There are some unsaved changes. What would you like to do?</string>
     <string name="action_save">Save</string>
     <string name="action_discard">Discard</string>
     <string name="title_new_revision">New Revision</string>
+    <string name="title_new_car">New Car</string>
     <string name="title_details_revision">Revision Details</string>
+    <string name="title_details_car">Car Details</string>
     <string name="verify_plate">Verify plate</string>
     <string name="app_icon_desc">Application icon</string>
     <string name="no_matching_item">No matching item found</string>
@@ -67,4 +71,10 @@
     <string name="lastname">Last name</string>
     <string name="firstname">First name</string>
     <string name="logout">Logout</string>
+    <string name="car_create_success">Car created successfully</string>
+    <string name="car_create_fail">Failed to create the car</string>
+    <string name="err_plate_empty">Plate can\'t be empty</string>
+    <string name="err_mileage_empty">Mileage can\'t be empty</string>
+    <string name="car_delete_success">Car successfully deleted</string>
+    <string name="car_delete_fail">Failed to delete the car</string>
 </resources>
