@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:hint="@string/plate"
-                    android:inputType="numberSigned" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageButton

@@ -3,7 +3,6 @@ package com.example.carrevision.database.async.car;
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.database.async.BaseAsync;
 import com.example.carrevision.database.entity.CarEntity;
-import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.util.OnAsyncEventListener;
 
 /**

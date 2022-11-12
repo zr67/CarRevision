@@ -1,7 +1,6 @@
 package com.example.carrevision.ui.car;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,41 +9,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
 import com.example.carrevision.R;
 import com.example.carrevision.adapter.CantonListAdapter;
 import com.example.carrevision.adapter.ListAdapter;
-import com.example.carrevision.adapter.StatusListAdapter;
 import com.example.carrevision.database.entity.BrandEntity;
 import com.example.carrevision.database.entity.CantonEntity;
 import com.example.carrevision.database.entity.CarEntity;
 import com.example.carrevision.database.entity.ModelEntity;
-import com.example.carrevision.database.entity.RevisionEntity;
-import com.example.carrevision.database.entity.TechnicianEntity;
 import com.example.carrevision.database.pojo.BrandWithModels;
 import com.example.carrevision.database.pojo.CompleteCar;
-import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.ui.SingleObjectActivity;
-import com.example.carrevision.ui.revision.RevisionActivity;
-import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.OnAsyncEventListener;
-import com.example.carrevision.util.Status;
 import com.example.carrevision.util.StringUtility;
 import com.example.carrevision.viewmodel.canton.BrandModelListVM;
 import com.example.carrevision.viewmodel.canton.CantonListVM;
 import com.example.carrevision.viewmodel.car.CarVM;
-import com.example.carrevision.viewmodel.revision.RevisionVM;
-import com.example.carrevision.viewmodel.technician.TechnicianVM;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -158,12 +143,12 @@ public class CarActivity extends SingleObjectActivity {
 
     // OK
     private void initView() {
-        spnBrand = findViewById(R.id.et_rev_brand);
-        spnModel = findViewById(R.id.et_rev_model);
-        spnCantons = findViewById(R.id.spn_rev_canton);
-        etPlate = findViewById(R.id.et_rev_plate);
-        etMileage = findViewById(R.id.et_rev_mileage);
-        spnYear = findViewById(R.id.et_rev_year);
+        spnBrand = findViewById(R.id.spn_car_brand);
+        spnModel = findViewById(R.id.spn_car_model);
+        spnCantons = findViewById(R.id.spn_car_canton);
+        etPlate = findViewById(R.id.et_car_plate);
+        etMileage = findViewById(R.id.et_car_mileage);
+        spnYear = findViewById(R.id.spn_car_year);
 
         spnBrand.setFocusable(false);
         spnBrand.setEnabled(false);
@@ -309,7 +294,7 @@ public class CarActivity extends SingleObjectActivity {
     private void updateContent() {
         if (car != null){
             etPlate.setText(StringUtility.plateWithoutAbbreviation(car.car.getPlate()));
-            etMileage.setText(car.car.getKilometers());
+            etMileage.setText(String.valueOf(car.car.getKilometers()));
             String canton = StringUtility.abbreviationFromPlate(car.car.getPlate());
             spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition( new CantonEntity(canton, canton))));
             spnBrand.post(() -> spnBrand.setSelection(adapterBrand.getPosition(car.modelWithBrand.brand)));
@@ -367,12 +352,12 @@ public class CarActivity extends SingleObjectActivity {
         BrandModelListVM brandModelListVM = new ViewModelProvider(new ViewModelStore(), bmFact).get(BrandModelListVM.class);
         brandModelListVM.getBrandWithModels().observe(this, brandsModels -> {
             if (brandsModels != null) {
+                brandWithModels = brandsModels;
                 ArrayList<BrandEntity> brands = new ArrayList<>();
                 for (BrandWithModels bm : brandsModels) {
                     brands.add(bm.brand);
                 }
                 adapterBrand.updateData(brands);
-                brandWithModels = brandWithModels;
             }
         });
 

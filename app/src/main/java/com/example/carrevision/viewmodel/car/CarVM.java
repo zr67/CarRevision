@@ -7,16 +7,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.carrevision.database.entity.CantonEntity;
 import com.example.carrevision.database.entity.CarEntity;
-import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.pojo.CompleteCar;
-import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.database.repository.CarRepository;
-import com.example.carrevision.database.repository.RevisionRepository;
 import com.example.carrevision.util.OnAsyncEventListener;
 import com.example.carrevision.viewmodel.BaseVM;
-import com.example.carrevision.viewmodel.revision.RevisionVM;
 
 /**
  * Car view-model class

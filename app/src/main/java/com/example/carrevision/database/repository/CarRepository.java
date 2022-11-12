@@ -8,12 +8,7 @@ import com.example.carrevision.BaseApp;
 import com.example.carrevision.database.async.car.CreateCar;
 import com.example.carrevision.database.async.car.DeleteCar;
 import com.example.carrevision.database.async.car.UpdateCar;
-import com.example.carrevision.database.async.revision.CreateRevision;
-import com.example.carrevision.database.async.revision.DeleteRevision;
-import com.example.carrevision.database.async.revision.UpdateRevision;
-import com.example.carrevision.database.entity.CantonEntity;
 import com.example.carrevision.database.entity.CarEntity;
-import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.util.OnAsyncEventListener;
 

@@ -1,6 +1,8 @@
 package com.example.carrevision.database;
+
 import android.content.Context;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,7 +11,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import java.util.concurrent.Executors;
 
 import com.example.carrevision.database.dao.BrandDao;
 import com.example.carrevision.database.dao.CantonDao;
@@ -23,6 +24,8 @@ import com.example.carrevision.database.entity.CarEntity;
 import com.example.carrevision.database.entity.ModelEntity;
 import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
+
+import java.util.concurrent.Executors;
 
 /**
  * Application database class

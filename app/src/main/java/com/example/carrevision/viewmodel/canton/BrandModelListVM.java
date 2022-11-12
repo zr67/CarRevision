@@ -8,11 +8,8 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.carrevision.database.pojo.BrandWithModels;
-import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.repository.BrandRepository;
-import com.example.carrevision.database.repository.CarRepository;
 import com.example.carrevision.viewmodel.BaseVM;
-import com.example.carrevision.viewmodel.car.CarListVM;
 
 import java.util.List;
 
