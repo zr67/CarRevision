@@ -77,6 +77,6 @@ public class BrandEntity {
     @NonNull
     @Override
     public String toString() {
-        return getId() + " " + getBrand();
+        return getBrand();
     }
 }

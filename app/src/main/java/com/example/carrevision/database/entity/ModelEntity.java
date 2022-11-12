@@ -110,6 +110,6 @@ public class ModelEntity {
     @NonNull
     @Override
     public String toString() {
-        return getId() + " " + getBrandId() + " " + getModel();
+        return getModel();
     }
 }
