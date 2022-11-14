@@ -25,7 +25,7 @@ public class TechnicianEntity {
     private String lastname;
     @NonNull
     @ColumnInfo(name = "email")
-    private String email;
+    private final String email;
     @ColumnInfo(name = "hash")
     private byte[] hash;
     @ColumnInfo(name = "slt")
@@ -150,38 +150,6 @@ public class TechnicianEntity {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Sets the technician's title
-     * @param title Technician's title
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Sets the technician's first name
-     * @param firstname Technician's first name
-     */
-    public void setFirstname(@NonNull String firstname) {
-        this.firstname = firstname;
-    }
-
-    /**
-     * Sets the technician's last name
-     * @param lastname Technician's last name
-     */
-    public void setLastname(@NonNull String lastname) {
-        this.lastname = lastname;
-    }
-
-    /**
-     * Sets the technician's email
-     * @param email Technician's email
-     */
-    public void setEmail(@NonNull String email) {
-        this.email = email;
     }
 
     /**

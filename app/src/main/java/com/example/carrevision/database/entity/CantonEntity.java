@@ -18,7 +18,7 @@ public class CantonEntity {
     private String canton;
     @NonNull
     @ColumnInfo(name = "abbr")
-    private String abbreviation;
+    private final String abbreviation;
 
     /**
      * Default constructor for the canton entity class
@@ -69,22 +69,6 @@ public class CantonEntity {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Sets the canton's name
-     * @param canton Canton's name
-     */
-    public void setCanton(@NonNull String canton) {
-        this.canton = canton;
-    }
-
-    /**
-     * Sets the canton's abbreviation
-     * @param abbreviation Canton's abbreviation
-     */
-    public void setAbbreviation(@NonNull String abbreviation) {
-        this.abbreviation = abbreviation;
     }
 
     @Override

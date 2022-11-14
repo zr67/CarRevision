@@ -154,7 +154,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             } else {
                 intent = new Intent(this, RevisionsActivity.class);
             }
-            intent.putExtra("snackMsg", "See you soon!"); // TODO translation
+            intent.putExtra("snackMsg", getString(R.string.logout_msg));
         }
         if (intent != null) {
             startActivity(intent);

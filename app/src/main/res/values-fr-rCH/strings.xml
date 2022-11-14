@@ -47,9 +47,9 @@
     <string name="date_start_invalid">Date de début invalide</string>
     <string name="date_end_invalid">Date de fin invalide</string>
     <string name="use_format">Utiliser le format \"%s\"</string>
-    <string name="revision_car_not_existing">Nouvelle voiture détectée, passage à la création de voiture...</string>
+    <string name="revision_car_not_existing">Nouvelle voiture détectée, passage à la création de voiture…</string>
     <string name="pref_header_about">A propos</string>
-    <string name="pref_about_text">Cette application a été réalisée dans le cadre du module 644-1 \"Développement mobile et cloud\" par Arthur Avez et Zacharie Renna.</string>
+    <string name="pref_about_text">Cette application a été réalisée dans le cadre du module 644–1 \"Développement mobile et cloud\" par Arthur Avez et Zacharie Renna.</string>
     <string name="language">Langue</string>
     <string name="title_activity_login">Connexion</string>
     <string name="title_activity_register">S\'enregistrer</string>
@@ -77,5 +77,12 @@
     <string name="err_plate_empty">La plaque ne peut pas être vide</string>
     <string name="err_mileage_empty">Le kilométrage ne peut pas être vide</string>
     <string name="car_delete_success">Voiture supprimée</string>
-    <string name="car_delete_fail">Erreur lors de la suppression de la voiture</string>
+    <string name="car_delete_fail">Erreur lors de la suppression de la voiture, veuillez vérifier qu\'aucune révision n\'y soit liée puis réessayer</string>
+    <string name="logout_msg">A bientôt!</string>
+    <string name="remember_me">Se souvenir de moi</string>
+    <string name="desc_icon_login">Icône de connexion</string>
+    <string name="desc_icon_revision">Icône de révision</string>
+    <string name="desc_icon_register">Icône d\'enregistrement</string>
+    <string name="title">Titre</string>
+    <string name="desc_icon_car">Icône de voiture</string>
 </resources>

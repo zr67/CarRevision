@@ -16,7 +16,7 @@ public class BrandEntity {
     private int id;
     @NonNull
     @ColumnInfo(name = "brand")
-    private String brand;
+    private final String brand;
 
     /**
      * Default constructor for the brand entity class
@@ -57,14 +57,6 @@ public class BrandEntity {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Sets the brand's name
-     * @param brand Brand's name
-     */
-    public void setBrand(@NonNull String brand) {
-        this.brand = brand;
     }
 
     @Override

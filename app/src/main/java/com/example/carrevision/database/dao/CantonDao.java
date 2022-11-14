@@ -16,13 +16,6 @@ import java.util.List;
  */
 @Dao
 public interface CantonDao {
-    /**
-     * Gets a canton by its unique identifier
-     * @param id Canton's unique identifier
-     * @return CantonEntity corresponding to the identifier
-     */
-    @Query("SELECT * FROM cantons WHERE id = :id")
-    LiveData<CantonEntity> getById(int id);
 
     /**
      * Gets all cantons

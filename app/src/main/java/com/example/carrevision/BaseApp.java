@@ -6,6 +6,7 @@ import com.example.carrevision.database.AppDatabase;
 import com.example.carrevision.database.repository.BrandRepository;
 import com.example.carrevision.database.repository.CantonRepository;
 import com.example.carrevision.database.repository.CarRepository;
+import com.example.carrevision.database.repository.ModelRepository;
 import com.example.carrevision.database.repository.RevisionRepository;
 import com.example.carrevision.database.repository.TechnicianRepository;
 import com.example.carrevision.util.AccountManager;
@@ -53,8 +54,20 @@ public class BaseApp extends Application {
         return TechnicianRepository.getInstance();
     }
 
+    /**
+     * Gets the brand repository
+     * @return Brand repository
+     */
     public BrandRepository getBrandRepository() {
         return BrandRepository.getInstance();
+    }
+
+    /**
+     * Gets the model repository
+     * @return Model repository
+     */
+    public ModelRepository getModelRepository() {
+        return ModelRepository.getInstance();
     }
 
     /**

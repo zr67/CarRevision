@@ -9,10 +9,10 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/iv_register_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/register" />
+        app:srcCompat="@drawable/register"
+        android:contentDescription="@string/desc_icon_register" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
             android:drawableEnd="@drawable/arrow_down"
-            android:hint="TITLE"
+            android:hint="@string/title"
             android:focusable="false"
             android:inputType="none"
             android:minHeight="48dp" />
@@ -107,7 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/fab_margin"
         android:minHeight="48dp"
-        android:text="REMEMBER ME" />
+        android:text="@string/remember_me" />
 
     <Button
         android:id="@+id/b_register_register"

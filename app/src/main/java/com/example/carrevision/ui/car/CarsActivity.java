@@ -50,7 +50,7 @@ public class CarsActivity extends BaseActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         cars = new ArrayList<>();
-        adapter = new CarRecyclerAdapter((v, position) -> {
+        adapter = new CarRecyclerAdapter((position) -> {
             Log.d(TAG, "Clicked position: " + position + " on car " + cars.get(position).car.getId());
 
             Intent intent = new Intent(CarsActivity.this, CarActivity.class);

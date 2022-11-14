@@ -16,20 +16,14 @@ import java.util.List;
  */
 @Dao
 public interface ModelDao {
-    /**
-     * Gets a model by its unique identifier
-     * @param id Model's unique identifier
-     * @return ModelEntity corresponding to the identifier
-     */
-    @Query("SELECT * FROM models WHERE id = :id")
-    LiveData<ModelEntity> getById(int id);
 
     /**
-     * Gets all models
-     * @return List of all ModelEntity
+     * Gets all models from a brand
+     * @param id Brand's identifier
+     * @return All models from the brand
      */
-    @Query("SELECT * FROM models")
-    LiveData<List<ModelEntity>> getAll();
+    @Query("SELECT * FROM models WHERE brand_id = :id")
+    LiveData<List<ModelEntity>> getByBrandId(int id);
 
     /**
      * Insert a new model into the database

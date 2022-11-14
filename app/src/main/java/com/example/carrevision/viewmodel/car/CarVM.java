@@ -20,6 +20,12 @@ public class CarVM extends BaseVM {
     private final CarRepository repository;
     private final MediatorLiveData<CompleteCar> observableCar;
 
+    /**
+     * Car view-model class constructor
+     * @param application Application
+     * @param repository Car repository
+     * @param carId Car identifier
+     */
     public CarVM(@NonNull Application application, CarRepository repository, int carId) {
         super(application);
         this.repository = repository;
@@ -31,24 +37,18 @@ public class CarVM extends BaseVM {
         observableCar.addSource(car, observableCar::setValue);
     }
 
-    public LiveData<CompleteCar> getCar() { return observableCar; }
-
-    public void updateCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.update(car, callback, application);
-    }
-
-    public void createCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.create(car, callback, application);
-    }
-
-    public void deleteCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.delete(car, callback, application);
-    }
-
+    /**
+     * Inner class factory for the car view-model
+     */
     public static class Factory extends BaseFactory {
         private final CarRepository repository;
         private final int carId;
 
+        /**
+         * Inner class factory constructor
+         * @param application Application
+         * @param carId Car identifier
+         */
         public Factory(@NonNull Application application, int carId) {
             super(application);
             this.repository = getApp().getCarRepository();
@@ -61,5 +61,38 @@ public class CarVM extends BaseVM {
             //noinspection unchecked
             return (T) new CarVM(getApp(), repository, carId);
         }
+    }
+
+    /**
+     * Gets the observable car
+     * @return Observable car
+     */
+    public LiveData<CompleteCar> getCar() { return observableCar; }
+
+    /**
+     * Creates a car
+     * @param car Car to create
+     * @param callback Callback
+     */
+    public void createCar(CarEntity car, OnAsyncEventListener callback) {
+        repository.create(car, callback, application);
+    }
+
+    /**
+     * Updates a car
+     * @param car Car to update
+     * @param callback Callback
+     */
+    public void updateCar(CarEntity car, OnAsyncEventListener callback) {
+        repository.update(car, callback, application);
+    }
+
+    /**
+     * Deletes a car
+     * @param car Car to delete
+     * @param callback Callback
+     */
+    public void deleteCar(CarEntity car, OnAsyncEventListener callback) {
+        repository.delete(car, callback, application);
     }
 }

@@ -1,11 +1,13 @@
 package com.example.carrevision.ui;
 
 import android.app.AlertDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 
 import com.example.carrevision.R;
@@ -15,12 +17,15 @@ import com.example.carrevision.R;
  */
 public abstract class SingleObjectActivity extends BaseActivity {
     protected boolean editable, ignoreChanges;
+    protected Drawable dArrow, dArrowDisabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         editable = false;
         ignoreChanges = false;
+        dArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.arrow_down, null);
+        dArrowDisabled = ResourcesCompat.getDrawable(getResources(), R.drawable.arrow_down_disabled, null);
     }
 
     @Override
@@ -128,6 +133,27 @@ public abstract class SingleObjectActivity extends BaseActivity {
         });
         return dlg;
     }
+
+    /**
+     * Initializes the view
+     */
+    protected abstract void initView();
+
+    /**
+     * Updates the content with the current data
+     */
+    protected abstract void updateContent();
+
+    /**
+     * Starts the list activity
+     * @param resource Resource identifier for the message to display
+     */
+    protected abstract void startListActivity(int resource);
+
+    /**
+     * Sets up all the remaining view-models
+     */
+    protected abstract void setupVMs();
 
     /**
      * Switches between the edit and the read-only mode

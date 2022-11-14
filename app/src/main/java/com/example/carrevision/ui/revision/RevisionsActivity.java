@@ -50,7 +50,7 @@ public class RevisionsActivity extends BaseActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         revisions = new ArrayList<>();
-        adapter = new RevisionRecyclerAdapter ((v, position) -> {
+        adapter = new RevisionRecyclerAdapter ((position) -> {
             Log.d(TAG, "Clicked position: " + position + " on revision " + revisions.get(position).revision.getId());
 
             Intent intent = new Intent(RevisionsActivity.this, RevisionActivity.class);

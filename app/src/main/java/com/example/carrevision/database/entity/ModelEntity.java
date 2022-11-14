@@ -31,7 +31,7 @@ public class ModelEntity {
     private int brandId;
     @NonNull
     @ColumnInfo(name = "model")
-    private String model;
+    private final String model;
 
     /**
      * Default constructor for the model entity class
@@ -82,22 +82,6 @@ public class ModelEntity {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Sets the brand's identifier
-     * @param brandId Brand's identifier
-     */
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
-    }
-
-    /**
-     * Sets the model's name
-     * @param model Model's name
-     */
-    public void setModel(@NonNull String model) {
-        this.model = model;
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
@@ -130,11 +129,4 @@ public abstract class AppDatabase extends RoomDatabase {
         isDBCreated.postValue(true);
     }
 
-    /**
-     * Gets the database status
-     * @return Database status
-     */
-    public LiveData<Boolean> getDBCreated() {
-        return isDBCreated;
-    }
 }

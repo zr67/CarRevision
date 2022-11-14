@@ -9,10 +9,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/iv_rev_icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/car_revision" />
+            app:srcCompat="@drawable/car_revision"
+            android:contentDescription="@string/desc_icon_revision" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -75,7 +75,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/fab_margin"
@@ -160,7 +159,6 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/fab_margin"
@@ -177,7 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
-            android:digits="01234567890.: "
+            android:digits="01234567890.:/ "
             android:hint="@string/date_start" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,7 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-                android:digits="0123456789.: "
+                android:digits="0123456789.:/ "
                 android:hint="@string/date_end" />
         </com.google.android.material.textfield.TextInputLayout>
 

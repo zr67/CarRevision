@@ -41,19 +41,6 @@ public class LocaleManager {
     }
 
     /**
-     * Sets the current language
-     * @param language New language
-     */
-    public void setLanguage(String language) {
-        if (language.equals(LANG_FR) || language.equals(LANG_EN)) {
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putString(PREFS_LANG, language);
-            editor.apply();
-            applyLanguage();
-        }
-    }
-
-    /**
      * Applies the language stored in the preferences
      */
     @SuppressLint("AppBundleLocaleChanges")

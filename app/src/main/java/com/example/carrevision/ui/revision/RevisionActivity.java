@@ -1,7 +1,6 @@
 package com.example.carrevision.ui.revision;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
@@ -53,7 +51,6 @@ public class RevisionActivity extends SingleObjectActivity {
     private Spinner spnCantons, spnStatus, spnTechnician;
     private EditText etPlate, etBrand, etModel, etMileage, etYear, etDateStart, etDateEnd, etTechnician, etStatus, etCanton;
     private MenuItem miAction;
-    private Drawable arrow, arrowDisabled;
 
     private CantonListAdapter adapterCantons;
     private StatusListAdapter adapterStatus;
@@ -75,15 +72,6 @@ public class RevisionActivity extends SingleObjectActivity {
         if (revisionId < 0) {
             setTitle(R.string.title_new_revision);
             matchingCar = null;
-            if (technicianIsConnected()) {
-                TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), getConnectedTechnicianId());
-                TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
-                technicianVM.getTechnician().observe(this, technicianEntity -> {
-                    if (technicianEntity != null) {
-                        spnTechnician.setSelection(adapterTechnician.getPosition(technicianEntity));
-                    }
-                });
-            }
             switchMode();
         } else {
             setTitle(R.string.title_details_revision);
@@ -97,17 +85,8 @@ public class RevisionActivity extends SingleObjectActivity {
                 updateContent();
             }
         });
-        setupVMs();
         if (getIntent().hasExtra("cantonPosition") && getIntent().hasExtra("plate")) {
-            spnCantons.setSelection(getIntent().getIntExtra("cantonPosition", 0));
             etPlate.setText(getIntent().getStringExtra("plate"));
-            bCheckPlate.callOnClick();
-        }
-        if (getIntent().hasExtra("statusPosition")) {
-            spnStatus.setSelection(getIntent().getIntExtra("statusPosition", 0));
-        }
-        if (getIntent().hasExtra("technicianPosition")) {
-            spnTechnician.setSelection(getIntent().getIntExtra("technicianPosition", 0));
         }
         if (getIntent().hasExtra("start")) {
             etDateStart.setText(getIntent().getStringExtra("start"));
@@ -115,8 +94,7 @@ public class RevisionActivity extends SingleObjectActivity {
         if (getIntent().hasExtra("end")) {
             etDateEnd.setText(getIntent().getStringExtra("end"));
         }
-        arrow = ResourcesCompat.getDrawable(getResources(), R.drawable.arrow_down, null);
-        arrowDisabled = ResourcesCompat.getDrawable(getResources(), R.drawable.arrow_down_disabled, null);
+        setupVMs();
     }
 
     @Override
@@ -154,20 +132,16 @@ public class RevisionActivity extends SingleObjectActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Starts the revision list activity
-     */
-    private void startListActivity(int resource) {
+    @Override
+    protected void startListActivity(int resource) {
         Intent intent = new Intent(RevisionActivity.this, RevisionsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra("snackMsg", getString(resource));
         startActivity(intent);
     }
 
-    /**
-     * Sets up all the view-models except the revision
-     */
-    private void setupVMs() {
+    @Override
+    protected void setupVMs() {
         CarListVM.Factory caFact = new CarListVM.Factory(getApplication());
         CarListVM carsVM = new ViewModelProvider(new ViewModelStore(), caFact).get(CarListVM.class);
         carsVM.getCars().observe(this, carEntities -> {
@@ -180,6 +154,10 @@ public class RevisionActivity extends SingleObjectActivity {
         cantonsVM.getCantons().observe(this, cantonEntities -> {
             if (cantonEntities != null) {
                 adapterCantons.updateData(cantonEntities);
+                spnCantons.setSelection(getIntent().getIntExtra("cantonPosition", 0));
+                if (matchingCar != null) {
+                    bCheckPlate.callOnClick();
+                }
             }
         });
         TechnicianListVM.Factory tFact = new TechnicianListVM.Factory(getApplication());
@@ -187,6 +165,17 @@ public class RevisionActivity extends SingleObjectActivity {
         techniciansVM.getTechnicians().observe(this, technicianEntities -> {
             if (technicianEntities != null) {
                 adapterTechnician.updateData(technicianEntities);
+                if (technicianIsAdmin()) {
+                    spnTechnician.setSelection(getIntent().getIntExtra("technicianPosition", 0));
+                } else if (technicianIsConnected()) {
+                    TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), getConnectedTechnicianId());
+                    TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
+                    technicianVM.getTechnician().observe(this, technicianEntity -> {
+                        if (technicianEntity != null) {
+                            spnTechnician.setSelection(adapterTechnician.getPosition(technicianEntity));
+                        }
+                    });
+                }
             }
         });
     }
@@ -266,7 +255,6 @@ public class RevisionActivity extends SingleObjectActivity {
 
     @Override
     protected void switchMode() {
-        spnCantons.setFocusable(!editable);
         spnCantons.setEnabled(!editable);
         etPlate.setFocusable(!editable);
         etPlate.setEnabled(!editable);
@@ -276,30 +264,27 @@ public class RevisionActivity extends SingleObjectActivity {
         etDateEnd.setEnabled(!editable);
         etStatus.setEnabled(!editable);
         etCanton.setEnabled(!editable);
-        spnStatus.setFocusable(!editable);
         spnStatus.setEnabled(!editable);
         if (technicianIsAdmin()) {
             etTechnician.setEnabled(!editable);
         }
         bCheckPlate.setEnabled(!editable);
         if (!editable) {
-            spnCantons.setFocusableInTouchMode(true);
             etPlate.setFocusableInTouchMode(true);
             etDateStart.setFocusableInTouchMode(true);
             etDateEnd.setFocusableInTouchMode(true);
-            spnStatus.setFocusableInTouchMode(true);
+            etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrow, null);
+            etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrow, null);
             if (technicianIsAdmin()) {
-                etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null);
+                etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrow, null);
             }
-            etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null);
-            etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null);
             if (miAction != null) {
                 miAction.setIcon(R.drawable.ic_done_white_24dp);
             }
         } else {
-            etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDisabled, null);
-            etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDisabled, null);
-            etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDisabled, null);
+            etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrowDisabled, null);
+            etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrowDisabled, null);
+            etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrowDisabled, null);
             if (miAction != null) {
                 miAction.setIcon(R.drawable.ic_edit_white_24dp);
             }
@@ -307,58 +292,8 @@ public class RevisionActivity extends SingleObjectActivity {
         editable = !editable;
     }
 
-    /**
-     * Updates the content with the current revision
-     */
-    private void updateContent() {
-        if (revision != null) {
-            etPlate.setText(StringUtility.plateWithoutAbbreviation(revision.completeCar.car.getPlate()));
-            loadCarInfo(revision.completeCar);
-            etDateStart.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), this));
-            Date end = revision.revision.getEnd();
-            if (end != null) {
-                etDateEnd.setText(StringUtility.dateToDateTimeString(end, this));
-            }
-            String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
-            spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton))));
-            spnStatus.post(() -> spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus())));
-            spnTechnician.post(() -> spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician)));
-        }
-    }
-
-    /**
-     * Searches for an existing car matching the plate entered by the user
-     */
-    private void searchForMatchingCar() {
-        if (cars != null) {
-            for (CompleteCar cc : cars) {
-                String abbr = ((CantonEntity)spnCantons.getSelectedItem()).getAbbreviation();
-                if (cc.car.getPlate().equals(abbr + etPlate.getText().toString())) {
-                    matchingCar = cc;
-                    bCheckPlate.setImageResource(R.drawable.ic_done_white_24dp);
-                    return;
-                }
-            }
-            matchingCar = null;
-            bCheckPlate.setImageResource(R.drawable.ic_action_add);
-        }
-    }
-
-    /**
-     * Loads the car information to the interface
-     * @param car Car to load
-     */
-    private void loadCarInfo(CompleteCar car) {
-        etBrand.setText(car.modelWithBrand.brand.getBrand());
-        etModel.setText(car.modelWithBrand.model.getModel());
-        etMileage.setText(StringUtility.intToString(car.car.getKilometers(), this));
-        etYear.setText(StringUtility.dateToYearString(car.car.getYear(), this));
-    }
-
-    /**
-     * Initializes the view
-     */
-    private void initView() {
+    @Override
+    protected void initView() {
         bCheckPlate = findViewById(R.id.b_checkPlate);
         etPlate = findViewById(R.id.et_rev_plate);
         etBrand = findViewById(R.id.et_rev_brand);
@@ -416,6 +351,7 @@ public class RevisionActivity extends SingleObjectActivity {
                 intent.putExtra("statusPosition", spnStatus.getSelectedItemPosition());
                 intent.putExtra("technicianPosition", spnTechnician.getSelectedItemPosition());
                 startActivity(intent);
+                finish();
             }
         });
         etPlate.addTextChangedListener(new TextWatcher() {
@@ -462,8 +398,26 @@ public class RevisionActivity extends SingleObjectActivity {
         spnCantons.setAdapter(adapterCantons);
         adapterStatus = new StatusListAdapter(this, R.layout.tv_list_view, Status.getAllStatus());
         spnStatus.setAdapter(adapterStatus);
+        spnStatus.setSelection(getIntent().getIntExtra("statusPosition", 0));
         adapterTechnician = new ListAdapter<>(this, R.layout.tv_list_view, new ArrayList<>());
         spnTechnician.setAdapter(adapterTechnician);
+    }
+
+    @Override
+    protected void updateContent() {
+        if (revision != null) {
+            etPlate.setText(StringUtility.plateWithoutAbbreviation(revision.completeCar.car.getPlate()));
+            loadCarInfo(revision.completeCar);
+            etDateStart.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), this));
+            Date end = revision.revision.getEnd();
+            if (end != null) {
+                etDateEnd.setText(StringUtility.dateToDateTimeString(end, this));
+            }
+            String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
+            spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton))));
+            spnStatus.post(() -> spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus())));
+            spnTechnician.post(() -> spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician)));
+        }
     }
 
     @Override
@@ -513,5 +467,34 @@ public class RevisionActivity extends SingleObjectActivity {
                 }
             });
         }
+    }
+
+    /**
+     * Searches for an existing car matching the plate entered by the user
+     */
+    private void searchForMatchingCar() {
+        if (cars != null) {
+            for (CompleteCar cc : cars) {
+                String abbr = ((CantonEntity)spnCantons.getSelectedItem()).getAbbreviation();
+                if (cc.car.getPlate().equals(abbr + etPlate.getText().toString())) {
+                    matchingCar = cc;
+                    bCheckPlate.setImageResource(R.drawable.ic_done_white_24dp);
+                    return;
+                }
+            }
+            matchingCar = null;
+            bCheckPlate.setImageResource(R.drawable.ic_action_add);
+        }
+    }
+
+    /**
+     * Loads the car information to the interface
+     * @param car Car to load
+     */
+    private void loadCarInfo(CompleteCar car) {
+        etBrand.setText(car.modelWithBrand.brand.getBrand());
+        etModel.setText(car.modelWithBrand.model.getModel());
+        etMileage.setText(StringUtility.intToString(car.car.getKilometers(), this));
+        etYear.setText(StringUtility.dateToYearString(car.car.getYear(), this));
     }
 }
