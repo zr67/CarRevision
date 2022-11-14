@@ -9,6 +9,9 @@ import com.example.carrevision.database.entity.CantonEntity;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Canton list adapter class
+ */
 public class CantonListAdapter extends ListAdapter<CantonEntity> {
     /**
      * Constructor of the list adapter class

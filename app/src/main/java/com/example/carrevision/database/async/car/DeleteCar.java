@@ -9,9 +9,8 @@ import com.example.carrevision.util.OnAsyncEventListener;
  * Async class for car deletion
  */
 public class DeleteCar extends BaseAsync<CarEntity> {
-
     /**
-     * Revision deletion class constructor
+     * Car deletion class constructor
      * @param application Application to access the dao interfaces
      * @param callback Callback interface to notify the operation status
      */

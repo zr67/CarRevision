@@ -8,6 +8,9 @@ import com.example.carrevision.util.Status;
 
 import java.util.List;
 
+/**
+ * Status list adapter class
+ */
 public class StatusListAdapter extends ListAdapter<Status> {
     /**
      * Constructor of the status list adapter class

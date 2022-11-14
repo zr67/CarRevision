@@ -49,18 +49,42 @@ public class CarRepository {
         return ((BaseApp) application).getDatabase().carDao().getAll();
     }
 
+    /**
+     * Gets a car by it's identifier
+     * @param application Applicaiton
+     * @param carId Car's identifier
+     * @return Car with all it's associated objects
+     */
     public LiveData<CompleteCar> getCar(Application application, int carId) {
         return ((BaseApp) application).getDatabase().carDao().getById(carId);
     }
 
-    public void update(final CarEntity car, OnAsyncEventListener callback, Application application) {
-        new UpdateCar((BaseApp) application, callback).execute(car);
-    }
-
+    /**
+     * Creates a new car
+     * @param car Car to create
+     * @param callback Callback
+     * @param application Application
+     */
     public void create(final CarEntity car, OnAsyncEventListener callback, Application application) {
         new CreateCar((BaseApp) application, callback).execute(car);
     }
 
+    /**
+     * Updates a car
+     * @param car Car to update
+     * @param callback Callback
+     * @param application Application
+     */
+    public void update(final CarEntity car, OnAsyncEventListener callback, Application application) {
+        new UpdateCar((BaseApp) application, callback).execute(car);
+    }
+
+    /**
+     * Deletes a car
+     * @param car Car to delete
+     * @param callback Callback
+     * @param application Application
+     */
     public void delete(final CarEntity car, OnAsyncEventListener callback, Application application) {
         new DeleteCar((BaseApp) application, callback).execute(car);
     }

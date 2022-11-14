@@ -9,11 +9,14 @@ import com.example.carrevision.util.OnAsyncEventListener;
  * Async class for car update
  */
 public class UpdateCar extends BaseAsync<CarEntity> {
-
+    /**
+     * Car update class constructor
+     * @param application Application to access the dao interface
+     * @param callback Callback interface to notify the operation status
+     */
     public UpdateCar(BaseApp application, OnAsyncEventListener callback) {
         super(application, callback);
     }
-
     @Override
     protected Void doInBackground(CarEntity... carEntities) {
         try {
