@@ -63,7 +63,7 @@ public abstract class SingleObjectActivity extends BaseActivity {
                 onBackPressed();
             });
             dlg.show();
-        } else if (editable) {
+        } else if (editable && !ignoreChanges) {
             switchMode();
         } else {
             super.onBackPressed();
