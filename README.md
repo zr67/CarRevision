@@ -12,6 +12,7 @@ N'importe qui peut s'enregister en tant que technicien non-administrateur, nous 
 
 <h1>Fonctionnalités</h1>
 <ul>
+<li>Javadoc effectuée pour chaque classe et méthode du projet</li>
 <li>Affichage et recherche dans la liste des voitures</li>
 <li>Affichage et recherche dans la liste des révisions</li>
 <li>Affichage/édition/suppression d'une voiture</li>
