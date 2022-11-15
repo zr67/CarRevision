@@ -34,6 +34,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected static int position = R.id.nav_revisions;
 
     /**
+     * Gets the current position, used when the language has been changed to restore the correct activity
+     * @return Current position
+     */
+    public static int getPosition() {
+        return position;
+    }
+
+    /**
      * Gets if the technician is connected
      * @return True if connected, false otherwise
      */

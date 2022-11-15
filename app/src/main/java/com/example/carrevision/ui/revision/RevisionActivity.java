@@ -25,6 +25,7 @@ import com.example.carrevision.database.entity.RevisionEntity;
 import com.example.carrevision.database.entity.TechnicianEntity;
 import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.database.pojo.CompleteRevision;
+import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.ui.SingleObjectActivity;
 import com.example.carrevision.ui.car.CarActivity;
 import com.example.carrevision.util.OnAsyncEventListener;
@@ -65,6 +66,7 @@ public class RevisionActivity extends SingleObjectActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BaseActivity.position = R.layout.activity_revision;
         getLayoutInflater().inflate(R.layout.activity_revision, frameLayout);
         initView();
 

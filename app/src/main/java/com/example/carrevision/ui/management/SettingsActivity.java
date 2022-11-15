@@ -18,6 +18,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 
 import com.example.carrevision.R;
+import com.example.carrevision.ui.BaseActivity;
+import com.example.carrevision.ui.car.CarActivity;
+import com.example.carrevision.ui.car.CarsActivity;
+import com.example.carrevision.ui.revision.RevisionActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.LocaleManager;
 
@@ -133,7 +137,12 @@ public class SettingsActivity extends PreferenceActivity {
                 int idx = listPref.findIndexOfValue(o.toString());
                 preference.setSummary(idx >= 0 ? listPref.getEntries()[idx] : null);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && thisActivity != null) {
-                    Intent intent = new Intent(getContext(), RevisionsActivity.class);
+                    Intent intent;
+                    if (BaseActivity.getPosition() == R.id.nav_cars) {
+                        intent = new Intent(getContext(), CarsActivity.class);
+                    } else {
+                        intent = new Intent(getContext(), RevisionsActivity.class);
+                    }
                     thisActivity.finish();
                     startActivity(intent);
                 }
