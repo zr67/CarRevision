@@ -33,6 +33,7 @@ public class CarsActivity extends BaseActivity {
 
     private List<CompleteCar> cars;
     private CarRecyclerAdapter adapter;
+    private FloatingActionButton btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class CarsActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        FloatingActionButton btnAdd = findViewById(R.id.button_add);
+        btnAdd = findViewById(R.id.button_add);
         if (!technicianIsConnected()) {
             btnAdd.setVisibility(View.INVISIBLE);
         }
@@ -82,6 +83,10 @@ public class CarsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (technicianIsConnected()) {
+            getMenuInflater().inflate(R.menu.new_object, menu);
+            menu.findItem(R.id.action_new).setTitle(R.string.title_new_car);
+        }
         getMenuInflater().inflate(R.menu.list_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -97,6 +102,16 @@ public class CarsActivity extends BaseActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_new) {
+            btnAdd.callOnClick();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

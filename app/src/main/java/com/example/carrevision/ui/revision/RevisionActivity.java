@@ -101,6 +101,7 @@ public class RevisionActivity extends SingleObjectActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.back, menu);
         if (revision == null) {
             getMenuInflater().inflate(R.menu.apply, menu);
         } else if (revision.technician.getId() == getConnectedTechnicianId() || technicianIsAdmin()) {
@@ -112,7 +113,9 @@ public class RevisionActivity extends SingleObjectActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_edit) {
+        if (item.getItemId() == R.id.action_back) {
+            onBackPressed();
+        } if (item.getItemId() == R.id.action_edit) {
             boolean toggle = !editable||saveChanges();
             if (toggle) {
                 if (!editable) {

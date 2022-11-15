@@ -84,4 +84,6 @@
     <string name="desc_icon_register">Register icon</string>
     <string name="title">Title</string>
     <string name="desc_icon_car">Car icon</string>
+    <string name="action_back">Back</string>
+    <string name="action_new">New...</string>
 </resources>

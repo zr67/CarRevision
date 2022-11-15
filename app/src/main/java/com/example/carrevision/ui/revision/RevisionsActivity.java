@@ -33,6 +33,7 @@ public class RevisionsActivity extends BaseActivity {
 
     private List<CompleteRevision> revisions;
     private RevisionRecyclerAdapter adapter;
+    private FloatingActionButton btnAdd;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class RevisionsActivity extends BaseActivity {
             startActivity(intent);
         }, this);
 
-        FloatingActionButton btnAdd = findViewById(R.id.button_add);
+        btnAdd = findViewById(R.id.button_add);
         if (!technicianIsConnected()) {
             btnAdd.setVisibility(View.INVISIBLE);
         }
@@ -82,6 +83,10 @@ public class RevisionsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (technicianIsConnected()) {
+            getMenuInflater().inflate(R.menu.new_object, menu);
+            menu.findItem(R.id.action_new).setTitle(R.string.title_new_revision);
+        }
         getMenuInflater().inflate(R.menu.list_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -97,6 +102,16 @@ public class RevisionsActivity extends BaseActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_new) {
+            btnAdd.callOnClick();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

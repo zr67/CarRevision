@@ -85,4 +85,6 @@
     <string name="desc_icon_register">Icône d\'enregistrement</string>
     <string name="title">Titre</string>
     <string name="desc_icon_car">Icône de voiture</string>
+    <string name="action_back">Retour</string>
+    <string name="action_new">Nouvelle...</string>
 </resources>
