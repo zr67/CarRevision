@@ -5,7 +5,7 @@ Projet Android réalisé dans le cadre du cours 644-1 "Développement mobile et 
 Développée à l'aide d'Android Studio et de Github pour le VCS, l'application mobile "Car Revisions" a pour but d'être utilisée au sein d'un garage pour gérer des révisions de voitures.
 Le principe de cette application est d'afficher la liste complète de toutes les révisions et de toutes les voitures traitées par le garage.
 Afin d'ajouter/modifier/supprimer une voiture, il est nécessaire d'être authentifié en tant que technicien.
-Il en va de même pour les révisions, au détail près qu'elles ne peuvent être ajoutées/supprimées/modifiées uniquement par le technicien auquel elle a été attribuée ou par un technicien administrateur (Fred ou Shaggy).
+Il en va de même pour les révisions, au détail près qu'elles ne peuvent être ajoutées/supprimées/modifiées uniquement par le technicien dont il est responsable ou par un technicien administrateur (Fred ou Shaggy).
 L'application est disponible en deux langues (français et anglais) et permet également à un technicien lors de l'authentification de rester connecté pour la prochaine ouverture de l'application.
 N'importe qui peut s'enregister en tant que technicien non-administrateur, nous sommes partis du principe que l'application ne serait disponible à l'installation qu'en interne.
 
