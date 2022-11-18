@@ -8,6 +8,7 @@ Afin d'ajouter/modifier/supprimer une voiture, il est nécessaire d'être authen
 Il en va de même pour les révisions, au détail près qu'elles ne peuvent être ajoutées/supprimées/modifiées uniquement par le technicien dont il est responsable ou par un technicien administrateur (Fred ou Shaggy).
 L'application est disponible en deux langues (français et anglais) et permet également à un technicien lors de l'authentification de rester connecté pour la prochaine ouverture de l'application.
 N'importe qui peut s'enregister en tant que technicien non-administrateur, nous sommes partis du principe que l'application ne serait disponible à l'installation qu'en interne.
+Cette application n'a pas été optimisée dans le cadre du mode sombre proposé par Android. De ce fait, certains aspects visuels peuvent être altérés si le smartphone est paramétré dans ce mode-ci.
 
 
 <h1>Fonctionnalités</h1>
