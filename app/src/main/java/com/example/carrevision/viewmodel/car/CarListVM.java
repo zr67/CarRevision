@@ -29,7 +29,7 @@ public class CarListVM extends BaseVM {
         observableCars = new MediatorLiveData<>();
         observableCars.setValue(null);
 
-        LiveData<List<CompleteCar>> cars = repository.getCars(application);
+        LiveData<List<CompleteCar>> cars = repository.getCars();
 
         observableCars.addSource(cars, observableCars::setValue);
     }

@@ -3,6 +3,7 @@ package com.example.carrevision.ui.revision;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -36,11 +37,13 @@ import com.example.carrevision.viewmodel.car.CarListVM;
 import com.example.carrevision.viewmodel.revision.RevisionVM;
 import com.example.carrevision.viewmodel.technician.TechnicianListVM;
 import com.example.carrevision.viewmodel.technician.TechnicianVM;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Revision activity class
@@ -70,8 +73,11 @@ public class RevisionActivity extends SingleObjectActivity {
         getLayoutInflater().inflate(R.layout.activity_revision, frameLayout);
         initView();
 
-        int revisionId = getIntent().getIntExtra("revisionId", -1);
-        if (revisionId < 0) {
+        String revisionId = "";
+        if (getIntent().hasExtra("revisionId")) {
+            revisionId = getIntent().getStringExtra("revisionId");
+        }
+        if (TextUtils.isEmpty(revisionId)) {
             setTitle(R.string.title_new_revision);
             matchingCar = null;
             switchMode();
@@ -104,7 +110,7 @@ public class RevisionActivity extends SingleObjectActivity {
         getMenuInflater().inflate(R.menu.back, menu);
         if (revision == null) {
             getMenuInflater().inflate(R.menu.apply, menu);
-        } else if (revision.technician.getId() == getConnectedTechnicianId() || technicianIsAdmin()) {
+        } else if (revision.technician.getId().equals(FirebaseAuth.getInstance().getUid()) || ADMIN_CONNECTED) {
             getMenuInflater().inflate(R.menu.edit_delete, menu);
             miAction = menu.findItem(R.id.action_edit);
         }
@@ -170,10 +176,10 @@ public class RevisionActivity extends SingleObjectActivity {
         techniciansVM.getTechnicians().observe(this, technicianEntities -> {
             if (technicianEntities != null) {
                 adapterTechnician.updateData(technicianEntities);
-                if (technicianIsAdmin()) {
+                if (ADMIN_CONNECTED) {
                     spnTechnician.setSelection(getIntent().getIntExtra("technicianPosition", 0));
-                } else if (technicianIsConnected()) {
-                    TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), getConnectedTechnicianId());
+                } else if (TECHNICIAN_CONNECTED) {
+                    TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), FirebaseAuth.getInstance().getUid());
                     TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
                     technicianVM.getTechnician().observe(this, technicianEntity -> {
                         if (technicianEntity != null) {
@@ -212,15 +218,15 @@ public class RevisionActivity extends SingleObjectActivity {
             rv = valid;
             if (valid) {
                 bCheckPlate.callOnClick();
-                int technicianId = ((TechnicianEntity) spnTechnician.getSelectedItem()).getId();
-                int carId = matchingCar.car.getId();
+                String technicianId = ((TechnicianEntity) spnTechnician.getSelectedItem()).getId();
+                String carId = matchingCar.car.getId();
                 Status status = (Status) spnStatus.getSelectedItem();
                 if (revision != null) {
                     RevisionEntity rev = revision.revision;
                     rev.setCarId(carId);
-                    rev.setStart(start);
-                    rev.setEnd(end);
-                    rev.setStatus(status);
+                    rev.setStartDate(start);
+                    rev.setEndDate(end);
+                    rev.setEStatus(status);
                     rev.setTechnicianId(technicianId);
                     revisionVM.updateRevision(rev, new OnAsyncEventListener() {
                         @Override
@@ -270,7 +276,7 @@ public class RevisionActivity extends SingleObjectActivity {
         etStatus.setEnabled(!editable);
         etCanton.setEnabled(!editable);
         spnStatus.setEnabled(!editable);
-        if (technicianIsAdmin()) {
+        if (ADMIN_CONNECTED) {
             etTechnician.setEnabled(!editable);
         }
         bCheckPlate.setEnabled(!editable);
@@ -280,7 +286,7 @@ public class RevisionActivity extends SingleObjectActivity {
             etDateEnd.setFocusableInTouchMode(true);
             etStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrow, null);
             etCanton.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrow, null);
-            if (technicianIsAdmin()) {
+            if (ADMIN_CONNECTED) {
                 etTechnician.setCompoundDrawablesWithIntrinsicBounds(null, null, dArrow, null);
             }
             if (miAction != null) {
@@ -413,14 +419,14 @@ public class RevisionActivity extends SingleObjectActivity {
         if (revision != null) {
             etPlate.setText(StringUtility.plateWithoutAbbreviation(revision.completeCar.car.getPlate()));
             loadCarInfo(revision.completeCar);
-            etDateStart.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), this));
-            Date end = revision.revision.getEnd();
+            etDateStart.setText(StringUtility.dateToDateTimeString(revision.revision.getStartDate(), this));
+            Date end = revision.revision.getEndDate();
             if (end != null) {
                 etDateEnd.setText(StringUtility.dateToDateTimeString(end, this));
             }
             String canton = StringUtility.abbreviationFromPlate(revision.completeCar.car.getPlate());
             spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition(new CantonEntity(canton, canton))));
-            spnStatus.post(() -> spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getStatus())));
+            spnStatus.post(() -> spnStatus.setSelection(adapterStatus.getPosition(revision.revision.getEStatus())));
             spnTechnician.post(() -> spnTechnician.setSelection(adapterTechnician.getPosition(revision.technician)));
         }
     }
@@ -430,21 +436,21 @@ public class RevisionActivity extends SingleObjectActivity {
         boolean rv;
         if (revision != null) {
             boolean end;
-            if (revision.revision.getEnd() != null) {
-                end = !etDateEnd.getText().toString().equals(StringUtility.dateToDateTimeString(revision.revision.getEnd(), this));
+            if (revision.revision.getEndDate() != null) {
+                end = !etDateEnd.getText().toString().equals(StringUtility.dateToDateTimeString(revision.revision.getEndDate(), this));
             } else {
                 end = !etDateEnd.getText().toString().trim().equals("");
             }
             boolean match;
             if (matchingCar != null) {
-                match = matchingCar.car.getId() != revision.completeCar.car.getId();
+                match = !Objects.equals(matchingCar.car.getId(), revision.completeCar.car.getId());
             } else {
                 match = true;
             }
             rv = match || end
-                    ||spnStatus.getSelectedItem() != revision.revision.getStatus()
+                    ||spnStatus.getSelectedItem() != revision.revision.getEStatus()
                     ||!spnTechnician.getSelectedItem().equals(revision.technician)
-                    ||!etDateStart.getText().toString().equals(StringUtility.dateToDateTimeString(revision.revision.getStart(), this));
+                    ||!etDateStart.getText().toString().equals(StringUtility.dateToDateTimeString(revision.revision.getStartDate(), this));
         } else {
             rv = spnCantons.getSelectedItem() != null
                     || spnStatus.getSelectedItem() != null
@@ -500,6 +506,6 @@ public class RevisionActivity extends SingleObjectActivity {
         etBrand.setText(car.modelWithBrand.brand.getBrand());
         etModel.setText(car.modelWithBrand.model.getModel());
         etMileage.setText(StringUtility.intToString(car.car.getKilometers(), this));
-        etYear.setText(StringUtility.dateToYearString(car.car.getYear(), this));
+        etYear.setText(StringUtility.dateToYearString(car.car.getYearDate(), this));
     }
 }

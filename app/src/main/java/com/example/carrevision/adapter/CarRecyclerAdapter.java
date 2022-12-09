@@ -77,7 +77,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
                 }
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return CarRecyclerAdapter.this.data.get(oldItemPosition).car.getId() == data.get(newItemPosition).car.getId();
+                    return CarRecyclerAdapter.this.data.get(oldItemPosition).car.getId().equals(data.get(newItemPosition).car.getId());
                 }
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {

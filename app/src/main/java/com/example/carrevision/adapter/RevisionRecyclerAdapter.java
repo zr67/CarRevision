@@ -48,8 +48,8 @@ public class RevisionRecyclerAdapter extends RecyclerView.Adapter<RevisionRecycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CompleteRevision revision = data.get(position);
         holder.tvPlate.setText(revision.completeCar.car.getPlate());
-        holder.tvDatetime.setText(StringUtility.dateToDateTimeString(revision.revision.getStart(), activity));
-        holder.tvStatus.setText(activity.getString(revision.revision.getStatus().getStringResourceId()));
+        holder.tvDatetime.setText(StringUtility.dateToDateTimeString(revision.revision.getStartDate(), activity));
+        holder.tvStatus.setText(activity.getString(revision.revision.getEStatus().getStringResourceId()));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class RevisionRecyclerAdapter extends RecyclerView.Adapter<RevisionRecycl
                 }
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return RevisionRecyclerAdapter.this.data.get(oldItemPosition).revision.getId() == data.get(newItemPosition).revision.getId();
+                    return RevisionRecyclerAdapter.this.data.get(oldItemPosition).revision.getId().equals(data.get(newItemPosition).revision.getId());
                 }
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {

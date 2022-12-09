@@ -1,6 +1,6 @@
 package com.example.carrevision.database;
 
-import androidx.room.TypeConverter;
+import android.util.Base64;
 
 import com.example.carrevision.util.Status;
 
@@ -15,7 +15,6 @@ public class Converters {
      * @param value Date in Long format
      * @return Date in Date format
      */
-    @TypeConverter
     public static Date fromTimestamp(Long value) {
         return value == null ? null : new Date(value);
     }
@@ -25,7 +24,6 @@ public class Converters {
      * @param date Date in Date format
      * @return Date in Long format
      */
-    @TypeConverter
     public static Long dateToTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
@@ -35,7 +33,6 @@ public class Converters {
      * @param value Integer to convert
      * @return Status enum object
      */
-    @TypeConverter
     public static Status fromInt(int value) {
         return Status.valueOf(value);
     }
@@ -45,8 +42,25 @@ public class Converters {
      * @param status Status to convert
      * @return Integer
      */
-    @TypeConverter
     public static int statusToInt(Status status) {
         return status.getValue();
+    }
+
+    /**
+     * Converts a base64 string to a byte array
+     * @param value Base64 string
+     * @return Byte array
+     */
+    public static byte[] fromBase64String(String value) {
+        return Base64.decode(value, Base64.DEFAULT);
+    }
+
+    /**
+     * Converts a byte array to a base64 string
+     * @param value Byte array
+     * @return Base64 string
+     */
+    public static String byteArrayToBase64String(byte[] value) {
+        return Base64.encodeToString(value, Base64.DEFAULT);
     }
 }

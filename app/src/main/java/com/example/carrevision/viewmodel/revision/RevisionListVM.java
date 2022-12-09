@@ -29,7 +29,7 @@ public class RevisionListVM extends BaseVM {
         observableRevisions = new MediatorLiveData<>();
         observableRevisions.setValue(null);
 
-        LiveData<List<CompleteRevision>> revisions = repository.getRevisions(application);
+        LiveData<List<CompleteRevision>> revisions = repository.getRevisions();
 
         observableRevisions.addSource(revisions, observableRevisions::setValue);
     }

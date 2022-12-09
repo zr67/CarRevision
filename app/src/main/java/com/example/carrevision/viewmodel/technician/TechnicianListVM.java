@@ -29,7 +29,7 @@ public class TechnicianListVM extends BaseVM {
         observableTechnicians = new MediatorLiveData<>();
         observableTechnicians.setValue(null);
 
-        LiveData<List<TechnicianEntity>> technicians = repository.getTechnicians(application);
+        LiveData<List<TechnicianEntity>> technicians = repository.getTechnicians();
 
         observableTechnicians.addSource(technicians, observableTechnicians::setValue);
     }

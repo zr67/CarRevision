@@ -61,7 +61,7 @@ public class CarsActivity extends BaseActivity {
         });
 
         btnAdd = findViewById(R.id.button_add);
-        if (!technicianIsConnected()) {
+        if (!TECHNICIAN_CONNECTED) {
             btnAdd.setVisibility(View.INVISIBLE);
         }
         btnAdd.setOnClickListener(view -> {
@@ -83,7 +83,7 @@ public class CarsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (technicianIsConnected()) {
+        if (TECHNICIAN_CONNECTED) {
             getMenuInflater().inflate(R.menu.new_object, menu);
             menu.findItem(R.id.action_new).setTitle(R.string.title_new_car);
         }

@@ -19,9 +19,7 @@ import androidx.core.app.NavUtils;
 
 import com.example.carrevision.R;
 import com.example.carrevision.ui.BaseActivity;
-import com.example.carrevision.ui.car.CarActivity;
 import com.example.carrevision.ui.car.CarsActivity;
-import com.example.carrevision.ui.revision.RevisionActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.LocaleManager;
 

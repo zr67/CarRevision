@@ -1,11 +1,11 @@
 package com.example.carrevision.database.repository;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 
-import com.example.carrevision.BaseApp;
 import com.example.carrevision.database.entity.CantonEntity;
+import com.example.carrevision.database.firebase.CantonListLiveData;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class CantonRepository {
     private static volatile CantonRepository instance;
+    public static final String TABLE = "cantons";
 
     /**
      * Canton repository class private constructor
@@ -37,10 +38,10 @@ public class CantonRepository {
 
     /**
      * Gets all cantons from the database
-     * @param application Application
      * @return List with all the cantons
      */
-    public LiveData<List<CantonEntity>> getCantons(Application application) {
-        return ((BaseApp) application).getDatabase().cantonDao().getAll();
+    public LiveData<List<CantonEntity>> getCantons() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(TABLE);
+        return new CantonListLiveData(reference);
     }
 }

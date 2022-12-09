@@ -2,29 +2,20 @@ package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
+
+import com.google.firebase.database.Exclude;
 
 /**
  * Brand entity class
  */
-@Entity(tableName = "brands")
-public class BrandEntity {
-    @PrimaryKey(autoGenerate = true)
+public class BrandEntity implements Comparable<BrandEntity> {
     private int id;
-    @NonNull
-    @ColumnInfo(name = "brand")
-    private final String brand;
+    private String brand;
 
     /**
      * Default constructor for the brand entity class
      */
-    @Ignore
-    public BrandEntity() {
-        this.brand = "";
-    }
+    private BrandEntity() {}
 
     /**
      * Constructor for the brand entity class
@@ -38,6 +29,7 @@ public class BrandEntity {
      * Gets the brand's identifier
      * @return Brand's identifier
      */
+    @Exclude
     public int getId() {
         return id;
     }
@@ -59,6 +51,14 @@ public class BrandEntity {
         this.id = id;
     }
 
+    /**
+     * Sets the brand's name
+     * @param brand Brand's name
+     */
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof BrandEntity) {
@@ -70,5 +70,10 @@ public class BrandEntity {
     @Override
     public String toString() {
         return getBrand();
+    }
+
+    @Override
+    public int compareTo(BrandEntity o) {
+        return this.getBrand().compareTo(o.getBrand());
     }
 }

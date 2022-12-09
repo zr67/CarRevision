@@ -2,44 +2,21 @@ package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
+
+import com.google.firebase.database.Exclude;
 
 /**
  * Model entity class
  */
-@Entity(tableName = "models",
-        foreignKeys =
-        @ForeignKey(
-                entity = BrandEntity.class,
-                parentColumns = "id",
-                childColumns = "brand_id"
-        ),
-        indices = {
-        @Index(
-                value = {"brand_id"}
-        )}
-)
-public class ModelEntity {
-    @PrimaryKey(autoGenerate = true)
+public class ModelEntity implements Comparable<ModelEntity> {
     private int id;
-    @ColumnInfo(name = "brand_id")
     private int brandId;
-    @NonNull
-    @ColumnInfo(name = "model")
-    private final String model;
+    private String model;
 
     /**
      * Default constructor for the model entity class
      */
-    @Ignore
-    public ModelEntity() {
-        this.model = "";
-    }
+    private ModelEntity() {}
 
     /**
      * Constructor for the model entity class
@@ -55,6 +32,7 @@ public class ModelEntity {
      * Gets the model's identifier
      * @return Model's identifier
      */
+    @Exclude
     public int getId() {
         return id;
     }
@@ -84,6 +62,22 @@ public class ModelEntity {
         this.id = id;
     }
 
+    /**
+     * Sets the model's brand's identifier
+     * @param brandId Model's brand's identifier
+     */
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    /**
+     * Sets the model's name
+     * @param model Model's name
+     */
+    public void setModel(@NonNull String model) {
+        this.model = model;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof ModelEntity) {
@@ -95,5 +89,10 @@ public class ModelEntity {
     @Override
     public String toString() {
         return getModel();
+    }
+
+    @Override
+    public int compareTo(ModelEntity o) {
+        return this.getModel().compareTo(o.getModel());
     }
 }

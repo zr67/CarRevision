@@ -23,12 +23,12 @@ public class TechnicianVM extends BaseVM {
      * @param repository Technician repository
      * @param technicianId Technician identifier
      */
-    public TechnicianVM(@NonNull Application application, TechnicianRepository repository, int technicianId) {
+    public TechnicianVM(@NonNull Application application, TechnicianRepository repository, String technicianId) {
         super(application);
         observableTechnician = new MediatorLiveData<>();
         observableTechnician.setValue(null);
 
-        LiveData<TechnicianEntity> technician = repository.getTechnician(application, technicianId);
+        LiveData<TechnicianEntity> technician = repository.getTechnician(technicianId);
 
         observableTechnician.addSource(technician, observableTechnician::setValue);
     }
@@ -38,14 +38,14 @@ public class TechnicianVM extends BaseVM {
      */
     public static class Factory extends BaseFactory {
         private final TechnicianRepository repository;
-        private final int technicianId;
+        private final String technicianId;
 
         /**
          * Inner class factory constructor
          * @param application Application
          * @param technicianId Technician identifier
          */
-        public Factory(@NonNull Application application, int technicianId) {
+        public Factory(@NonNull Application application, String technicianId) {
             super(application);
             this.repository = getApp().getTechnicianRepository();
             this.technicianId = technicianId;

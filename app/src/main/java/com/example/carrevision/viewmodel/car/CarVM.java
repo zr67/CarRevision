@@ -1,6 +1,7 @@
 package com.example.carrevision.viewmodel.car;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -26,15 +27,18 @@ public class CarVM extends BaseVM {
      * @param repository Car repository
      * @param carId Car identifier
      */
-    public CarVM(@NonNull Application application, CarRepository repository, int carId) {
+    public CarVM(@NonNull Application application, CarRepository repository, String carId) {
         super(application);
         this.repository = repository;
         observableCar = new MediatorLiveData<>();
         observableCar.setValue(null);
 
-        LiveData<CompleteCar> car = repository.getCar(application, carId);
-
-        observableCar.addSource(car, observableCar::setValue);
+        if (carId != null) {
+            if (!TextUtils.isEmpty(carId)) {
+                LiveData<CompleteCar> car = repository.getCar(carId);
+                observableCar.addSource(car, observableCar::setValue);
+            }
+        }
     }
 
     /**
@@ -42,14 +46,14 @@ public class CarVM extends BaseVM {
      */
     public static class Factory extends BaseFactory {
         private final CarRepository repository;
-        private final int carId;
+        private final String carId;
 
         /**
          * Inner class factory constructor
          * @param application Application
          * @param carId Car identifier
          */
-        public Factory(@NonNull Application application, int carId) {
+        public Factory(@NonNull Application application, String carId) {
             super(application);
             this.repository = getApp().getCarRepository();
             this.carId = carId;
@@ -75,7 +79,7 @@ public class CarVM extends BaseVM {
      * @param callback Callback
      */
     public void createCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.create(car, callback, application);
+        repository.create(car, callback);
     }
 
     /**
@@ -84,7 +88,7 @@ public class CarVM extends BaseVM {
      * @param callback Callback
      */
     public void updateCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.update(car, callback, application);
+        repository.update(car, callback);
     }
 
     /**
@@ -93,6 +97,6 @@ public class CarVM extends BaseVM {
      * @param callback Callback
      */
     public void deleteCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.delete(car, callback, application);
+        repository.delete(car, callback);
     }
 }

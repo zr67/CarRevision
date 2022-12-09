@@ -1,6 +1,7 @@
 package com.example.carrevision.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,26 +13,50 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
 
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.R;
+import com.example.carrevision.database.entity.TechnicianEntity;
+import com.example.carrevision.database.repository.TechnicianRepository;
 import com.example.carrevision.ui.car.CarsActivity;
 import com.example.carrevision.ui.management.LoginActivity;
 import com.example.carrevision.ui.management.SettingsActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.LocaleManager;
+import com.example.carrevision.viewmodel.technician.TechnicianVM;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Activity base class for all application activities
  */
 public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    public static final String PREFS_NAME = "SharedPrefs";
+    public static final String PREFS_NAME;
+    public static final String PREFS_UNAME;
+    public static final String PREFS_PWD;
     protected FrameLayout frameLayout;
     protected DrawerLayout drawerLayout;
     protected NavigationView navigationView;
     protected static int position = R.id.nav_revisions;
+    protected static boolean TECHNICIAN_CONNECTED;
+    protected static boolean ADMIN_CONNECTED;
+    protected static boolean INITIALIZED;
+
+    static {
+        PREFS_NAME = "SharedPrefs";
+        PREFS_UNAME = "Username";
+        PREFS_PWD = "Password";
+        TECHNICIAN_CONNECTED = false;
+        ADMIN_CONNECTED = false;
+        INITIALIZED = false;
+    }
 
     /**
      * Gets the current position, used when the language has been changed to restore the correct activity
@@ -39,30 +64,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
      */
     public static int getPosition() {
         return position;
-    }
-
-    /**
-     * Gets if the technician is connected
-     * @return True if connected, false otherwise
-     */
-    protected boolean technicianIsConnected() {
-        return ((BaseApp) getApplication()).getAccountManager().isTechnicianConnected();
-    }
-
-    /**
-     * Gets the connected technician identifier
-     * @return Connected technician's identifier, -1 if no technician is connected
-     */
-    protected int getConnectedTechnicianId() {
-        return ((BaseApp) getApplication()).getAccountManager().getConnectedTechnicianId();
-    }
-
-    /**
-     * Gets if the connected technician is an administrator
-     * @return True if administrator, false otherwise
-     */
-    protected boolean technicianIsAdmin() {
-        return ((BaseApp) getApplication()).getAccountManager().isConnectedTechnicianAdmin();
     }
 
     /**
@@ -85,15 +86,51 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
      * Updates the navigation menu with the correct options
      */
     protected void updateNavMenu() {
-        boolean loggedIn = technicianIsConnected();
-        navigationView.getMenu().findItem(R.id.nav_login).setVisible(!loggedIn);
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(loggedIn);
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(!TECHNICIAN_CONNECTED);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(TECHNICIAN_CONNECTED);
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        TECHNICIAN_CONNECTED = false;
+        ADMIN_CONNECTED = false;
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        if (prefs.contains(PREFS_UNAME)) {
+            prefs.edit().remove(PREFS_UNAME).apply();
+        }
+        if (prefs.contains(PREFS_PWD)) {
+            prefs.edit().remove(PREFS_PWD).apply();
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new LocaleManager(this).applyLanguage();
+
+        if (!INITIALIZED) {
+            INITIALIZED = true;
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(PREFS_NAME, 0);
+            if (prefs.contains(PREFS_UNAME) && prefs.contains(PREFS_PWD)) {
+                TechnicianRepository repo = ((BaseApp)getApplication()).getTechnicianRepository();
+                repo.login(prefs.getString(PREFS_UNAME, ""), prefs.getString(PREFS_PWD, ""), task -> {
+                    if (task.isSuccessful()) {
+                        TechnicianVM.Factory fact = new TechnicianVM.Factory(getApplication(), FirebaseAuth.getInstance().getUid());
+                        TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), fact).get(TechnicianVM.class);
+                        technicianVM.getTechnician().observe(this, technicianEntity -> {
+                            if (technicianEntity != null) {
+                                TECHNICIAN_CONNECTED = true;
+                                ADMIN_CONNECTED = technicianEntity.getAdmin();
+                                Intent intent = new Intent(BaseActivity.this, RevisionsActivity.class);
+                                intent.putExtra("snackMsg", String.format(getString(R.string.welcome_back_msg), technicianEntity.getFirstname()));
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
+                });
+            }
+        }
 
         setContentView(R.layout.activity_base);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -155,7 +192,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         } else if (id == R.id.nav_login) {
             intent = new Intent(this, LoginActivity.class);
         } else if (id == R.id.nav_logout) {
-            ((BaseApp) getApplication()).getAccountManager().logout();
+            logout();
             updateNavMenu();
             if (position == R.id.nav_cars) {
                 intent = new Intent(this, CarsActivity.class);

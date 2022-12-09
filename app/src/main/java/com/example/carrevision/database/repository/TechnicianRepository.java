@@ -1,11 +1,16 @@
 package com.example.carrevision.database.repository;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 
-import com.example.carrevision.BaseApp;
 import com.example.carrevision.database.entity.TechnicianEntity;
+import com.example.carrevision.database.firebase.TechnicianListLiveData;
+import com.example.carrevision.database.firebase.TechnicianLiveData;
+import com.example.carrevision.util.OnAsyncEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -14,6 +19,7 @@ import java.util.List;
  */
 public class TechnicianRepository {
     private static volatile TechnicianRepository instance;
+    public static final String TABLE = "technicians";
 
     /**
      * Technician repository class private constructor
@@ -37,30 +43,66 @@ public class TechnicianRepository {
 
     /**
      * Gets all the technicians from the database
-     * @param application Application
      * @return List with all the technicians
      */
-    public LiveData<List<TechnicianEntity>> getTechnicians(Application application) {
-        return ((BaseApp) application).getDatabase().technicianDao().getAll();
+    public LiveData<List<TechnicianEntity>> getTechnicians() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(TABLE);
+        return new TechnicianListLiveData(reference);
+    }
+
+    /**
+     * Logs in a technician
+     * @param email Technician's email
+     * @param password Technician's password
+     * @param listener Listener
+     */
+    public void login(final String email, final String password, final OnCompleteListener<AuthResult> listener) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(listener);
     }
 
     /**
      * Gets a technician by it's identifier
-     * @param application Application
      * @param technicianId Technician's identifier
-     * @return Technician corresponding to the identifier
+     * @return Technician corresponding to the email
      */
-    public LiveData<TechnicianEntity> getTechnician(Application application, final int technicianId) {
-        return ((BaseApp) application).getDatabase().technicianDao().getById(technicianId);
+    public LiveData<TechnicianEntity> getTechnician(final String technicianId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(TABLE);
+        return new TechnicianLiveData(reference, technicianId);
     }
 
     /**
-     * Gets a technician by it's email
-     * @param application Application
-     * @param email Technician's email
-     * @return Technician corresponding to the email
+     * Registers and create a new technician
+     * @param technician Technician to be registered
+     * @param password Technician's password
+     * @param callback Callback
      */
-    public LiveData<TechnicianEntity> getTechnician(Application application, final String email) {
-        return ((BaseApp) application).getDatabase().technicianDao().getByEmail(email);
+    public void register(final TechnicianEntity technician, final String password, final OnAsyncEventListener callback) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(technician.getEmail(), password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        technician.setId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        create(technician, callback);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    /**
+     * Creates a new technician
+     * @param technician Technician to be created
+     * @param callback Callback
+     */
+    private void create(final TechnicianEntity technician, final OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(technician, (dbErr, dbRef) -> {
+                    if (dbErr != null) {
+                        callback.onFailure(dbErr.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 }

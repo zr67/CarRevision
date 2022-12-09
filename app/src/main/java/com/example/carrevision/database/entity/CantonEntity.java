@@ -2,31 +2,21 @@ package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
+
+import com.google.firebase.database.Exclude;
 
 /**
  * Canton entity class
  */
-@Entity(tableName = "cantons")
-public class CantonEntity {
-    @PrimaryKey(autoGenerate = true)
+public class CantonEntity implements Comparable<CantonEntity> {
     private int id;
-    @ColumnInfo(name = "canton")
     private String canton;
-    @NonNull
-    @ColumnInfo(name = "abbr")
-    private final String abbreviation;
+    private String abbreviation;
 
     /**
      * Default constructor for the canton entity class
      */
-    @Ignore
-    public CantonEntity() {
-        this.abbreviation = "";
-    }
+    private CantonEntity() {}
 
     /**
      * Constructor for the canton entity class
@@ -42,6 +32,7 @@ public class CantonEntity {
      * Gets the canton's identifier
      * @return Canton's identifier
      */
+    @Exclude
     public int getId() {
         return id;
     }
@@ -71,6 +62,22 @@ public class CantonEntity {
         this.id = id;
     }
 
+    /**
+     * Sets the canton's name
+     * @param canton Canton's name
+     */
+    public void setCanton(String canton) {
+        this.canton = canton;
+    }
+
+    /**
+     * Sets the canton's abbreviation
+     * @param abbreviation Canton's abbreviation
+     */
+    public void setAbbreviation(@NonNull String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof CantonEntity) {
@@ -82,5 +89,10 @@ public class CantonEntity {
     @Override
     public String toString() {
         return getAbbreviation();
+    }
+
+    @Override
+    public int compareTo(CantonEntity o) {
+        return this.getAbbreviation().compareTo(o.getAbbreviation());
     }
 }

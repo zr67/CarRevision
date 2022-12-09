@@ -65,8 +65,11 @@ public class CarActivity extends SingleObjectActivity {
         getLayoutInflater().inflate(R.layout.activity_car, frameLayout);
         initView();
 
-        int carId = getIntent().getIntExtra("carId", -1);
-        if (carId < 0) {
+        String carId = "";
+        if (getIntent().hasExtra("carId")) {
+            carId = getIntent().getStringExtra("carId");
+        }
+        if (TextUtils.isEmpty(carId)) {
             setTitle(R.string.title_new_car);
             switchMode();
         } else {
@@ -93,7 +96,7 @@ public class CarActivity extends SingleObjectActivity {
         getMenuInflater().inflate(R.menu.back, menu);
         if (car == null) {
             getMenuInflater().inflate(R.menu.apply, menu);
-        } else if (technicianIsConnected()) {
+        } else if (TECHNICIAN_CONNECTED) {
             getMenuInflater().inflate(R.menu.edit_delete, menu);
             menuItem = menu.findItem(R.id.action_edit);
         }
@@ -181,7 +184,7 @@ public class CarActivity extends SingleObjectActivity {
             c.setModelId(idModel);
             c.setPlate(plate);
             c.setKilometers(m);
-            c.setYear(new GregorianCalendar(year, Calendar.JANUARY, 1).getTime());
+            c.setYearDate(new GregorianCalendar(year, Calendar.JANUARY, 1).getTime());
 
             carVM.updateCar(c, new OnAsyncEventListener() {
                 @Override
@@ -212,7 +215,7 @@ public class CarActivity extends SingleObjectActivity {
                         intent.putExtra("cantonPosition", spnCantons.getSelectedItemPosition());
                         intent.putExtra("plate", etPlate.getText().toString());
                         intent.putExtra("statusPosition", getIntent().getIntExtra("statusPosition", 0));
-                        intent.putExtra("technicianPosition", getIntent().getIntExtra("technicianPosition", technicianIsConnected() ? getConnectedTechnicianId() : 0));
+                        intent.putExtra("technicianPosition", getIntent().getIntExtra("technicianPosition", 0));
                         intent.putExtra("start", getIntent().getStringExtra("start"));
                         intent.putExtra("end", getIntent().getStringExtra("end"));
                         intent.putExtra("snackMsg", getString(R.string.car_create_success));
@@ -376,7 +379,7 @@ public class CarActivity extends SingleObjectActivity {
             spnCantons.post(() -> spnCantons.setSelection(adapterCantons.getPosition( new CantonEntity(canton, canton))));
             spnBrand.post(() -> spnBrand.setSelection(adapterBrand.getPosition(car.modelWithBrand.brand)));
             spnModel.post(() -> spnModel.setSelection(adapterModel.getPosition(car.modelWithBrand.model)));
-            spnYear.post(() -> spnYear.setSelection(adapterYear.getPosition(StringUtility.dateToYearString(car.car.getYear(), this))));
+            spnYear.post(() -> spnYear.setSelection(adapterYear.getPosition(StringUtility.dateToYearString(car.car.getYearDate(), this))));
         }
     }
 
@@ -388,7 +391,7 @@ public class CarActivity extends SingleObjectActivity {
             rv = !((CantonEntity) spnCantons.getSelectedItem()).getAbbreviation().equals(StringUtility.abbreviationFromPlate(car.car.getPlate()))
                     || ! spnBrand.getSelectedItem().equals(car.modelWithBrand.brand)
                     || ! spnModel.getSelectedItem().equals(car.modelWithBrand.model)
-                    || !spnYear.getSelectedItem().toString().equals(StringUtility.dateToYearString(car.car.getYear(), this))
+                    || !spnYear.getSelectedItem().toString().equals(StringUtility.dateToYearString(car.car.getYearDate(), this))
                     || Integer.parseInt(etMileage.getText().toString()) != car.car.getKilometers()
                     || !etPlate.getText().toString().equals(StringUtility.plateWithoutAbbreviation(car.car.getPlate()));
         } else {

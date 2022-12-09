@@ -29,7 +29,7 @@ public class BrandListVM extends BaseVM {
         observableBrands = new MediatorLiveData<>();
         observableBrands.setValue(null);
 
-        LiveData<List<BrandEntity>> brands = repository.getBrands(application);
+        LiveData<List<BrandEntity>> brands = repository.getBrands();
 
         observableBrands.addSource(brands, observableBrands::setValue);
     }

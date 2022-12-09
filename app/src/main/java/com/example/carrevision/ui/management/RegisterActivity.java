@@ -1,6 +1,7 @@
 package com.example.carrevision.ui.management;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,16 +13,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
 
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.R;
 import com.example.carrevision.adapter.ListAdapter;
-import com.example.carrevision.database.async.technician.CreateTechnician;
 import com.example.carrevision.database.entity.TechnicianEntity;
 import com.example.carrevision.database.repository.TechnicianRepository;
 import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.OnAsyncEventListener;
+import com.example.carrevision.viewmodel.technician.TechnicianVM;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 
@@ -112,8 +116,8 @@ public class RegisterActivity extends BaseActivity {
             etEmail.requestFocus();
             return;
         }
-        TechnicianEntity technician = new TechnicianEntity(title, firstname, lastname, email, pass1, false);
-        new CreateTechnician((BaseApp) getApplication(), new OnAsyncEventListener() {
+        TechnicianEntity technician = new TechnicianEntity(title, firstname, lastname, email, false);
+        repository.register(technician, pass1, new OnAsyncEventListener() {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "User created with mail " + technician.getEmail());
@@ -124,7 +128,7 @@ public class RegisterActivity extends BaseActivity {
                 Log.w(TAG, "Failed to create user with mail " + technician.getEmail());
                 setResponse(false);
             }
-        }).execute(technician);
+        });
     }
 
     /**
@@ -133,9 +137,18 @@ public class RegisterActivity extends BaseActivity {
      */
     private void setResponse(boolean response) {
         if (response) {
-            repository.getTechnician(getApplication(), etEmail.getText().toString()).observe(RegisterActivity.this, technicianEntity -> {
+            TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), FirebaseAuth.getInstance().getUid());
+            TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
+            technicianVM.getTechnician().observe(this, technicianEntity -> {
                 if (technicianEntity != null) {
-                    ((BaseApp) getApplication()).getAccountManager().login(technicianEntity.getId(), technicianEntity.isAdmin(), swRememberMe.isChecked());
+                    TECHNICIAN_CONNECTED = true;
+                    ADMIN_CONNECTED = technicianEntity.getAdmin();
+                    if (swRememberMe.isChecked()) {
+                        SharedPreferences.Editor editor = getSharedPreferences(BaseActivity.PREFS_NAME, 0).edit();
+                        editor.putString(BaseActivity.PREFS_UNAME, etEmail.getText().toString());
+                        editor.putString(BaseActivity.PREFS_PWD, etPassword1.getText().toString());
+                        editor.apply();
+                    }
                     Intent intent = new Intent(RegisterActivity.this, RevisionsActivity.class);
                     intent.putExtra("snackMsg", String.format(getString(R.string.welcome_msg), technicianEntity.getFirstname()));
                     updateNavMenu();

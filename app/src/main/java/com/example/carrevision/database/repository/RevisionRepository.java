@@ -1,16 +1,14 @@
 package com.example.carrevision.database.repository;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 
-import com.example.carrevision.BaseApp;
-import com.example.carrevision.database.async.revision.CreateRevision;
-import com.example.carrevision.database.async.revision.DeleteRevision;
-import com.example.carrevision.database.async.revision.UpdateRevision;
 import com.example.carrevision.database.entity.RevisionEntity;
+import com.example.carrevision.database.firebase.RevisionListLiveData;
+import com.example.carrevision.database.firebase.RevisionLiveData;
 import com.example.carrevision.database.pojo.CompleteRevision;
 import com.example.carrevision.util.OnAsyncEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -19,6 +17,7 @@ import java.util.List;
  */
 public class RevisionRepository {
     private static volatile RevisionRepository instance;
+    public static final String TABLE = "revisions";
 
     /**
      * Revision repository private constructor
@@ -42,50 +41,74 @@ public class RevisionRepository {
 
     /**
      * Gets all revisions from the database
-     * @param application Application
      * @return List with all the revisions
      */
-    public LiveData<List<CompleteRevision>> getRevisions(Application application) {
-        return ((BaseApp) application).getDatabase().revisionDao().getAll();
+    public LiveData<List<CompleteRevision>> getRevisions() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        return new RevisionListLiveData(reference);
     }
 
     /**
      * Gets a revision by it's identifier
-     * @param application Application
      * @param revisionId Revision's identifier
      * @return Revision with all it's associated objects
      */
-    public LiveData<CompleteRevision> getRevision(Application application, int revisionId) {
-        return ((BaseApp) application).getDatabase().revisionDao().getById(revisionId);
+    public LiveData<CompleteRevision> getRevision(String revisionId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        return new RevisionLiveData(reference, revisionId);
     }
 
     /**
      * Creates a new revision
      * @param revision Revision to create
      * @param callback Callback
-     * @param application Application
      */
-    public void create(final RevisionEntity revision, OnAsyncEventListener callback, Application application) {
-        new CreateRevision((BaseApp) application, callback).execute(revision);
+    public void create(final RevisionEntity revision, OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .push()
+                .setValue(revision, (dbErr, dbRef) -> {
+                    if (dbErr != null) {
+                        callback.onFailure(dbErr.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 
     /**
      * Updates a revision
      * @param revision Revision to update
      * @param callback Callback
-     * @param application Application
      */
-    public void update(final RevisionEntity revision, OnAsyncEventListener callback, Application application) {
-        new UpdateRevision((BaseApp) application, callback).execute(revision);
+    public void update(final RevisionEntity revision, OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .child(revision.getId())
+                .updateChildren(revision.toMap(), (dbErr, dbRef) -> {
+                    if (dbErr != null) {
+                        callback.onFailure(dbErr.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 
     /**
      * Deletes a revision
      * @param revision Revision to delete
      * @param callback Callback
-     * @param application Application
      */
-    public void delete(final RevisionEntity revision, OnAsyncEventListener callback, Application application) {
-        new DeleteRevision((BaseApp) application, callback).execute(revision);
+    public void delete(final RevisionEntity revision, OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .child(revision.getId())
+                .removeValue((dbErr, dbRef) -> {
+                    if (dbErr != null) {
+                        callback.onFailure(dbErr.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 }

@@ -1,6 +1,7 @@
 package com.example.carrevision.viewmodel.revision;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -26,15 +27,18 @@ public class RevisionVM extends BaseVM {
      * @param repository Revision repository
      * @param revisionId Revision identifier
      */
-    public RevisionVM(@NonNull Application application, RevisionRepository repository, int revisionId) {
+    public RevisionVM(@NonNull Application application, RevisionRepository repository, String revisionId) {
         super(application);
         this.repository = repository;
         observableRevision = new MediatorLiveData<>();
         observableRevision.setValue(null);
 
-        LiveData<CompleteRevision> revision = repository.getRevision(application, revisionId);
-
-        observableRevision.addSource(revision, observableRevision::setValue);
+        if (revisionId != null) {
+            if (!TextUtils.isEmpty(revisionId)) {
+                LiveData<CompleteRevision> revision = repository.getRevision(revisionId);
+                observableRevision.addSource(revision, observableRevision::setValue);
+            }
+        }
     }
 
     /**
@@ -42,14 +46,14 @@ public class RevisionVM extends BaseVM {
      */
     public static class Factory extends BaseFactory {
         private final RevisionRepository repository;
-        private final int revisionId;
+        private final String revisionId;
 
         /**
          * Inner class factory constructor
          * @param application Application
          * @param revisionId Revision identifier
          */
-        public Factory(@NonNull Application application, int revisionId) {
+        public Factory(@NonNull Application application, String revisionId) {
             super(application);
             this.repository = getApp().getRevisionRepository();
             this.revisionId = revisionId;
@@ -77,7 +81,7 @@ public class RevisionVM extends BaseVM {
      * @param callback Callback
      */
     public void createRevision(RevisionEntity revision, OnAsyncEventListener callback) {
-        repository.create(revision, callback, application);
+        repository.create(revision, callback);
     }
 
     /**
@@ -86,7 +90,7 @@ public class RevisionVM extends BaseVM {
      * @param callback Callback
      */
     public void updateRevision(RevisionEntity revision, OnAsyncEventListener callback) {
-        repository.update(revision, callback, application);
+        repository.update(revision, callback);
     }
 
     /**
@@ -95,6 +99,6 @@ public class RevisionVM extends BaseVM {
      * @param callback Callback
      */
     public void deleteRevision(RevisionEntity revision, OnAsyncEventListener callback) {
-        repository.delete(revision, callback, application);
+        repository.delete(revision, callback);
     }
 }

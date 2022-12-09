@@ -1,16 +1,14 @@
 package com.example.carrevision.database.repository;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 
-import com.example.carrevision.BaseApp;
-import com.example.carrevision.database.async.car.CreateCar;
-import com.example.carrevision.database.async.car.DeleteCar;
-import com.example.carrevision.database.async.car.UpdateCar;
 import com.example.carrevision.database.entity.CarEntity;
+import com.example.carrevision.database.firebase.CarListLiveData;
+import com.example.carrevision.database.firebase.CarLiveData;
 import com.example.carrevision.database.pojo.CompleteCar;
 import com.example.carrevision.util.OnAsyncEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -19,6 +17,7 @@ import java.util.List;
  */
 public class CarRepository {
     private static volatile CarRepository instance;
+    public static final String TABLE = "cars";
 
     /**
      * Car repository class private constructor
@@ -42,50 +41,74 @@ public class CarRepository {
 
     /**
      * Gets all cars with their model and brand from the database
-     * @param application Application
      * @return List with all the cars
      */
-    public LiveData<List<CompleteCar>> getCars(Application application) {
-        return ((BaseApp) application).getDatabase().carDao().getAll();
+    public LiveData<List<CompleteCar>> getCars() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        return new CarListLiveData(reference);
     }
 
     /**
      * Gets a car by it's identifier
-     * @param application Applicaiton
      * @param carId Car's identifier
      * @return Car with all it's associated objects
      */
-    public LiveData<CompleteCar> getCar(Application application, int carId) {
-        return ((BaseApp) application).getDatabase().carDao().getById(carId);
+    public LiveData<CompleteCar> getCar(String carId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        return new CarLiveData(reference, carId);
     }
 
     /**
      * Creates a new car
-     * @param car Car to create
+     * @param car Car to be created
      * @param callback Callback
-     * @param application Application
      */
-    public void create(final CarEntity car, OnAsyncEventListener callback, Application application) {
-        new CreateCar((BaseApp) application, callback).execute(car);
+    public void create(final CarEntity car, OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .push()
+                .setValue(car, (dbErr, dbRef) -> {
+                    if (dbErr != null) {
+                        callback.onFailure(dbErr.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 
     /**
      * Updates a car
      * @param car Car to update
      * @param callback Callback
-     * @param application Application
      */
-    public void update(final CarEntity car, OnAsyncEventListener callback, Application application) {
-        new UpdateCar((BaseApp) application, callback).execute(car);
+    public void update(final CarEntity car, OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .child(car.getId())
+                .updateChildren(car.toMap(), (dbError, dbRef) -> {
+                    if (dbError != null) {
+                        callback.onFailure(dbError.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 
     /**
      * Deletes a car
      * @param car Car to delete
      * @param callback Callback
-     * @param application Application
      */
-    public void delete(final CarEntity car, OnAsyncEventListener callback, Application application) {
-        new DeleteCar((BaseApp) application, callback).execute(car);
+    public void delete(final CarEntity car, OnAsyncEventListener callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(TABLE)
+                .child(car.getId())
+                .removeValue((dbErr, dbRef) -> {
+                    if (dbErr != null) {
+                        callback.onFailure(dbErr.toException());
+                    } else {
+                        callback.onSuccess();
+                    }
+                });
     }
 }

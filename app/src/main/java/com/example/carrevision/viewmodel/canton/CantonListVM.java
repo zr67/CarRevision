@@ -29,7 +29,7 @@ public class CantonListVM extends BaseVM {
         observableCantons = new MediatorLiveData<>();
         observableCantons.setValue(null);
 
-        LiveData<List<CantonEntity>> cantons = repository.getCantons(application);
+        LiveData<List<CantonEntity>> cantons = repository.getCantons();
 
         observableCantons.addSource(cantons, observableCantons::setValue);
     }

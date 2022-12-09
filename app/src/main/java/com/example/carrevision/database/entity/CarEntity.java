@@ -2,48 +2,28 @@ package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
+
+import com.example.carrevision.database.Converters;
+import com.google.firebase.database.Exclude;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Car entity class
  */
-@Entity(tableName = "cars",
-        foreignKeys =
-        @ForeignKey(
-                entity = ModelEntity.class,
-                parentColumns = "id",
-                childColumns = "model_id"
-        ),
-        indices = {
-        @Index(
-                value = {"model_id"}
-        )}
-)
-public class CarEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    @ColumnInfo(name = "model_id")
+public class CarEntity implements Comparable<CarEntity> {
+    private String id;
     private int modelId;
-    @NonNull
-    @ColumnInfo(name = "plate")
     private String plate;
-    @ColumnInfo(name = "year")
     private Date year;
-    @ColumnInfo(name = "kilometers")
     private int kilometers;
 
     /**
      * Default constructor for the car entity class
      */
-    @Ignore
-    public CarEntity() {
+    private CarEntity() {
         this.plate = "";
     }
 
@@ -61,11 +41,19 @@ public class CarEntity {
         this.kilometers = kilometers;
     }
 
+    public CarEntity(int modelId, @NonNull String plate, @NonNull Long year, int kilometers) {
+        this.modelId = modelId;
+        this.plate = plate;
+        this.year = Converters.fromTimestamp(year);
+        this.kilometers = kilometers;
+    }
+
     /**
      * Gets the car's identifier
      * @return Car's identifier
      */
-    public int getId() {
+    @Exclude
+    public String getId() {
         return id;
     }
 
@@ -88,9 +76,18 @@ public class CarEntity {
 
     /**
      * Gets the car's issuance year
+     * @return Car's issuance year in long
+     */
+    public Long getYear() {
+        return Converters.dateToTimestamp(year);
+    }
+
+    /**
+     * Gets the car's issuance year
      * @return Car's issuance year
      */
-    public Date getYear() {
+    @Exclude
+    public Date getYearDate() {
         return year;
     }
 
@@ -106,7 +103,7 @@ public class CarEntity {
      * Sets the car's identifier
      * @param id Car's identifier
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -128,9 +125,17 @@ public class CarEntity {
 
     /**
      * Sets the car's issuance year
+     * @param year Car's issuance year in long
+     */
+    public void setYear(Long year) {
+        this.year = Converters.fromTimestamp(year);
+    }
+
+    /**
+     * Sets the car's issuance year
      * @param year Car's issuance year
      */
-    public void setYear(@NonNull Date year) {
+    public void setYearDate(@NonNull Date year) {
         this.year = year;
     }
 
@@ -153,6 +158,21 @@ public class CarEntity {
     @NonNull
     @Override
     public String toString() {
-        return getId() + " " + getModelId() + " " + getPlate() + " " + getYear() + " " + getKilometers();
+        return getId() + " " + getModelId() + " " + getPlate() + " " + getYearDate() + " " + getKilometers();
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> rv = new HashMap<>();
+        rv.put("modelId", modelId);
+        rv.put("plate", plate);
+        rv.put("year", Converters.dateToTimestamp(year));
+        rv.put("kilometers", kilometers);
+        return rv;
+    }
+
+    @Override
+    public int compareTo(CarEntity o) {
+        return this.getPlate().compareTo(o.getPlate());
     }
 }

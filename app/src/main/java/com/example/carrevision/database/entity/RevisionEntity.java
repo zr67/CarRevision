@@ -2,59 +2,30 @@ package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
 
+import com.example.carrevision.database.Converters;
 import com.example.carrevision.util.Status;
+import com.google.firebase.database.Exclude;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Revision entity class
  */
-@Entity(tableName = "revisions",
-        foreignKeys = {
-                @ForeignKey(
-                        entity = TechnicianEntity.class,
-                        parentColumns = "id",
-                        childColumns = "technician_id"
-                ),
-                @ForeignKey(
-                        entity = CarEntity.class,
-                        parentColumns = "id",
-                        childColumns = "car_id"
-                )},
-                indices = {
-                @Index(
-                        value = {"technician_id"}
-                ),
-                @Index(
-                        value = {"car_id"}
-                )}
-        )
-public class RevisionEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    @ColumnInfo(name = "technician_id")
-    private int technicianId;
-    @ColumnInfo(name = "car_id")
-    private int carId;
-    @ColumnInfo(name = "start")
+public class RevisionEntity implements Comparable<RevisionEntity> {
+    private String id;
+    private String technicianId;
+    private String carId;
     private Date start;
-    @ColumnInfo(name = "end")
     private Date end;
-    @ColumnInfo(name = "status")
     private Status status;
 
     /**
      * Default constructor for the revision entity class
      */
-    @Ignore
-    public RevisionEntity() {}
+    private RevisionEntity() {}
 
     /**
      * Constructor for the revision entity class
@@ -64,7 +35,7 @@ public class RevisionEntity {
      * @param end Revision's end date and time
      * @param status Revision's status
      */
-    public RevisionEntity(int technicianId, int carId, @NonNull Date start, Date end, Status status) {
+    public RevisionEntity(String technicianId, String carId, @NonNull Date start, Date end, Status status) {
         this.technicianId = technicianId;
         this.carId = carId;
         this.start = start;
@@ -76,7 +47,8 @@ public class RevisionEntity {
      * Gets the revision's identifier
      * @return Revision's identifier
      */
-    public int getId() {
+    @Exclude
+    public String getId() {
         return id;
     }
 
@@ -84,7 +56,7 @@ public class RevisionEntity {
      * Gets the technician's identifier
      * @return Technician's identifier
      */
-    public int getTechnicianId() {
+    public String getTechnicianId() {
         return technicianId;
     }
 
@@ -92,31 +64,58 @@ public class RevisionEntity {
      * Gets the car's identifier
      * @return Car's identifier
      */
-    public int getCarId() {
+    public String getCarId() {
         return carId;
+    }
+
+    /**
+     * Gets the revision's start date and time
+     * @return Revision's start date and time in long
+     */
+    public Long getStart() {
+        return Converters.dateToTimestamp(start);
     }
 
     /**
      * Gets the revision's start date and time
      * @return Revision's start date and time
      */
-    public Date getStart() {
+    @Exclude
+    public Date getStartDate() {
         return start;
+    }
+
+    /**
+     * Gets the revision's end date and time
+     * @return Revision's end date and time in long
+     */
+    public Long getEnd() {
+        return Converters.dateToTimestamp(end);
     }
 
     /**
      * Gets the revision's end date and time
      * @return Revision's end date and time
      */
-    public Date getEnd() {
+    @Exclude
+    public Date getEndDate() {
         return end;
+    }
+
+    /**
+     * Gets the revision's status
+     * @return Revision's status's integer value
+     */
+    public int getStatus() {
+        return Converters.statusToInt(status);
     }
 
     /**
      * Gets the revision's status
      * @return Revision's status
      */
-    public Status getStatus() {
+    @Exclude
+    public Status getEStatus() {
         return status;
     }
 
@@ -124,7 +123,7 @@ public class RevisionEntity {
      * Sets the revision's identifier
      * @param id Revision's identifier
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -132,7 +131,7 @@ public class RevisionEntity {
      * Sets the technician's identifier
      * @param technicianId Technician's identifier
      */
-    public void setTechnicianId(int technicianId) {
+    public void setTechnicianId(String technicianId) {
         this.technicianId = technicianId;
     }
 
@@ -140,31 +139,56 @@ public class RevisionEntity {
      * Sets the car's identifier
      * @param carId Car's identifier
      */
-    public void setCarId(int carId) {
+    public void setCarId(String carId) {
         this.carId = carId;
+    }
+
+    /**
+     * Sets the revision's start date and time
+     * @param start Revision's end date and time
+     */
+    public void setStart(Long start) {
+        this.start = Converters.fromTimestamp(start);
     }
 
     /**
      * Sets the revision's start date and time
      * @param start Revision's start date and time
      */
-    public void setStart(@NonNull Date start) {
+    public void setStartDate(@NonNull Date start) {
         this.start = start;
+    }
+
+    /**
+     * Sets the revision's end date and time
+     * @param end End long value
+     */
+    public void setEnd(Long end) {
+        this.end = Converters.fromTimestamp(end);
     }
 
     /**
      * Sets the revision's end date and time
      * @param end Revision's end date and time
      */
-    public void setEnd(Date end) {
+    public void setEndDate(Date end) {
         this.end = end;
+    }
+
+    /**
+     * Sets the revision's status
+     * @param status Status' integer value
+     */
+    public void setStatus(int status) {
+        this.status = Converters.fromInt(status);
     }
 
     /**
      * Sets the revision's status
      * @param status Revision's status
      */
-    public void setStatus(Status status) {
+    @Exclude
+    public void setEStatus(Status status) {
         this.status = status;
     }
 
@@ -172,13 +196,24 @@ public class RevisionEntity {
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof RevisionEntity) {
             RevisionEntity r = (RevisionEntity) obj;
-            return obj == this || (r.getCarId() == this.getCarId() && r.getStart().equals(this.getStart()));
+            return obj == this || (r.getCarId().equals(this.getCarId()) && r.getStartDate().equals(this.getStartDate()));
         }
         return false;
     }
-    @NonNull
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> rv = new HashMap<>();
+        rv.put("technicianId", technicianId);
+        rv.put("carId", carId);
+        rv.put("start", Converters.dateToTimestamp(start));
+        rv.put("end", Converters.dateToTimestamp(end));
+        rv.put("status", Converters.statusToInt(status));
+        return rv;
+    }
+
     @Override
-    public String toString() {
-        return getId() + " " + getTechnicianId() + " " + getCarId() + " " + getStart() + " " + getEnd() + " " + getStatus();
+    public int compareTo(RevisionEntity o) {
+        return this.getStartDate().compareTo(o.getStartDate());
     }
 }

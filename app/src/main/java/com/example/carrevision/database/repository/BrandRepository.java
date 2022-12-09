@@ -1,11 +1,11 @@
 package com.example.carrevision.database.repository;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 
-import com.example.carrevision.BaseApp;
 import com.example.carrevision.database.entity.BrandEntity;
+import com.example.carrevision.database.firebase.BrandListLiveData;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class BrandRepository {
     private static volatile BrandRepository instance;
+    public static final String TABLE = "brands";
 
     /**
      * Brand repository class private constructor
@@ -37,11 +38,11 @@ public class BrandRepository {
 
     /**
      * Gets all brands from the database
-     * @param application Application
      * @return List with all the brands
      */
-    public LiveData<List<BrandEntity>> getBrands(Application application) {
-        return ((BaseApp) application).getDatabase().brandDao().getAll();
+    public LiveData<List<BrandEntity>> getBrands() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(TABLE);
+        return new BrandListLiveData(reference);
     }
 }
 

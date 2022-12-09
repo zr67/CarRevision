@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "257263111592",
+    "firebase_url": "https://carrevisions-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "carrevisions",
+    "storage_bucket": "carrevisions.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257263111592:android:6fe28b989a6e97327be19d",
+        "android_client_info": {
+          "package_name": "com.example.carrevision"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "257263111592-n2v99k0ashcmnu6knti0rt658dd83llc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClw6MyKEB54GfO0sQ0ILNvmLDMIIGCmJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "257263111592-n2v99k0ashcmnu6knti0rt658dd83llc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

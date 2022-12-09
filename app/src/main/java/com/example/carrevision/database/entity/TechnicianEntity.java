@@ -2,65 +2,25 @@ package com.example.carrevision.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
 
-import com.example.carrevision.util.SecurePassword;
+import com.example.carrevision.database.Converters;
+import com.google.firebase.database.Exclude;
 
 /**
  * Technician entity class
  */
-@Entity(tableName = "technicians", indices = { @Index(value = {"email"}, unique = true) })
-public class TechnicianEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    @ColumnInfo(name = "title")
+public class TechnicianEntity implements Comparable<TechnicianEntity> {
+    private String id;
     private String title;
-    @ColumnInfo(name = "name")
     private String firstname;
-    @ColumnInfo(name = "surname")
     private String lastname;
-    @NonNull
-    @ColumnInfo(name = "email")
-    private final String email;
-    @ColumnInfo(name = "hash")
-    private byte[] hash;
-    @ColumnInfo(name = "slt")
-    private byte[] salt;
-    @ColumnInfo(name = "admin")
-    private final boolean admin;
+    private String email;
+    private boolean admin;
 
     /**
      * Default constructor for the technician entity class
      */
-    @Ignore
-    public TechnicianEntity() {
-        this.email = "";
-        this.hash = new byte[0];
-        this.salt = new byte[0];
-        this.admin = false;
-    }
-
-    /**
-     * Constructor for the technician entity class
-     * @param title Technician's title
-     * @param firstname Technician's first name
-     * @param lastname Technician's last name
-     * @param email Technician's email
-     * @param password Technician's password
-     */
-    @Ignore
-    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String password, boolean admin) {
-        this.title = title;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        setPassword(password);
-        this.admin = admin;
-    }
+    private TechnicianEntity() {}
 
     /**
      * Constructor for the technician entity class
@@ -69,13 +29,11 @@ public class TechnicianEntity {
      * @param lastname Technician's last name
      * @param email Technician's email
      */
-    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email, byte[] hash, byte[] salt, boolean admin) {
+    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email, boolean admin) {
         this.title = title;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
-        this.hash = hash;
-        this.salt = salt;
         this.admin = admin;
     }
 
@@ -83,7 +41,8 @@ public class TechnicianEntity {
      * Gets the technician's identifier
      * @return Technician's identifier
      */
-    public int getId() {
+    @Exclude
+    public String getId() {
         return id;
     }
 
@@ -121,26 +80,10 @@ public class TechnicianEntity {
     }
 
     /**
-     * Gets the technician's password's salt
-     * @return Technician's password's salt
-     */
-    public byte[] getSalt() {
-        return salt;
-    }
-
-    /**
-     * Gets the technician's password's hash
-     * @return Technician's password's hash
-     */
-    public byte[] getHash() {
-        return hash;
-    }
-
-    /**
      * Gets if the technician is an admin
      * @return True if the technician is an admin, false otherwise
      */
-    public boolean isAdmin() {
+    public boolean getAdmin() {
         return admin;
     }
 
@@ -148,17 +91,48 @@ public class TechnicianEntity {
      * Sets the technician's identifier
      * @param id Technician's identifier
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * Sets the technician's password
-     * @param password Technician's password
+     * Sets the technician's title
+     * @param title Technician's title
      */
-    public void setPassword(@NonNull String password) {
-        this.salt = SecurePassword.generateSalt();
-        this.hash = SecurePassword.generateHash(password, salt);
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Sets the technician's first name
+     * @param firstname Technician's first name
+     */
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    /**
+     * Sets the technician's last name
+     * @param lastname Technician's last name
+     */
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    /**
+     * Sets the technician's email address
+     * @param email Technician's email address
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Sets if the technician is admin
+     * @param admin Technician's admin status
+     */
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     @Override
@@ -173,5 +147,10 @@ public class TechnicianEntity {
     @Override
     public String toString() {
         return getTitle() + " " + getFirstname() + " " + getLastname();
+    }
+
+    @Override
+    public int compareTo(TechnicianEntity o) {
+        return this.getEmail().compareTo(o.getEmail());
     }
 }

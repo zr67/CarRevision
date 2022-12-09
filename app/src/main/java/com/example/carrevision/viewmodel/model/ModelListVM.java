@@ -30,7 +30,7 @@ public class ModelListVM extends BaseVM {
         observableModels = new MediatorLiveData<>();
         observableModels.setValue(null);
 
-        LiveData<List<ModelEntity>> models = repository.getModelsByBrandId(application, brandId);
+        LiveData<List<ModelEntity>> models = repository.getModelsByBrandId(brandId);
 
         observableModels.addSource(models, observableModels::setValue);
     }
