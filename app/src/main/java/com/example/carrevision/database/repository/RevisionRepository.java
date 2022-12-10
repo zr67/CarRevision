@@ -3,6 +3,7 @@ package com.example.carrevision.database.repository;
 import androidx.lifecycle.LiveData;
 
 import com.example.carrevision.database.entity.RevisionEntity;
+import com.example.carrevision.database.firebase.RevisionLightListLiveData;
 import com.example.carrevision.database.firebase.RevisionListLiveData;
 import com.example.carrevision.database.firebase.RevisionLiveData;
 import com.example.carrevision.database.pojo.CompleteRevision;
@@ -46,6 +47,16 @@ public class RevisionRepository {
     public LiveData<List<CompleteRevision>> getRevisions() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         return new RevisionListLiveData(reference);
+    }
+
+    /**
+     * Gets all revisions that have the car linked to it
+     * @param carId Car's id
+     * @return List with all linked revisions
+     */
+    public LiveData<List<RevisionEntity>> getRevisionsLight(String carId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(TABLE);
+        return new RevisionLightListLiveData(reference, carId);
     }
 
     /**

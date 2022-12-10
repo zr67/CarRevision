@@ -3,7 +3,6 @@ package com.example.carrevision.database.entity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.carrevision.database.Converters;
 import com.google.firebase.database.Exclude;
 
 /**
@@ -14,7 +13,6 @@ public class TechnicianEntity implements Comparable<TechnicianEntity> {
     private String title;
     private String firstname;
     private String lastname;
-    private String email;
     private boolean admin;
 
     /**
@@ -27,13 +25,11 @@ public class TechnicianEntity implements Comparable<TechnicianEntity> {
      * @param title Technician's title
      * @param firstname Technician's first name
      * @param lastname Technician's last name
-     * @param email Technician's email
      */
-    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, @NonNull String email, boolean admin) {
+    public TechnicianEntity(String title, @NonNull String firstname, @NonNull String lastname, boolean admin) {
         this.title = title;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.email = email;
         this.admin = admin;
     }
 
@@ -68,15 +64,6 @@ public class TechnicianEntity implements Comparable<TechnicianEntity> {
      */
     public String getLastname() {
         return lastname;
-    }
-
-    /**
-     * Gets the technician's email
-     * @return Technician's email
-     */
-    @NonNull
-    public String getEmail() {
-        return email;
     }
 
     /**
@@ -120,14 +107,6 @@ public class TechnicianEntity implements Comparable<TechnicianEntity> {
     }
 
     /**
-     * Sets the technician's email address
-     * @param email Technician's email address
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
      * Sets if the technician is admin
      * @param admin Technician's admin status
      */
@@ -139,7 +118,7 @@ public class TechnicianEntity implements Comparable<TechnicianEntity> {
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof TechnicianEntity) {
             TechnicianEntity t = (TechnicianEntity) obj;
-            return obj == this || (t.getFirstname().equals(this.getFirstname()) && t.getLastname().equals(this.getLastname()) && t.getEmail().equals(this.getEmail()));
+            return obj == this || (t.getFirstname().equals(this.getFirstname()) && t.getLastname().equals(this.getLastname()));
         }
         return false;
     }
@@ -151,6 +130,6 @@ public class TechnicianEntity implements Comparable<TechnicianEntity> {
 
     @Override
     public int compareTo(TechnicianEntity o) {
-        return this.getEmail().compareTo(o.getEmail());
+        return this.getFirstname().compareTo(o.getFirstname());
     }
 }

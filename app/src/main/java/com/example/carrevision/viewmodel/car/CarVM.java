@@ -94,9 +94,10 @@ public class CarVM extends BaseVM {
     /**
      * Deletes a car
      * @param car Car to delete
+     * @param linked If the car is linked to one or many revisions
      * @param callback Callback
      */
-    public void deleteCar(CarEntity car, OnAsyncEventListener callback) {
-        repository.delete(car, callback);
+    public void deleteCar(CarEntity car, boolean linked, OnAsyncEventListener callback) {
+        repository.delete(car, linked, callback);
     }
 }

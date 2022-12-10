@@ -62,22 +62,23 @@ public class TechnicianRepository {
 
     /**
      * Gets a technician by it's identifier
-     * @param technicianId Technician's identifier
+     * @param id Technician's uid
      * @return Technician corresponding to the email
      */
-    public LiveData<TechnicianEntity> getTechnician(final String technicianId) {
+    public LiveData<TechnicianEntity> getTechnician(String id) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(TABLE);
-        return new TechnicianLiveData(reference, technicianId);
+        return new TechnicianLiveData(reference, id);
     }
 
     /**
      * Registers and create a new technician
      * @param technician Technician to be registered
+     * @param email Technician's email
      * @param password Technician's password
      * @param callback Callback
      */
-    public void register(final TechnicianEntity technician, final String password, final OnAsyncEventListener callback) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(technician.getEmail(), password)
+    public void register(final TechnicianEntity technician, final String email, final String password, final OnAsyncEventListener callback) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         technician.setId(FirebaseAuth.getInstance().getCurrentUser().getUid());

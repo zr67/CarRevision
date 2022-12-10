@@ -13,13 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
 import com.example.carrevision.BaseApp;
 import com.example.carrevision.R;
-import com.example.carrevision.database.entity.TechnicianEntity;
 import com.example.carrevision.database.repository.TechnicianRepository;
 import com.example.carrevision.ui.car.CarsActivity;
 import com.example.carrevision.ui.management.LoginActivity;
@@ -27,11 +25,8 @@ import com.example.carrevision.ui.management.SettingsActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
 import com.example.carrevision.util.LocaleManager;
 import com.example.carrevision.viewmodel.technician.TechnicianVM;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**

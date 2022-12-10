@@ -97,9 +97,14 @@ public class CarRepository {
     /**
      * Deletes a car
      * @param car Car to delete
+     * @param linked If the car is linked to one or many revisions
      * @param callback Callback
      */
-    public void delete(final CarEntity car, OnAsyncEventListener callback) {
+    public void delete(final CarEntity car, final boolean linked, OnAsyncEventListener callback) {
+        if (linked) {
+            callback.onFailure(null);
+            return;
+        }
         FirebaseDatabase.getInstance()
                 .getReference(TABLE)
                 .child(car.getId())

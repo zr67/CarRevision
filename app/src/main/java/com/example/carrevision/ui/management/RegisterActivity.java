@@ -116,16 +116,16 @@ public class RegisterActivity extends BaseActivity {
             etEmail.requestFocus();
             return;
         }
-        TechnicianEntity technician = new TechnicianEntity(title, firstname, lastname, email, false);
-        repository.register(technician, pass1, new OnAsyncEventListener() {
+        TechnicianEntity technician = new TechnicianEntity(title, firstname, lastname, false);
+        repository.register(technician, email, pass1, new OnAsyncEventListener() {
             @Override
             public void onSuccess() {
-                Log.d(TAG, "User created with mail " + technician.getEmail());
+                Log.d(TAG, "User created with mail " + email);
                 setResponse(true);
             }
             @Override
             public void onFailure(Exception e) {
-                Log.w(TAG, "Failed to create user with mail " + technician.getEmail());
+                Log.w(TAG, "Failed to create user with mail " + email);
                 setResponse(false);
             }
         });

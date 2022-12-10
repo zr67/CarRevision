@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
@@ -17,11 +16,7 @@ import com.example.carrevision.R;
 import com.example.carrevision.database.repository.TechnicianRepository;
 import com.example.carrevision.ui.BaseActivity;
 import com.example.carrevision.ui.revision.RevisionsActivity;
-import com.example.carrevision.viewmodel.car.CarVM;
 import com.example.carrevision.viewmodel.technician.TechnicianVM;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -88,6 +83,7 @@ public class LoginActivity extends BaseActivity {
                         updateNavMenu();
                         finish();
                         startActivity(intent);
+                        BaseActivity.position = R.id.nav_revisions;
                     }
                 });
             } else {

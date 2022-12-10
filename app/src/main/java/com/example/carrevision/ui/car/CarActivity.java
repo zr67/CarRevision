@@ -31,6 +31,7 @@ import com.example.carrevision.viewmodel.brand.BrandListVM;
 import com.example.carrevision.viewmodel.canton.CantonListVM;
 import com.example.carrevision.viewmodel.car.CarVM;
 import com.example.carrevision.viewmodel.model.ModelListVM;
+import com.example.carrevision.viewmodel.revision.RevisionLightListVM;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,6 +57,7 @@ public class CarActivity extends SingleObjectActivity {
 
     private CarVM carVM;
     private CompleteCar car;
+    private boolean linked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,15 @@ public class CarActivity extends SingleObjectActivity {
         carVM.getCar().observe(this, carEntity -> {
             if (carEntity != null) {
                 car = carEntity;
+                RevisionLightListVM.Factory rf = new RevisionLightListVM.Factory(getApplication(), car.car.getId());
+                RevisionLightListVM rvm = new ViewModelProvider(new ViewModelStore(), rf).get(RevisionLightListVM.class);
+                rvm.getRevisions().observe(this, revisionEntities -> {
+                    if (revisionEntities != null) {
+                        linked = !revisionEntities.isEmpty();
+                    } else {
+                        linked = false;
+                    }
+                });
                 updateContent();
             }
         });
@@ -408,7 +419,7 @@ public class CarActivity extends SingleObjectActivity {
     @Override
     protected void deleteItem() {
         if (car != null) {
-            carVM.deleteCar(car.car, new OnAsyncEventListener() {
+            carVM.deleteCar(car.car, linked, new OnAsyncEventListener() {
                 @Override
                 public void onSuccess() {
                     Log.d(TAG, "Car " + car.car.getId() + " successfully deleted");
