@@ -90,6 +90,12 @@ public class RegisterActivity extends BaseActivity {
             etPassword2.setText("");
             return;
         }
+        if (pass1.length() < 6) {
+            etPassword1.setError(getString(R.string.min_pwd_msg));
+            etPassword1.requestFocus();
+            etPassword2.setText("");
+            return;
+        }
         if (TextUtils.isEmpty(firstname)) {
             etFirstname.setError(getString(R.string.err_firstname_empty));
             etFirstname.requestFocus();
@@ -121,45 +127,33 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "User created with mail " + email);
-                setResponse(true);
+                TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), FirebaseAuth.getInstance().getUid());
+                TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
+                technicianVM.getTechnician().observe(RegisterActivity.this, technicianEntity -> {
+                    if (technicianEntity != null) {
+                        TECHNICIAN_CONNECTED = true;
+                        ADMIN_CONNECTED = technicianEntity.getAdmin();
+                        if (swRememberMe.isChecked()) {
+                            SharedPreferences.Editor editor = getSharedPreferences(BaseActivity.PREFS_NAME, 0).edit();
+                            editor.putString(BaseActivity.PREFS_UNAME, etEmail.getText().toString());
+                            editor.putString(BaseActivity.PREFS_PWD, etPassword1.getText().toString());
+                            editor.apply();
+                        }
+                        Intent intent = new Intent(RegisterActivity.this, RevisionsActivity.class);
+                        intent.putExtra("snackMsg", String.format(getString(R.string.welcome_msg), technicianEntity.getFirstname()));
+                        updateNavMenu();
+                        finish();
+                        startActivity(intent);
+                    }
+                });
             }
             @Override
             public void onFailure(Exception e) {
                 Log.w(TAG, "Failed to create user with mail " + email);
-                setResponse(false);
+                Log.e(TAG, e.getMessage());
+                etEmail.setError(getString(R.string.err_email_inuse));
+                etEmail.requestFocus();
             }
         });
-    }
-
-    /**
-     * Logs in the technician if the creation is successful, displays an error otherwise
-     * @param response Creation's result
-     */
-    private void setResponse(boolean response) {
-        if (response) {
-            TechnicianVM.Factory factory = new TechnicianVM.Factory(getApplication(), FirebaseAuth.getInstance().getUid());
-            TechnicianVM technicianVM = new ViewModelProvider(new ViewModelStore(), factory).get(TechnicianVM.class);
-            technicianVM.getTechnician().observe(this, technicianEntity -> {
-                if (technicianEntity != null) {
-                    TECHNICIAN_CONNECTED = true;
-                    ADMIN_CONNECTED = technicianEntity.getAdmin();
-                    if (swRememberMe.isChecked()) {
-                        SharedPreferences.Editor editor = getSharedPreferences(BaseActivity.PREFS_NAME, 0).edit();
-                        editor.putString(BaseActivity.PREFS_UNAME, etEmail.getText().toString());
-                        editor.putString(BaseActivity.PREFS_PWD, etPassword1.getText().toString());
-                        editor.apply();
-                    }
-                    Intent intent = new Intent(RegisterActivity.this, RevisionsActivity.class);
-                    intent.putExtra("snackMsg", String.format(getString(R.string.welcome_msg), technicianEntity.getFirstname()));
-                    updateNavMenu();
-                    finish();
-                    startActivity(intent);
-                }
-            });
-        }
-        else {
-            etEmail.setError(getString(R.string.err_email_inuse));
-            etEmail.requestFocus();
-        }
     }
 }
