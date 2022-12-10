@@ -150,7 +150,6 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onFailure(Exception e) {
                 Log.w(TAG, "Failed to create user with mail " + email);
-                Log.e(TAG, e.getMessage());
                 etEmail.setError(getString(R.string.err_email_inuse));
                 etEmail.requestFocus();
             }
