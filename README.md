@@ -17,7 +17,7 @@ N'importe qui peut s'enregister en tant que technicien non-administrateur, nous 
 <li>Affichage/édition/suppression d'une voiture</li>
 <li>Affichage/édition/suppression d'une révision</li>
 <li>Création d'une nouvelle voiture depuis la création de révision</li>
-<li>Authentification sécurisée avec stockage des mots de passes hashés en utilisant l'algorithme "PBKDF2WithHmacSHA1"</li>
+<li>Authentification sécurisée avec FirebaseAuth</li>
 <li>Possibilité de rester connecté pour la prochaine ouverture de l'application</li>
 <li>Enregistrement en tant que technicien</li>
 <li>Traductions en deux langues (français et anglais) et support des formats de date correspondants</li>
