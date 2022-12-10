@@ -10,7 +10,6 @@ L'application est disponible en deux langues (français et anglais) et permet é
 N'importe qui peut s'enregister en tant que technicien non-administrateur, nous sommes partis du principe que l'application ne serait disponible à l'installation qu'en interne.
 Cette application n'a pas été optimisée dans le cadre du mode sombre proposé par Android. De ce fait, certains aspects visuels peuvent être altérés si le smartphone est paramétré dans ce mode-ci.
 
-
 <h1>Fonctionnalités</h1>
 <ul>
 <li>Javadoc effectuée pour chaque classe et méthode du projet</li>
@@ -33,3 +32,26 @@ Cette application n'a pas été optimisée dans le cadre du mode sombre proposé
 <li>daphne.blake@sbg.com : "Jeepers!"</li>
 <li>scooby.doo@sbg.com : "Ruh-roh-RAGGY"</li>
 </ul>
+
+<h1>Règles de sécurité Firebase</h1>
+{
+  "rules": {
+    ".read": true,
+    ".write": false,
+    "cars": {
+      ".write": "auth !== null"
+    },
+    "revisions": {
+      ".write": "auth !== null"
+    },
+    "technicians": {
+      "$uid": {
+        ".read": "auth !== null && auth.uid === $uid",
+        ".write": "auth !== null && auth.uid === $uid"
+      }
+    }
+  }
+}
+
+
+
