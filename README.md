@@ -34,6 +34,8 @@ Cette application n'a pas été optimisée dans le cadre du mode sombre proposé
 </ul>
 
 <h1>Règles de sécurité Firebase</h1>
+
+```yaml
 {
   "rules": {
     ".read": true,
@@ -52,6 +54,478 @@ Cette application n'a pas été optimisée dans le cadre du mode sombre proposé
     }
   }
 }
+```
 
+<h1>Json</h1>
+
+```yaml
+{
+  "brands": [
+    null,
+    {
+      "brand": "Chevrolet"
+    },
+    {
+      "brand": "Dodge"
+    },
+    {
+      "brand": "Hummer"
+    },
+    {
+      "brand": "Lincoln"
+    },
+    {
+      "brand": "Mercury"
+    },
+    {
+      "brand": "Subaru"
+    }
+  ],
+  "cantons": [
+    null,
+    {
+      "abbreviation": "ZH",
+      "canton": "Zürich"
+    },
+    {
+      "abbreviation": "BE",
+      "canton": "Berne"
+    },
+    {
+      "abbreviation": "LU",
+      "canton": "Lucerne"
+    },
+    {
+      "abbreviation": "UR",
+      "canton": "Uri"
+    },
+    {
+      "abbreviation": "SZ",
+      "canton": "Schwyz"
+    },
+    {
+      "abbreviation": "OW",
+      "canton": "Obwald"
+    },
+    {
+      "abbreviation": "NW",
+      "canton": "Nidwald"
+    },
+    {
+      "abbreviation": "GL",
+      "canton": "Glaris"
+    },
+    {
+      "abbreviation": "ZG",
+      "canton": "Zoug"
+    },
+    {
+      "abbreviation": "FB",
+      "canton": "Fribourg"
+    },
+    {
+      "abbreviation": "SO",
+      "canton": "Soleure"
+    },
+    {
+      "abbreviation": "BS",
+      "canton": "Bâle-Ville"
+    },
+    {
+      "abbreviation": "BL",
+      "canton": "Bâle-Campagne"
+    },
+    {
+      "abbreviation": "SH",
+      "canton": "Schaffhouse"
+    },
+    {
+      "abbreviation": "AR",
+      "canton": "Appenzell Rh.-Ext."
+    },
+    {
+      "abbreviation": "AI",
+      "canton": "Appenzell Rh.-Int."
+    },
+    {
+      "abbreviation": "SG",
+      "canton": "Saint-Gall"
+    },
+    {
+      "abbreviation": "GR",
+      "canton": "Grisons"
+    },
+    {
+      "abbreviation": "AG",
+      "canton": "Argovie"
+    },
+    {
+      "abbreviation": "TG",
+      "canton": "Thurgovie"
+    },
+    {
+      "abbreviation": "TI",
+      "canton": "Tessin"
+    },
+    {
+      "abbreviation": "VD",
+      "canton": "Vaud"
+    },
+    {
+      "abbreviation": "VS",
+      "canton": "Valais"
+    },
+    {
+      "abbreviation": "NE",
+      "canton": "Neuchâtel"
+    },
+    {
+      "abbreviation": "GE",
+      "canton": "Genève"
+    },
+    {
+      "abbreviation": "JU",
+      "canton": "Jura"
+    }
+  ],
+  "cars": {
+    "-NIv_tkBBv0F7KM6LrT8": {
+      "kilometers": 1,
+      "modelId": 1,
+      "plate": "AG123",
+      "year": 1640991600000
+    },
+    "-NIvhTKW3cV3Z5WIZgdy": {
+      "kilometers": 69000,
+      "modelId": 32,
+      "plate": "AG111111",
+      "year": 757382400000
+    },
+    "-NIvhfN7sWHLjA94jags": {
+      "kilometers": 69000,
+      "modelId": 1,
+      "plate": "AG1",
+      "year": 1640995200000
+    },
+    "-NIvhwnl5baht-6LuDMB": {
+      "kilometers": 50000,
+      "modelId": 24,
+      "plate": "VS890890",
+      "year": 1640995200000
+    }
+  },
+  "models": [
+    null,
+    {
+      "brandId": 1,
+      "model": "Astro Cargo"
+    },
+    {
+      "brandId": 1,
+      "model": "Astro Passenger"
+    },
+    {
+      "brandId": 1,
+      "model": "Avalanche"
+    },
+    {
+      "brandId": 1,
+      "model": "Aveo"
+    },
+    {
+      "brandId": 1,
+      "model": "Blazer"
+    },
+    {
+      "brandId": 1,
+      "model": "Camaro"
+    },
+    {
+      "brandId": 1,
+      "model": "Cavalier"
+    },
+    {
+      "brandId": 1,
+      "model": "Classic"
+    },
+    {
+      "brandId": 1,
+      "model": "Corvette"
+    },
+    {
+      "brandId": 1,
+      "model": "Equinox"
+    },
+    {
+      "brandId": 1,
+      "model": "Impala"
+    },
+    {
+      "brandId": 1,
+      "model": "Malibu"
+    },
+    {
+      "brandId": 1,
+      "model": "Prizm"
+    },
+    {
+      "brandId": 1,
+      "model": "Silverado"
+    },
+    {
+      "brandId": 1,
+      "model": "Suburban"
+    },
+    {
+      "brandId": 1,
+      "model": "Volt"
+    },
+    {
+      "brandId": 2,
+      "model": "Avenger"
+    },
+    {
+      "brandId": 2,
+      "model": "Caliber"
+    },
+    {
+      "brandId": 2,
+      "model": "Colt"
+    },
+    {
+      "brandId": 2,
+      "model": "Dart"
+    },
+    {
+      "brandId": 2,
+      "model": "Intrepid"
+    },
+    {
+      "brandId": 2,
+      "model": "Journey"
+    },
+    {
+      "brandId": 2,
+      "model": "Stratus"
+    },
+    {
+      "brandId": 2,
+      "model": "Viper"
+    },
+    {
+      "brandId": 3,
+      "model": "H1"
+    },
+    {
+      "brandId": 3,
+      "model": "H2"
+    },
+    {
+      "brandId": 3,
+      "model": "H3"
+    },
+    {
+      "brandId": 3,
+      "model": "H3T"
+    },
+    {
+      "brandId": 4,
+      "model": "Aviator"
+    },
+    {
+      "brandId": 4,
+      "model": "Blackwood"
+    },
+    {
+      "brandId": 4,
+      "model": "Continental"
+    },
+    {
+      "brandId": 4,
+      "model": "Corsair"
+    },
+    {
+      "brandId": 4,
+      "model": "LS"
+    },
+    {
+      "brandId": 4,
+      "model": "MKC"
+    },
+    {
+      "brandId": 4,
+      "model": "MKS"
+    },
+    {
+      "brandId": 4,
+      "model": "Nautilus"
+    },
+    {
+      "brandId": 4,
+      "model": "Navigator"
+    },
+    {
+      "brandId": 4,
+      "model": "Town Car"
+    },
+    {
+      "brandId": 4,
+      "model": "Zephyr"
+    },
+    {
+      "brandId": 5,
+      "model": "Capri"
+    },
+    {
+      "brandId": 5,
+      "model": "Cougar"
+    },
+    {
+      "brandId": 5,
+      "model": "Grand Marquis"
+    },
+    {
+      "brandId": 5,
+      "model": "Mariner"
+    },
+    {
+      "brandId": 5,
+      "model": "Milan"
+    },
+    {
+      "brandId": 5,
+      "model": "Montego"
+    },
+    {
+      "brandId": 5,
+      "model": "Monterey"
+    },
+    {
+      "brandId": 5,
+      "model": "Mountaineer"
+    },
+    {
+      "brandId": 5,
+      "model": "Mystique"
+    },
+    {
+      "brandId": 5,
+      "model": "Sable"
+    },
+    {
+      "brandId": 5,
+      "model": "Topaz"
+    },
+    {
+      "brandId": 5,
+      "model": "Tracer"
+    },
+    {
+      "brandId": 5,
+      "model": "Villager"
+    },
+    {
+      "brandId": 6,
+      "model": "Ascent"
+    },
+    {
+      "brandId": 6,
+      "model": "BRZ"
+    },
+    {
+      "brandId": 6,
+      "model": "Baja"
+    },
+    {
+      "brandId": 6,
+      "model": "Crosstrek"
+    },
+    {
+      "brandId": 6,
+      "model": "Forester"
+    },
+    {
+      "brandId": 6,
+      "model": "Impreza"
+    },
+    {
+      "brandId": 6,
+      "model": "Justy"
+    },
+    {
+      "brandId": 6,
+      "model": "Legacy"
+    },
+    {
+      "brandId": 6,
+      "model": "Loyale"
+    },
+    {
+      "brandId": 6,
+      "model": "Outback"
+    },
+    {
+      "brandId": 6,
+      "model": "Tribeca"
+    },
+    {
+      "brandId": 6,
+      "model": "WRX"
+    },
+    {
+      "brandId": 6,
+      "model": "XV Crosstrek"
+    }
+  ],
+  "revisions": {
+    "-NIva-QKFIcGX7FyvacZ": {
+      "carId": "-NIv_tkBBv0F7KM6LrT8",
+      "end": 1670880120000,
+      "start": 1670880120000,
+      "status": 0,
+      "technicianId": "e6gNzujpH0cnz2MNltxbniHhG4u2"
+    },
+    "-NIvhaKJ3OSCjK7VRYy-": {
+      "carId": "-NIvhTKW3cV3Z5WIZgdy",
+      "end": 1577872800000,
+      "start": 1577865600000,
+      "status": 2,
+      "technicianId": "e6gNzujpH0cnz2MNltxbniHhG4u2"
+    }
+  },
+  "technicians": {
+    "0goayOkHe0fEud17yq1DZChDsxs2": {
+      "admin": false,
+      "firstname": "Daphne",
+      "lastname": "Blake",
+      "title": "Mme."
+    },
+    "FPdMTP1KqEcAopSdBmCWrxaLQqY2": {
+      "admin": true,
+      "firstname": "Shaggy",
+      "lastname": "Rogers",
+      "title": "M."
+    },
+    "e6gNzujpH0cnz2MNltxbniHhG4u2": {
+      "admin": false,
+      "firstname": "Scooby",
+      "lastname": "Doo",
+      "title": "M."
+    },
+    "eVLDIr9NBNWWlzdh0U032F4ZbhI2": {
+      "admin": true,
+      "firstname": "Fred",
+      "lastname": "Jones",
+      "title": "M."
+    },
+    "jXJhVkRNqbYHfMkN9Uzq24c3Xi92": {
+      "admin": false,
+      "firstname": "Vera",
+      "lastname": "Dinkley",
+      "title": "Mme."
+    }
+  }
+}
+```
 
 
